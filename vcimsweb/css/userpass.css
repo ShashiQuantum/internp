@@ -1,0 +1,178 @@
+.wrapper{ width:1055px; margin:0 auto;}
+.user{ max-width:560px; margin:0 auto; padding-top:15px;}
+.user ul{ margin:0; padding:0;}
+.user ul li{ display:block; border-left:14px solid #fff; font-size:16px; padding-left:30px; line-height:40px;}
+.user ul li:hover{border-left:14px solid #ebd2b5;}
+.user ul li.active{border-left:14px solid #bc3526;}
+.user ul li a{ text-decoration:none; color:#555;}
+.user ul li a:hover, .user ul li a.active{ color:#F00;}
+.lebel02{ font-size:15px; width:135px; color:#bc3526; line-height:25px; font-weight:bold; float:left;}
+
+textarea{ width:395px; height:80px; margin-bottom:15px; }
+.spaces02 {margin-left: 135px;}
+.user h3{ font-size:18px; line-height:35px; color:#bc3526; font-weight:normal; margin-top:15px;}
+.user h3 span{ padding-left:70px;}
+.address001 p{ font-size:15px; color:#555;}
+.address001 p span{ font-weight:bold; line-height:25px;}
+.address001{ border:1px solid #ccc; border-bottom-width:4px; padding:15px 30px 5px; float:left; display:inline-block; background-color:#eee; width:200px; margin:5px;}
+.address001 hr{ border:0; height:1px; background-color:#ccc;} 
+#addnewadd{ display:none; text-align:center; background-color:#eee;border:1px solid #ccc; border-bottom-width:4px;}
+.hidden{ display:block;}
+.edit{ float:left; background:url(../images/1416846661_edit-16.png) top left no-repeat; padding-left:20px; line-height:16px;
+cursor:pointer; display:block; border-right:1px solid #999; width:36%;}
+.delete{ float:right; background:url(../images/1416846690_delete-16.png) top left no-repeat; 
+ line-height:16px; padding-left:20px; cursor:pointer; display:block;}
+ 
+ .clear{ clear:both;}
+ 
+/*  Thank you page  */
+.thanks_box{ max-width:100%; padding:20px; border-bottom:1px solid #ccc;}
+.thanks_user{ max-width:100%; padding:20px;}
+.thanks_box table, .thanks_box p, .thanks_user p{ font-size:16px; line-height:23px; color:#555;}
+.thanks_box table th, .thanks_box table td{ text-align:center; border:1px solid #eee; line-height:35px;}
+.thanks_box p span{ line-height:40px; color:#bc3526; font-weight:normal; font-size:16px;}
+/*  Thank you page end  */
+
+/*  Books page  */
+.boo{ border:1px solid #ccc; margin-bottom:10px;}
+.boo_heading_02{ background-color:#fff; padding:10px 25px; line-height:20px;}
+.boo_heading_02 h4{ font-size:15px; color:#555; margin:0; font-weight:normal; display:inline-block;}
+.boo_heading{ background-color:#eee; padding:10px 25px; line-height:20px;}
+.boo_heading h4{ font-size:15px; color:#555; margin:0; font-weight:normal; display:inline-block;}
+.boo002 h4{ font-weight:normal; display:none; font-size:15px;}
+.boo_heading_02 h4 span, .boo002 h4 span{color:#C30;}
+.boo_heading p{font-size:14px; margin:0;}
+.boo001{ float:left; display:inline-block; width:35%;}
+.boo002{ width:180px; text-align:center; float:left; display:inline-block;}
+.boo002 h3{ font-size:15px; color:#bc3526; line-height:20px; padding-left:8px; display:none;}
+.boo002 img{ width:88px; margin:8px 0;}
+.boo001_button{ cursor:pointer; position:absolute; top:100px;}
+.clear{ clear:both;}
+.boo001 h3{ line-height:20px; margin-top:5px;}
+.boo001 a{ text-decoration:none; color:#bc3526; line-height:25px;}
+.boo001 p{ font-size:14px; line-height:20px; margin-top:20px;}
+.boo003{ width:150px; text-align:center; float:left; display:inline-block; position:relative;}
+.colors002{ color:#bc3526;}
+.rev_plus{ float:right; font-weight:bold; font-size:25px; color:#666; line-height:20px; display:none; content:"+"}
+.user_02{ max-width:700px; margin:20px auto 10px;}
+.user_02 input[type="text"]{max-width:595px; width:85%; padding-left:10px; color:#999; line-height:19px;}
+.boo_003{ padding:20px;}
+.boo_003 span{ color:#bc3526; font-weight:normal;}
+/*  Books page end  */
+
+/*  New_address page  */
+.user input[type="text"], .user textarea, .user input[type="password"] { width:400px; margin-bottom:15px;}
+.user select { width:415px; margin-bottom:15px;}
+
+/*  New_address end  */
+
+
+ 
+  @media only screen and (max-width : 1900px){
+		
+	}
+	@media only screen and (max-width : 1366px){
+	}
+	@media only screen and (max-width : 1200px) {
+
+	}
+    @media only screen and (max-width : 1024px){
+.wrapper{ width:90%; margin:0 auto;}
+	}
+	
+	/* Medium Devices, Desktops */
+	@media only screen and (max-width : 992px) {
+.wrapper{ width:90%; margin:0 auto;}
+/*  Books page */
+
+/*  Books page end */
+	}
+
+	/* Small Devices, Tablets */
+	@media only screen and (max-width : 768px) {
+.wrapper{ width:90%; margin:0 auto;}
+.user input[type="text"], .new_address_form input[type="text"] { max-width:188px; min-width:75px;}
+.user select, .new_address_form select{ max-width:200px;}
+.user textarea{ max-width:340px;}
+.new_address_form{ display:none;}
+#addnewadd{ display:block;}
+.hidden{ display:none;}
+.address001{ width:85%;}
+.user{ width:100%;}
+/*  Bookshelf page  */
+
+/*  Bookshelf page end  */
+
+/*  Books page */
+.boo001{ width:95%;padding:0 10px;}
+.boo001_button{ position:static;}
+.boo002{ width:100%; text-align:left;}
+.boo002 img{ float:left; margin-right:10px;}
+.boo003{ float:right; bottom:35px;}
+.boo002 h4, .boo002 h3{ display:block; margin:10px 0;}
+.boo_heading_02{ display:none;}
+.rev{ display:none;}
+.rev_plus{ display:block;}
+.boo_heading span{ cursor:pointer}
+.user_02 input[type="text"]{ width:69%;}
+/*  Books page end */
+	}
+
+	@media only screen and (max-width : 480px) {
+.wrapper{ width:90%; margin:0 auto;}
+.user textarea{ max-width:204px;}
+.new_address_form{ display:none;}
+#addnewadd{ display:block;}
+.hidden{ display:none;}
+.address001{ width:80%;}
+.user{ width:75%; margin:0 auto;}
+.spaces02{ margin-left:0;}
+
+/*  Books page  */
+.boo001{ width:95%;padding:0 10px;}
+.boo001_button{ position:static;}
+.user_02 input[type="text"]{ width:54%;}
+.boo002{ width:100%; text-align:left;}
+.boo002 img{ float:left; margin-right:10px;}
+.boo003{ float:right; bottom:0;}
+.boo002 h4, .boo002 h3{ display:block; margin-top:4px;}
+.boo_heading_02{ display:none;}
+.rev{ display:none;}
+.rev_plus{ display:block;}
+.boo_heading span{ cursor:pointer}
+
+/*  Books page end  */
+	}
+
+	@media only screen and (max-width : 320px) {
+
+.wrapper{ width:90%; margin:0 auto;}
+
+.user textarea{ max-width:204px;}
+.spaces02 {margin-left: 0px;}
+.new_address_form{ display:none;}
+#addnewadd{ display:block;}
+.hidden{ display:none;}
+.address001{ width:75%;}
+.user{ width:100%;}
+/*  Books page  */
+.boo001{  width:95%;padding:0 10px;}
+.boo001_button{ position:static;}
+
+.boo002{ width:100%; text-align:left;}
+.boo002 img{ float:left; margin-right:10px;}
+.boo003{ float:right;}
+.boo002 h4{ display:block;}
+.boo002 h3{ display:block;}
+.boo_heading_02{ display:none;}
+.rev{ display:none;}
+.rev_plus{ display:block;}
+.boo_heading span{ cursor:pointer}
+.boo003{ bottom:0;}
+
+/*  Books page end  */
+.user_02 input[type="text"]{ width:54%;}
+
+/* user_details */
+/* user_details end */
+	}

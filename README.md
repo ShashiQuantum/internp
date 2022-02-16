@@ -1,2 +1,1 @@
-# digiamin-web
-Development of a Admin Tool
+##--THIS IS PROPRIETERY PRODUCT CODE OF QUANTUMCS 

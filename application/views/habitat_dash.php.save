@@ -1,0 +1,211 @@
+<html>
+ <meta http-equiv="refresh" content="10">
+
+<?php
+	$cqset_id=$this->session->userdata('qset_id'); //current qset_id
+	$csid=$this->session->userdata('sid'); //current sid
+$csid=$_SESSION['sid'];
+	$table=$this->m_habitat->getPTable($cqset_id);
+	$cqid=$this->m_habitat->get_cqid($cqset_id, $csid); //current question id
+	$qtype=$this->m_habitat->get_qtype($cqid);
+	if($qtype=='instruction'){
+	    while($qtype!='radio' || $qtype!='checkbox'){
+		++$csid;
+		$_SESSION['sid']=$csid;
+		$this->session->set_userdata('sid', $csid);
+		$csid= $this->session->userdata('sid');
+	        $cqid=$this->m_habitat->get_cqid($cqset_id, $csid);
+		$qtype=$this->m_habitat->get_qtype($cqid);
+//		echo "<br> sid: $csid ,qid: $cqid , qtype: $qtype <br>";
+		if($qtype=='instruction' || $qtype == 'text' || $qtype == 'textarea') continue;
+		else break;
+	   }
+	}
+                echo "<br>s sid: $csid ,qid: $cqid , qtype: $qtype <br>";
+//print_r($_SESSION);
+	$cterm=$this->m_habitat->get_ctermid($cqid); //current question id
+	$cqt=$this->m_habitat->get_cqt($cqid); //current question title
+	$mxsid=$this->m_habitat->get_mxsid($cqset_id); //getting all question and sequence
+	$total_q=$mxsid; //total questions for a project
+?>
+
+<!------------------------------------------------------- GRAPH CHART --------------------------------------------------------------->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load("current", {packages:['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+
+      var data = google.visualization.arrayToDataTable([
+
+        ["Element", "", { role: "style" } ],
+			    <?php 
+				$i=0;
+				$ntermc = 0;
+				////////For Current Term
+			if($csid <= $mxsid)
+			{
+				$nsid = $csid + 1;	//next sid
+				$nqid=$this->m_habitat->get_cqid($cqset_id, $nsid); //next question id
+				$nqt=$this->m_habitat->get_cqt($nqid); //next question title
+				//$nterm= $m_habitat=$this->m_habitat->get_optxt($nqid); //next term details
+				$nqtype=$this->m_habitat->get_qtype($nqid);
+				if($nqtype != 'instruction' || $nqtype != 'text' || $nqtype != 'textarea'){
+                                	$nterm= $m_habitat=$this->m_habitat->get_optxt($nqid); //next term details
+					//$ntrm='ss';
+					foreach($nterm as $nt)
+					{
+					$noptions=$nt->opt_text_value;
+					$nvalue=$nt->value;
+					$ntrm = $nt->term;
+					$ntermc=$this->m_habitat->get_cod_ov($table,$ntrm); //count nxt term overall
+					}
+				}
+			}
+	$optxt= $m_habitat=$this->m_habitat->get_optxt($cqid); //current term option text
+
+	//to display only the current sid data chart
+	if(@$ntermc == 0 ){
+	foreach($optxt as $d)
+	{
+		$i++;
+		$options=$d->opt_text_value;
+		$value=$d->value;
+		$cterm=$d->term;
+		$count_opt=$this->m_habitat->get_cod($table,$cterm, $value); //counting current term options as per value
+		$cov=$this->m_habitat->get_cod_ov($table,$cterm); //counting overall current term
+		if($i==1)
+		$ab="#B82E2E";
+		if($i==2)
+		$ab="#3366CC";
+		if($i==3)
+		$ab="#FF9900";
+		if($i==4)
+		$ab="#3CB371";
+		if($i==5)
+		$ab="#DD4477";
+		if($i==6)
+		$ab="#F5FABD";
+		if($i==7)
+		$ab="#66AA00";
+		if($i==8)
+		$ab="#DC3912";
+		if($i==9)
+		$ab="#0099C6";
+		if($i==10)
+		$ab="#990099";
+
+		///////////////// checking overall data of current term and next term////////////
+		?>
+        ["<?php echo $options?>", <?php echo $count_opt?>, "<?php echo $ab;?>"], //current term questions and options
+         <?php 
+			} //end of for loop
+			 	$_SESSION['sid'] = ++$csid;
+			} //end of if
+		  ?>
+		  ///////////// For Next Term Data Chart//////////
+		  	<?php
+			$in=0;
+			//if($csid<=$mxsid)
+                        if($ntermc > 0)
+			{
+				$nsid = $csid + 1;	//next sid
+				$nqid = $this->m_habitat->get_cqid($cqset_id, $nsid); //next question id
+				$nterm= $m_habitat=$this->m_habitat->get_optxt($nqid); //next term details
+				foreach($nterm as $nt)
+				{
+					$in++;
+					$noptions=$nt->opt_text_value;
+					$nvalue=$nt->value;
+					$nterm=$nt->term;
+					$ncount_opt=$this->m_habitat->get_cod($table,$nterm, $nvalue); //counting next term options as per value
+					if($in==1)
+					$abn="#B82E2E";
+					if($in==2)
+					$abn="#3366CC";
+					if($in==3)
+					$abn="#FF9900";
+					if($in==4)
+					$abn="#3CB371";
+					if($in==5)
+					$abn="#DD4477";
+					if($in==6)
+					$abn="#F5FABD";
+					if($in==7)
+					$abn="#66AA00";
+					if($in==8)
+					$abn="#DC3912";
+					if($in==9)
+					$abn="#0099C6";
+					if($in==10)
+					$abn="#990099";
+					//$ntermc=$this->m_habitat->get_cod_ov($table,$nterm); //count nxt term overall
+				?>
+				 ["<?php echo $noptions?>", <?php echo $ncount_opt?>, "<?php echo $abn;?>"], //next term questions and options
+				 <?php
+					} //end of loop
+						$_SESSION['sid'] = $nsid + 1;
+                                                $this->session->set_userdata('sid', $nsid);
+
+					} //end of if
+					?>
+
+		]);
+
+
+      var view = new google.visualization.DataView(data);
+      view.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       2]);
+///// Current Question
+
+///////////////// Questions /////////////////////
+      var options = {
+		 <?php 
+
+	if(@$cov>=0 AND @$ntermc==0)
+	{
+		?>
+
+        title: "Q<?php echo $csid?>: <?php echo $cqt?>", ///////Current Question
+		 <?php }?>
+///// Next Questions
+		<?php
+		if(@$ntermc>0)
+		{
+			
+		?> 
+		title: "Q<?php echo $nsid?>: <?php echo $nqt?>",  ///// Next Question	
+		<?php }?>
+        width: 900,
+        height: 500,
+        bar: {groupWidth: "50%"},
+        legend: { position: "none" },
+      };
+
+
+      var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+      chart.draw(view, options);
+ 
+	    var options2 = {'title':'Results in %', 'width':550, 'height':400};
+
+  // Display the chart inside the <div> element with id="piechart"
+  var chart2 = new google.visualization.PieChart(document.getElementById('piechart'));
+  chart2.draw(data, options2);
+  }
+  </script>
+<div id="columnchart_values" style="width: 900px; height: 500px;"></div>
+
+<script>
+   function getValueAt(column, dataTable, row) {
+        return dataTable.getFormattedValue(row, column);
+      }
+</script>
+<!------------------------------------------------------- END OF GRAPH CHART --------------------------------------------------------------->
+
+<!------------------------------------------------------- PIE CHART --------------------------------------------------------------->
+<div id="piechart" style="float:right; margin-top:-450px"></div>
+

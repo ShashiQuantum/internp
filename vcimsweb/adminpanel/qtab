@@ -1,0 +1,75 @@
+<?php
+include_once('../init.php');
+
+  
+?>
+<center>
+<br><br>
+<table border="1">
+<form method=post action="">
+Month <select name=mn><option value=0>--All--</option></select>  <input type=submit name=view value=View>
+</form>
+<br><br>
+
+<?php
+
+
+  if(isset($_POST['view']))
+  {
+		echo "<br><br><form method=post action=''><table>";
+	  $qq="SELECT `user_id`, `user`, `pass`, `salt`, `role`, `create_date`, `last_login`, `status` FROM `app_user` WHERE `status`=0 ";
+	  $rst=DB::getInstance()->query($qq);
+	  if($rst->count()>0)
+	  {
+	   	echo "<tr bgcolor=lightgray><td>UserID</td><td>User</td><td>Reg. Date</td><td>Approve</td></tr>";
+	      foreach($rst->results() as $r)
+	      {
+	            echo "<tr><td>$r->user_id</td><td>$r->user</td><td>$r->create_date</td><td><input type=checkbox name=$r->user_id value=$r->status></td></tr>";
+	            
+	      }
+	      
+	      echo "<br><br><input type=submit name=save value=Save>";
+	  }
+	  else echo "No data available";
+	  
+	  
+  }
+  
+  if(isset($_POST['save']))
+  {
+  	//print_r($_POST);
+  	foreach($_POST as $key=>$val)
+    	{
+	    	if($val!='')
+	    	{       
+	    	 	
+	    		//echo "<br>".$key."=>".$val;
+	    		 
+	    		if($key !='save' )
+	    		{
+		    		$rq="UPDATE `app_user` SET `status`=1 WHERE `user_id`=$key";
+		    		DB::getInstance()->query($rq);
+
+				$rq2="SELECT a.user_id, b.name as name, a.user as user  FROM app_user as a join respondent_detail as b on a.user_id=b.user_id WHERE a.user_id=$key";
+		    		$rr2=DB::getInstance()->query($rq2);
+		    		if($rr2->count()>0)
+		    		{
+		    			$usern=$rr2->first()->name;
+		    			$user=$rr2->first()->user;
+	                          	$headers  = 'MIME-Version: 1.0' . "\r\n";
+			                $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+			                $headers .= 'From: admin@digiadmin.quantumcs.com' . "\r\n" .'Reply-To: admin@digiadmin.quantumcs.com' . "\r\n" .
+			"CC:  piyushr.ranjan47@gmail.com";
+			                $m.='Dear '.$usern.', <br><br><br>Welcome from Qtap! Your Qtap account is now approved/activated. <br> Please  login now to continue with Qtap App.  <br><br><br> Thanks,<br>Admin<br><img  src=www.digiadmin.quantumcs.com/images/Digiadmin_logo.jpg height=50 width=100><br>';
+			                $s="Qtap Digiadmin account approved ";
+			
+			               $fs= mail($user, $s, nl2br($m), $headers);
+		               }
+		    		
+	    		}
+	    	}
+	 }
+	 echo "<center>Approved successfully";
+  }
+
+?>

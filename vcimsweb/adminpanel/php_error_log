@@ -1,0 +1,16 @@
+[11-May-2016 11:51:17 Europe/Berlin] PHP Warning:  session_start(): open(C:\xampp\tmp/sess_83e097vc2ajt7atadl5mssqs21, O_RDWR) failed: No such file or directory (2) in /home/vareniacims/public_html/vcims/init.php on line 10
+[11-May-2016 11:51:17 Europe/Berlin] PHP Fatal error:  Call to undefined function mysqli_connect() in /home/vareniacims/public_html/vcims/init.php on line 12
+[11-May-2016 11:51:25 Europe/Berlin] PHP Warning:  session_start(): open(C:\xampp\tmp/sess_83e097vc2ajt7atadl5mssqs21, O_RDWR) failed: No such file or directory (2) in /home/vareniacims/public_html/vcims/init.php on line 10
+[11-May-2016 11:51:25 Europe/Berlin] PHP Fatal error:  Call to undefined function mysqli_connect() in /home/vareniacims/public_html/vcims/init.php on line 12
+[11-May-2016 11:51:27 Europe/Berlin] PHP Warning:  session_start(): open(C:\xampp\tmp/sess_83e097vc2ajt7atadl5mssqs21, O_RDWR) failed: No such file or directory (2) in /home/vareniacims/public_html/vcims/init.php on line 10
+[11-May-2016 11:51:27 Europe/Berlin] PHP Fatal error:  Call to undefined function mysqli_connect() in /home/vareniacims/public_html/vcims/init.php on line 12
+[11-May-2016 11:51:28 Europe/Berlin] PHP Warning:  session_start(): open(C:\xampp\tmp/sess_83e097vc2ajt7atadl5mssqs21, O_RDWR) failed: No such file or directory (2) in /home/vareniacims/public_html/vcims/init.php on line 10
+[11-May-2016 11:51:28 Europe/Berlin] PHP Fatal error:  Call to undefined function mysqli_connect() in /home/vareniacims/public_html/vcims/init.php on line 12
+[11-May-2016 11:51:33 Europe/Berlin] PHP Warning:  session_start(): open(C:\xampp\tmp/sess_83e097vc2ajt7atadl5mssqs21, O_RDWR) failed: No such file or directory (2) in /home/vareniacims/public_html/vcims/init.php on line 10
+[11-May-2016 11:51:33 Europe/Berlin] PHP Fatal error:  Call to undefined function mysqli_connect() in /home/vareniacims/public_html/vcims/init.php on line 12
+[11-May-2016 11:51:57 Europe/Berlin] PHP Warning:  session_start(): open(C:\xampp\tmp/sess_83e097vc2ajt7atadl5mssqs21, O_RDWR) failed: No such file or directory (2) in /home/vareniacims/public_html/vcims/init.php on line 10
+[11-May-2016 11:51:57 Europe/Berlin] PHP Fatal error:  Call to undefined function mysqli_connect() in /home/vareniacims/public_html/vcims/init.php on line 12
+[11-May-2016 11:52:00 Europe/Berlin] PHP Warning:  session_start(): open(C:\xampp\tmp/sess_83e097vc2ajt7atadl5mssqs21, O_RDWR) failed: No such file or directory (2) in /home/vareniacims/public_html/vcims/init.php on line 10
+[11-May-2016 11:52:00 Europe/Berlin] PHP Fatal error:  Call to undefined function mysqli_connect() in /home/vareniacims/public_html/vcims/init.php on line 12
+[11-May-2016 11:52:01 Europe/Berlin] PHP Warning:  session_start(): open(C:\xampp\tmp/sess_83e097vc2ajt7atadl5mssqs21, O_RDWR) failed: No such file or directory (2) in /home/vareniacims/public_html/vcims/init.php on line 10
+[11-May-2016 11:52:01 Europe/Berlin] PHP Fatal error:  Call to undefined function mysqli_connect() in /home/vareniacims/public_html/vcims/init.php on line 12

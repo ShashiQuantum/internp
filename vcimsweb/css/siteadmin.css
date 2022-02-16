@@ -1,0 +1,40 @@
+   body#pg 
+   {
+    font-family: 'Source Sans Pro', sans-serif;
+
+    margin: 0;
+    padding: 0;
+    text-align: justify;
+    text-justify: inter-word;
+    text-decoration: none;
+    //font-size: 150%;
+    background-color: #F9FCF8; 
+    margin-top: 105px;
+    margin-bottom: 5px;
+    margin-right: 75px;
+    margin-left: 75px;
+    }
+        
+	div#header
+	{
+   	    height: 95px;
+   	    top:0px;
+	    right:0px;
+	    left:0px;
+	    position:fixed;
+	    //background: #00e500;
+            background: #fff;
+	    border:1px solid #ccc;
+	    padding: 0 10px 0 20px;
+   	}
+   	
+   	input[type="submit"]{background-color:#00B800; color:#fff;}
+   	
+   	 input[type="number"],input[type="text"],input[type="email"],input[type="password"], select,textarea{ border:1px solid #bebab9; padding:6px; width:240px; margin:0px auto 15px; background:#eeeeee; font-size: 12px;line-height: 20px;}
+   	 .tat{ border:1px solid #bebab9; padding:6px; width:340px; margin:0px auto 15px; background:#eeeeee; font-size: 12px;line-height: 20px;}
+   	 
+   	 .txt{ border:1px solid #bebab9; padding:6px; width:210px; margin:0px auto 15px; background:#eeeeee; font-size: 12px;line-height: 20px;}
+   	 
+   	 
+   	 
+   	 
