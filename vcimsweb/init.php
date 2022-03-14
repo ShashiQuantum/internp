@@ -12,14 +12,14 @@
 //        session_start();
 	
 	 
-	$no_pdo=mysqli_connect("database-1.c1mggasso0hp.ap-south-1.rds.amazonaws.com","qcsrdsadmin","Pa7du#ah$098","vcims") or die("Mysql Couldn't connect");
+	$no_pdo=mysqli_connect("localhost","root","","vcims") or die("Mysql Couldn't connect");
 
 	define("APP_ROOT", dirname(__FILE__));
 	
 	$GLOBALS['config']=array(										//Globals array to store standard constant values
-		'mysql' => 		array(		'host' => 'database-1.c1mggasso0hp.ap-south-1.rds.amazonaws.com',
-							'user'=>'qcsrdsadmin',
-							'pass'=>'Pa7du#ah$098',
+		'mysql' => 		array(		'host' => 'localhost',
+							'user'=>'root',
+							'pass'=>'',
 							'db'=>'vcims'
 					     ),
 			
@@ -31,7 +31,7 @@
 					'token_name' =>'token'
 							),
 
-		'url' => array( 'base' => 'http://www.live.digiadmin.quantumcs.com',
+		'url' => array( 'base' => 'http://localhost/quantumdigiadmin/',
 				'blog' => 'http://blog.digiadmin.quantumcs.com/',
 				'image' => 'https://www.digiadmin.quantumcs.com/images' ),
 		

@@ -2,9 +2,9 @@
 /**
  * Database config variables
  */
-define("DB_HOST", "database-1.c1mggasso0hp.ap-south-1.rds.amazonaws.com");
-define("DB_USER", "qcsrdsadmin");
-define("DB_PASSWORD", "Pa7du#ah$098");
+define("DB_HOST", "localhost");
+define("DB_USER", "root");
+define("DB_PASSWORD", "");
 define("DB_DATABASE", "vcims");
 
 /*

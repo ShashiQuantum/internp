@@ -132,7 +132,7 @@ class MSausermodel extends CI_Model{
 			$user=$this->isUser($username);		
 			if($user) 
 			{
-                        	$uid=$this->getUserID($username);
+                        	    $uid=$this->getUserID($username);
                                 $pass=$this->getUserPass($uid);
                                 $salt=$this->getUserSalt($uid);
                                 $st=$this->getUserStatus($uid);

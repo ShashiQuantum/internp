@@ -126,7 +126,7 @@ class Siteadmin extends CI_Controller {
 				$t= $email;
 				$s='Digiadmin Password Reset Requested';
 				$msg = "
-					Hello ,<br><br> Received your password reset request.<br> Click here on <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/reset_password/$token'>Reset Password</a>  link to reset your new password. This link is valid for 30 minutes only else get expired.<br><br> Thanks,<br>Team SiteAdmin 
+					Hello ,<br><br> Received your password reset request.<br> Click here on <a href='http://localhost/quantumdigiadmin/siteadmin/reset_password/$token'>Reset Password</a>  link to reset your new password. This link is valid for 30 minutes only else get expired.<br><br> Thanks,<br>Team SiteAdmin 
 				";
 				if(mail($t, $s, $msg, $headers))
 		 		{}
@@ -147,22 +147,16 @@ class Siteadmin extends CI_Controller {
 	}
          //for siteadmin login procee
         public function sadmlogin()
-        {
-        	//$this->load->helper('url'); 
-	        //$this->load->helper('form');   
-	            
-	       // $this->load->view('sadm_login_form');
+        {    
 	       $usern=$this->input->post("username");
         	$passd=$this->input->post("password");
-
                 $this->load->model('MSausermodel');
-
                 $ss=$this->MSausermodel->login($usern, $passd);
 
-                if($ss)
-                {
+                if($ss) 
+                {       
                   	 $uid=$_SESSION['sauserid'];
-                         $this->load->model('MSausermodel');
+                        // $this->load->model('MSausermodel');  //SHASHI// THIS IS REPEATED LOADING THE MODEL
                          $role=$this->MSausermodel->getuserrole($uid);
         		 $permission=$this->MSausermodel->getuserpermissionmap($uid);
 			 $data['rqpost']=''; $data['msg']='';
@@ -176,9 +170,10 @@ class Siteadmin extends CI_Controller {
                          $this->session->set_userdata('permission',$permission);
 
                          $satempuri=$this->session->tempdata('satemp');
-//print_r($_SESSION);
+//print_r($_SESSION);die;
                          if($satempuri=='')
         		    	//$this->load->view('samylogin',$data);
+                                 
 				$this->load->view('v_shome', $data);
                          else
                           	redirect($satempuri);
@@ -401,12 +396,13 @@ class Siteadmin extends CI_Controller {
          //for ajax call to get product filter 
         public function user_action($action=null)
         {
-		//if($action!=null) {
+		
+                //if($action!=null) {
 		//switch($action) {
 		$task=$action;
-		if(!empty($_POST['action'])){$task = $_POST['action'];}
+		if(!empty($_POST['action'])) {$task = $_POST['action'];}
         	if(!empty($_POST['action']) || $action!=null) {  
-                var_dump($task);
+               // var_dump($task);
 		switch($task ) {
 			case "vrusradd":
                          ?>
@@ -1153,6 +1149,7 @@ onclick="return confirm('Are you sure to set project quota?');"></td></tr>
                 <?php
                         break;
                         case "viewtransdataupload":
+                               
                                 $this->load->view('v_h');
 				echo "<br><br><br><br> <div class='content' style='margin-left: 15%;'><div class='well col-lg-9'>";
                                 $this->load->model('MTablet');
@@ -1225,7 +1222,7 @@ onclick="return confirm('Are you sure to set project quota?');"></td></tr>
 
                                 ?>			
 				<?php echo form_close(); ?> 
-				<label class='btn btn-light' style='margin-left: 15%;'> <a href='https://digiadmin.quantumcs.com/vcimsweb/adminpanel/1236.php' target="_blank">See Translated Questionnare </a> </label>
+				<label class='btn btn-light' style='margin-left: 15%;'> <a href='http://localhost/quantumdigiadmin/vcimsweb/adminpanel/1236.php' target="_blank">See Translated Questionnare </a> </label>
 				</div></div>
 		<?php
 			break;
@@ -1484,6 +1481,8 @@ onclick="return confirm('Are you sure to set project quota?');"></td></tr>
 		<?php
 			break;
                         case "createproject":
+                               // echo "createporject";die;
+                               
                                 $this->load->view('v_h');
                                 echo "<br><br><br><br> <div class='content' style='margin-left: 15%;'><div class='well col-lg-9'>";
 
@@ -1747,7 +1746,7 @@ onclick="return confirm('Are you sure to set project quota?');"></td></tr>
                                 			
 				echo form_close();
  				*/
-				header("Location: https://digiadmin.quantumcs.com/vcimsweb/adminpanel/question_trans.php?st=101");
+				header("Location: http://localhost/quantumdigiadmin/vcimsweb/adminpanel/question_trans.php?st=101");
                               ?>
 		<?php
 			break;
@@ -2783,7 +2782,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 			//$_SESSION['ctpn'] = $pn;
 			//print_r($_SESSION);
 		}
-                redirect("https://digiadmin.quantumcs.com/vcimsweb/crosstabh.php?ctp=$pid&pn=$pn");
+                redirect("http://localhost/quantumdigiadmin/vcimsweb/crosstabh.php?ctp=$pid&pn=$pn");
         }
         public function viewtransdataupload()
         {
@@ -2796,7 +2795,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         //$_SESSION['ctpn'] = $pn;
                         //print_r($_SESSION);
                 }
-                redirect("https://digiadmin.quantumcs.com/dataupload/viewtransqop.php?ctp=$pid&pn=$pn");
+                redirect("http://localhost/quantumdigiadmin/dataupload/viewtransqop.php?ctp=$pid&pn=$pn");
         }
 
         public function transdataupload()
@@ -2810,7 +2809,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         //$_SESSION['ctpn'] = $pn;
                         //print_r($_SESSION);
                 }
-                redirect("https://digiadmin.quantumcs.com/dataupload/transqop.php?ctp=$pid&pn=$pn");
+                redirect("http://localhost/quantumdigiadmin/dataupload/transqop.php?ctp=$pid&pn=$pn");
         }
 
         public function dummydataupload()
@@ -2824,7 +2823,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         //$_SESSION['ctpn'] = $pn;
                         //print_r($_SESSION);
                 }
-                redirect("https://digiadmin.quantumcs.com/dataupload/dummydataupload.php?ctp=$pid&pn=$pn");
+                redirect("http://localhost/quantumdigiadmin/dataupload/dummydataupload.php?ctp=$pid&pn=$pn");
         }
 
         public function dummycrosstab()
@@ -2836,7 +2835,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $this->load->model('MProject');
                         $pn = $this->MProject->get_project_name($pid);
                 }
-                redirect("https://digiadmin.quantumcs.com/vcimsweb/dummycrosstabh.php?ctp=$pid&pn=$pn");
+                redirect("http://localhost/quantumdigiadmin/vcimsweb/dummycrosstabh.php?ctp=$pid&pn=$pn");
         }
 	public function viewpshowcards()
 	{
@@ -3030,7 +3029,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        $pid= $this->input->post('pn'); 
 	               $this->load->model('MProject');
                        $sdata=$this->MProject->getEditRoutineDetail($pid);
- 			$sdata.= "<br><br>Click on  <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/editroutine'> Edit Routine </a></font> ";
+ 			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/editroutine'> Edit Routine </a></font> ";
                        $arrdata['rqpost']='';
                        echo "<br><br><br><br> <div style='margin-left:50px;'>";
                        echo $arrdata['msg']=$sdata;
@@ -3998,7 +3997,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 			
 			$_SESSION['pid']=$pn;
 			$_SESSION['qset']=$pid;
-			$sdata.= "<br><br>Click to more <font clolor=red> <a href = 'https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/createquestion'> New Question </a></font> "; 
+			$sdata.= "<br><br>Click to more <font clolor=red> <a href = 'http://localhost/quantumdigiadmin/siteadmin/user_action/createquestion'> New Question </a></font> "; 
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4108,7 +4107,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                              		} //end of  if $
                        } //end of foreach
                        $sdata= "<br>Question Routine added successfully";
-		       $sdata.= "<br><br>Click here to <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/createroutine'> Add Routine </a></font> ";
+		       $sdata.= "<br><br>Click here to <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/createroutine'> Add Routine </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4153,7 +4152,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        $rr=$this->MProject->isQOp($qid,$code);
                        if(!$rr)
                        {   $sd=$this->MProject->insertIntoTable('question_option_detail',$arr);
-                           if($sd) $sdata="Sucessfully Added Option in qid:$qid as $opt <br><br>Click here to <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/addqop'> Add More Options</a>";
+                           if($sd) $sdata="Sucessfully Added Option in qid:$qid as $opt <br><br>Click here to <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/addqop'> Add More Options</a>";
                            if(!$sd) $sdata="Unable to Add Option in qid:$qid as $opt";
                        }
                        if($rr) $sdata="Already exist in our database-- Option in qid:$qid as $opt";
@@ -4223,7 +4222,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 	               $this->load->model('MProject');
                        $arr=array('qset_id'=>$qset,'qid'=>$qid, 'sid'=>$sid,'chkflag'=>0);
                         $sd=$this->MProject->insertIntoTable('question_sequence',$arr);
-                           if($sd) $sdata="Sucessfully Sequence Added qid:$qid of Qset:$qset <br><br>Click here to <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/addsequence'> Add more sequence</a>";
+                           if($sd) $sdata="Sucessfully Sequence Added qid:$qid of Qset:$qset <br><br>Click here to <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/addsequence'> Add more sequence</a>";
                            if(!$sd) $sdata="Unable to Sequence Added qid:$qid of Qset:$qset";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
@@ -4266,7 +4265,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 	                        $sd=$this->MProject->insertIntoTable('centre_project_details',$arr);
 				if($sd) $sdata="Sucessfully Centre(s) Added to Qset:$qset";
 			}
-                       $sdata.= "<br><br>Click on  <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/addpcentre'> Add Centre </a></font> ";
+                       $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/addpcentre'> Add Centre </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4286,7 +4285,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $sd=$this->MProject->insertIntoTable('project_product_map',$arr);
                            if($sd) $sdata="Sucessfully Product Added :$prdn to Qset:$qset";
                            if(!$sd) $sdata="Unable to Product Added :$prdn to Qset:$qset";
-                      $sdata.= "<br><br>Click on  <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/addpproduct'> Add Product </a></font> ";
+                      $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/addpproduct'> Add Product </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4306,7 +4305,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $sd=$this->MProject->insertIntoTable('project_store_loc_map',$arr);
                            if($sd) $sdata="Sucessfully Store Added :$sn to Qset:$qset";
                            if(!$sd) $sdata="Unable to Store Added :$sn to Qset:$qset";
-                      $sdata.= "<br><br>Click on  <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/addpstore'> Add Store </a></font> ";
+                      $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/addpstore'> Add Store </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4325,7 +4324,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $sd=$this->MProject->insertIntoTable('project_sec_map',$arr);
                            if($sd) $sdata="Sucessfully SEC Added :$sn to Qset:$qset";
                            if(!$sd) $sdata="Unable to SEC Added :$sn to Qset:$qset";
-                      $sdata.= "<br><br>Click on  <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/addpsec'> Add SEC </a></font> ";
+                      $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/addpsec'> Add SEC </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4345,7 +4344,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $sd=$this->MProject->insertIntoTable('project_age_map',$arr);
                            if($sd) $sdata="Sucessfully Age Added :$sn to Qset:$qset";
                            if(!$sd) $sdata="Unable to Age Added :$sn to Qset:$qset";
-                       $sdata.= "<br><br>Click on  <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/addpage'> Add Age </a></font> ";
+                       $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/addpage'> Add Age </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4383,7 +4382,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $sd=$this->MProject->insertIntoTable('project_centre_area_map',$arr);
                            if($sd) $sdata="Sucessfully Area Added :$area";
                            if(!$sd) $sdata="Unable to Area Added :$area";
-			$sdata.= "<br><br>Click on  <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/addarea'> Add Area </a></font> ";
+			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/addarea'> Add Area </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4406,7 +4405,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $sd=$this->MProject->insertIntoTable('project_centre_subarea_map',$arr);
                            if($sd) $sdata="Sucessfully SubArea Added :$area";
                            if(!$sd) $sdata="Unable to SubArea Added :$area";
-			$sdata.= "<br><br>Click on  <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/addsubarea'> Add Sub-Area </a></font> ";
+			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/addsubarea'> Add Sub-Area </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4422,7 +4421,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        $qid= $this->input->post('qid');  $qno=strtolower($qno);
 	               $this->load->model('MProject');
                        $sdata=$this->MProject->copyquestioninproject($pid, $qset, $qid, $qno);
-			$sdata.= "<br><br>Click on  <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/copyqbquest'> Copy Question </a></font> ";
+			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/copyqbquest'> Copy Question </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4440,7 +4439,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 	               $this->load->model('MProject');
 			//print_r($qids);
                        $sdata = $this->MProject->copyquestioninproject($pid, $qset, $qids, $qno);
-			$sdata.= "<br><br>Click on  <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/copyquestionop'> Copy Question Options </a></font> ";
+			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/copyquestionop'> Copy Question Options </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4538,7 +4537,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        $sa=$this->MProject->doSqlDML($qi); 
                        $sdata="Not deleted";
                        if($sa) $sdata="Question Routine of QSET: $qset, Deleted Successfully";
-			$sdata.= "<br><br>Click on  <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/deleteroutine'> Delete Routine </a></font> ";
+			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/deleteroutine'> Delete Routine </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4881,7 +4880,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        if($rt!=0 && $qset!=0)  $sdata=$this->MProject->doaddrule($_POST);
                        $msg=" Done";
                        if($sdata==1) $msg="Successfully added rule for Questions";
-			$sdata.= "<br><br>Click on  <font clolor=red> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/addrule'> Add Rule </a></font> ";
+			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/quantumdigiadmin/siteadmin/user_action/addrule'> Add Rule </a></font> ";
                        $ardata['rqpost']=''; 
                        echo $ardata['msg']=$msg; 
                        $this->load->model('MSausermodel');

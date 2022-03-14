@@ -619,7 +619,7 @@ class PHPExcel_Reader_Excel2003XML extends PHPExcel_Reader_Abstract implements P
 							// added this as a check for array formulas
 							if (isset($cell_ss['ArrayRange'])) {
 								$cellDataCSEFormula = $cell_ss['ArrayRange'];
-//								echo "found an array formula at ".$columnID.$rowID."<br />";
+//								echo "found an array formula at ".$columnID.$rowID."<br/>";
 							}
 							$hasCalculatedValue = true;
 						}

@@ -340,7 +340,7 @@ if(isset($_POST['nq_submit']))
             {
                 echo "<br>Sorry, there was an error uploading your file.";
             }
-            //echo "Return Code: " . $_FILES["qfile"]["error"] . "<br />";
+            //echo "Return Code: " . $_FILES["qfile"]["error"] . "<br/>";
             */
         }
         if($qt=='text' || $qt=='textarea' || $qt == 'dropdown'|| $qt=='image')

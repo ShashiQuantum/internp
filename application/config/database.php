@@ -48,9 +48,14 @@
 $active_group = 'default';
 $active_record = TRUE;
 //Quantum DB
-$db['default']['hostname'] = 'database-1.c1mggasso0hp.ap-south-1.rds.amazonaws.com';
-$db['default']['username'] = 'qcsrdsadmin';
-$db['default']['password'] = 'Pa7du#ah$098';
+// $db['default']['hostname'] = 'database-1.c1mggasso0hp.ap-south-1.rds.amazonaws.com';
+// $db['default']['username'] = 'qcsrdsadmin';
+// $db['default']['password'] = 'Pa7du#ah$098';
+
+$db['default']['hostname'] = 'localhost';
+$db['default']['username'] = 'root';
+$db['default']['password'] = '';
+
 $db['default']['database'] = 'vcims';
 $db['default']['dbdriver'] = 'mysqli';
 $db['default']['dbprefix'] = '';

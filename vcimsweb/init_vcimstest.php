@@ -9,15 +9,15 @@
 
 	session_start();
 	
-	$no_pdo=mysqli_connect("localhost","vcimsdemo","password123","vcimstest") or die("Mysql Couldn't connect");
+	$no_pdo=mysqli_connect("localhost","root","","vcims") or die("Mysql Couldn't connect");
 
 	define("APP_ROOT", dirname(__FILE__));
 	
 	$GLOBALS['config']=array(										//Globals array to store standard constant values
 		'mysql' => 		array(		'host' => 'localhost',
-							'user'=>'vcimsdemo',
-							'pass'=>'password123',
-							'db'=>'vcimstest'
+							'user'=>'root',
+							'pass'=>'',
+							'db'=>'vcimvcimsstest'
 					     ),
 			
 		'remember' => array(
@@ -28,7 +28,7 @@
 					'token_name' =>'token'
 							),
 
-		'url' => array( 'base' => 'https://www.digiadmin.quantumcs.com',
+		'url' => array( 'base' => 'http://localhost/quantumdigiadmin',
 				'blog' => 'http://blog.digiadmin.quantumcs.com/',
 				'image' => 'https://www.digiadmin.quantumcs.com/images' ),
 		

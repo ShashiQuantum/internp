@@ -17,7 +17,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-$config['base_url'] = 'https://digiadmin.quantumcs.com/quantumdigiadmin/';
+//$config['base_url'] = 'https://digiadmin.quantumcs.com/quantumdigiadmin/';
+$config['base_url'] = 'http://localhost/quantumdigiadmin';
 //console.log('Inside config');
 /*
 |--------------------------------------------------------------------------
@@ -411,7 +412,9 @@ $config['standardize_newlines'] = FALSE;
 |
 */
 $config['global_xss_filtering'] = FALSE;
-
+// error_reporting(0);
+// ini_set('display_errors', 'Off');
+// ini_set('display_errors', 0);
 /*
 |--------------------------------------------------------------------------
 | Cross Site Request Forgery
@@ -420,6 +423,7 @@ $config['global_xss_filtering'] = FALSE;
 | checked on a submitted form. If you are accepting user data, it is strongly
 | recommended CSRF protection be enabled.
 |
+
 | 'csrf_token_name' = The token name
 | 'csrf_cookie_name' = The cookie name
 | 'csrf_expire' = The number in seconds the token should expire.
