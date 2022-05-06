@@ -31,7 +31,7 @@ function SelectRedirect(){
 	switch(document.getElementById('domain').value)
 	{
 		case "1":
-			window.location="http://www.localhost/quantumdigiadmin";
+			window.location="http://www.localhost/digiamin-web";
 		break;
 		case "2":
 			window.location="http://www.localhost/vpms";

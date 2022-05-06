@@ -191,7 +191,7 @@ $yrs = (date('Y') - date('Y',strtotime($dob)));
 			($qset,$resp_id,'$fn','$mb',$gen,'$cadd', '$padd',$centre,$centre2,'$city','$pcity','$dob',$yrs,'$em',$du,0)";
                 	$ds = DB::getInstance()->query($sqt);
 
-                     	$newURL="http://localhost/quantumdigiadmin/test/2.php";
+                     	$newURL="http://localhost/digiamin-web/test/2.php";
                     	//header('Location: '.$newURL);
                 }
                 else    echo "<tr style='text-color:red;'><td>Please fill all details * to start this survey.</td></tr>";

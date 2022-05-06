@@ -122,7 +122,7 @@ include_once('survey-function.php');
                     DB::getInstance()->query($qqa);
                     //session_destroy();
 			//$newURL="https://www.vareniacims.com/survey/fp234.php?q=$qset";
-                       echo $newURL="http://localhost/quantumdigiadmin/survey/thanks.php";
+                       echo $newURL="http://localhost/digiamin-web/survey/thanks.php";
                      header('Location: '.$newURL);
 
 	}
@@ -1764,9 +1764,9 @@ placeholder='Type here'  name=q$qid id=q$qid value='$str' >";
 	  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
 <script type = "text/javascript" >
-history.pushState(null, null, 'http://localhost/quantumdigiadmin/survey/fpn_234.php');
+history.pushState(null, null, 'http://localhost/digiamin-web/survey/fpn_234.php');
 window.addEventListener('popstate', function(event) {
-history.pushState(null, null, 'http://localhost/quantumdigiadmin/survey/fpn_234.php');
+history.pushState(null, null, 'http://localhost/digiamin-web/survey/fpn_234.php');
 });
 </script>
 

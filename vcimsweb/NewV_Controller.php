@@ -323,11 +323,49 @@ class NewController implements Responder
     }
 
     private function returnResponse($status, $msg, $response)
-    {  //echo 'b';
-       //print_r($response);
+    {  
 
         $jsonResponse = array(STATUS => $status, MSG => $msg, RESPONSE => $response);
         echo json_encode($jsonResponse);
+    } 
+
+    private function apireturnResponse($status, $msg, $userid, $data)
+    {  
+        
+        // $data  = [
+ 
+	 
+        //     array(
+        //             "userdata" => 'userDataDetails',
+        //            "datavalue" => 'userDataValueDetails',
+        //            "userdataFlag" => 'userDataFlagValue',
+        //           ),
+           
+           
+        //        array(
+                   
+        //            "userdata" => 'userDataDetails',
+        //            "datavalue" => 'userDataValueDetails',
+        //            "userdataFlag" => 'userDataFlagValue',
+        //           )	
+            
+           
+           
+        //    ];
+        
+        $data =[$data];
+           
+           $dataarray[]  = [
+                "status" => $status,
+               "msg" => $msg,
+               "user_id" => $userid,
+                
+               "data" => $data
+           ];
+           
+           echo json_encode($dataarray,true);
+        
+       
     } 
     private function returnResponseMobi($status, $msg, $response)
     {  //echo 'b';
@@ -360,6 +398,11 @@ class NewController implements Responder
             $this->returnResponse(0, "Ids not Found", null);
         else
             $this->model->_getRoutineDetails($this);
+    }
+
+    public function apionSuccess($status, $msg, $userid, $data)
+    {  
+        $this->apireturnResponse($status, $msg, $userid, $data);
     }
 
 

@@ -1030,7 +1030,7 @@ value='text'>Open Ended [Text]</option><option value='textarea'>Open Ended Multi
 Dropdown List(0-30)</option><option value='rating'>Rating </option><option value='image'>Image Capture</option><option value='audio'>Audio 
 Capture</option><option value='video'>Video Capture</option><option value='imaged'>Display Instruction with Image</option><option value='audiod'>Play Audio with 
 Instruction</option> <option value='videod'>Play Video with Instruction</option><option value='old_sec'>Old SEC</option><option value='new_sec'>New SEC</option></select>
-<div id=oplist style='display:none;'> Total Options<input type=number class='form-control' name=cnt id=cnt style='width:70px;' onchange='generate();'> </div> <a href='https://digiadmin.quantumcs.com/quantumdigiadmin/siteadmin/user_action/createquestion'> RESET ALL</a> </td></tr>";
+<div id=oplist style='display:none;'> Total Options<input type=number class='form-control' name=cnt id=cnt style='width:70px;' onchange='generate();'> </div> <a href='https://digiadmin.quantumcs.com/digiamin-web/siteadmin/user_action/createquestion'> RESET ALL</a> </td></tr>";
 			$str.="<tr><td>Mark as SHOW CARD [optional]</td><td><select class='form-control' name=sc><option value='0'>No</option> <option value='1'>Yes</option> </select></td></tr>";
 			$str.="<tr><td>Timestamp Capture Required </td><td><select class='form-control' name=ts><option value='0'>No</option> <option value='1'>Yes</option></select> </td></tr>";
 	                $str.="<tr><td>Question S.No *</td><td> <input type='text' class='form-control' name='qno' id='qno' placeholder='question serial no' onkeypress='return 

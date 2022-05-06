@@ -28,7 +28,7 @@
 					'token_name' =>'token'
 							),
 
-		'url' => array( 'base' => 'http://localhost/quantumdigiadmin',
+		'url' => array( 'base' => 'http://localhost/digiamin-web',
 				'blog' => 'http://blog.digiadmin.quantumcs.com/',
 				'image' => 'https://www.digiadmin.quantumcs.com/images' ),
 		

@@ -57,8 +57,8 @@ class NewQueryManager
     }
  
     /* query for appsignup result  details */
-    public
-    function _appSignUp(NewController $instance)
+    
+    public  function _appSignUp(NewController $instance)
     {
         $tag = "**_appSignUp**";
         $conn = DBConnector::getDBInstance();
@@ -70,273 +70,227 @@ class NewQueryManager
         if ($conn->connect_error) {
             $this->_returnError($conn, $instance, $tag);
             die("Connection failed: " . $conn->connect_error);
-        } else {
-            $jsonPost = stripslashes($_REQUEST['appsignup']);
-            $name=null;$email=null;$mobile=null;$address=null;$gender=null;$age=null;$pwd=null;$ref=0;$nresp_dob=0;$sq1=null;$sq2=null;
-            $nresp_sec_educ=null;$nresp_sec_occup=null;$nresp_educ=null;$nresp_occup=null;$nresp_m_status=null;
-            $nresp_income=null;$nresp_tot_kids=null;$nresp_hfd=null;$nresp_hfd_frequency=null;$nresp_twowheeler=null;
-            $nresp_fourwheeler=null;$city=null;$state=null;$nresp_working_st=null;$nresp_hh_mob_user_cnt=null;$plang=null;
-            $imei=null;$oprator_name=null;$net_loc=null;$phone_type=null;$pin_code=null;
-            $marr=array();
-            $result = json_decode($jsonPost,true); //print_r($result);
-            foreach ($result as $json) {
-                $column = null;
-                $isFirst = false;
-                $value = null;
-                 
-                foreach ($json as $key => $val) 
+        } 
+        
+        else {
+$jsonPost = stripslashes($_REQUEST['appsignup']);
+   
+    
+    $result = json_decode($jsonPost,true); 
+     foreach ($result as $key => $val) 
                 {    
-	                 if(is_array($val))  
-	                 {    
-	                 	 
-	                 	foreach ($val as $akey => $aval) 
-                		{
-                			if($aval != ' ')
-                			{$temp=array($key => $aval);array_push($marr, $temp); }
-                		}
-		              
-	           	}
-	           	else
-	           	{ 
-	           		// echo "<br>$key=".$val;
-	           		     if($key == 'name')
-			              {    $name=$val;}
-			              if($key == 'email')
-			              {     $email=$val;}
-			              if($key == 'mobile')
-			              {     $mobile=$val;}
-			              if($key == 'address')
-			              {     $address=$val;}
-			              if($key == 'gender')
-			              {     $gender=$val;}
-			              if($key == 'age_yrs')
-			              {     $age_yrs=$val;}
-			              if($key == 'nresp_dob')
-			              {     $nresp_dob=$val;}
-			              if($key == 'password')
-			              {     $pwd=$val;}
-			              if($key == 'ref')
-		              	      {   $ref=$val;}
-		              	 	if(trim ($key) == 'nresp_sec_educ')
-		              		{   $nresp_sec_educ=$val;}
-		              		if(trim ($key) == 'nresp_sec_occup')
-		              		{   $nresp_sec_occup=$val;}
-		              		if($key == 'nresp_educ')
-		              		{   $nresp_educ=$val;}
-		              		if($key == 'nresp_occup')
-		              		{   $nresp_occup=$val;}
-		              		if($key == 'nresp_m_status')
-		              		{   $nresp_m_status=$val;}
-		              		if($key == 'nresp_income')
-		              		{   $nresp_income=$val;}
-		              		if($key == 'nresp_tot_kids')
-		              		{   $nresp_tot_kids=$val;}
-		              		if($key == 'nresp_hfd')
-		              		{   $nresp_hfd=$val;}
-		              		if($key == 'nresp_hfd_frequency')
-		              		{   $nresp_hfd_frequency=$val;}
-		              		if($key == 'nresp_twowheeler')
-		              		{   $nresp_twowheeler=$val;}
-		              	        if($key == 'nresp_fourwheeler')
-		              		{   $nresp_fourwheeler=$val;}
-                                        if($key == 'nresp_working_st')
-			                {     $nresp_working_st=$val;}
-			                if($key == 'nresp_hh_mob_user_cnt')
-			                {     $nresp_hh_mob_user_cnt=$val;}
-		              		if($key == 'city')
-		              		{   $city=$val;}
-                                        if($key == 'state')
-		              		{   $state=$val;}
-                                        if($key == 'plang')
-		              		{   $plang=$val;}
+	                        if($key == 'mobile')
+			                {   
+                                  $mobile=$val;
+                            }
+			                if($key == 'verfyStatus')
+			                {     
+                                $verfyStatus=$val;
+                            }
 
-                                        if($key == 'imei')
-		              		{   $imei=$val;}
-                                        if($key == 'oprator_name')
-		              		{   $oprator_name=$val;}
-                                        if($key == 'network_circlr_location')
-		              		{   $net_loc=$val;}
-                                        if($key == 'phone_type')
-		              		{   $phone_type=$val;}
-                                        if($key == 'pin_code')
-		              		{   $pin_code=$val;}
-	           	}
-                }
-            
-            } 
-  // print_r($marr);
-        //$qchk0="SELECT resp_id FROM mangopinion_57 WHERE imei='$imei' ";
-        //$rchk0=mysqli_query($conn, $qchk0);  
-        //if($rchk0->num_rows < 1)
-        //{
-              $qchk="SELECT user_id FROM app_user WHERE user='$email' or mobil='$mobile' ";
-              $rchk=mysqli_query($conn, $qchk);  
-            if($rchk->num_rows < 1)
-            {
-                   $sq1="INSERT INTO `app_user`(`user_name`, `user`, `mobil`, `pass`, `role`,`status`,`create_date`) VALUES ('$name','$email','$mobile','$pwd',5,1,'$dt')";
+                            if($key == 'gcmid')
+			                {     
+                                $gcmid=$val;
+                            }
+		              	
+                } 
+                
+                $qry="SELECT * FROM `app_user` WHERE  `mobile` ='$mobile' "; 
+                $qresult=mysqli_query($conn, $qry);
+
+                if($qresult->num_rows < 1){
+                    
+                   $sq1="INSERT INTO `app_user`(`mobile`, `status`,`gcmid`) VALUES ('$mobile','$verfyStatus','$gcmid')";
                    $rs1=mysqli_query($conn, $sq1);
-                   $touser_id=mysqli_insert_id($conn);
+                   if($rs1){
+                    $userid=  mysqli_insert_id($conn);
+                    $msg = "user register successfully ";
+                    $status = 'true';
+                    $data= null;
+                    $this->apireturnResponse($conn, $instance, $status, $msg, $userid, $data);
+                   }
 
-			/*		   $sec_occup=$nresp_sec_occup;
-                                           $sec_educ=$nresp_sec_educ;
-                                           
-                                               $sec=array(
-                                                   array('E2','E2','E2','E1','D','D','D','D'),
-                                                   array('E2','E1','E1','D','C','C','B2','B2'),
-                                                   array('E2','D','D','D','C','C','B2','B2'),
-                                                   array('D','D','D','C','B2','B1','A2','A2'),
-                                                   array('D','C','C','B2','B1','A2','A2','A1'),
-                                                   array('D','C','C','B2','B1','A2','A1','A1'),
-                                                   array('B1','B1','B1','A2','A2','A1','A1','A1'),
-                                                   array('D','D','D','D','B2','B1','A2','A1'),
-                                                   array('D','D','D','D','C','B2','B1','B1'),
-                                                   array('D','D','D','C','C','B2','B1','A2'),
-                                                   array('C','C','C','C','B2','B1','A1','A1'),
-                                                   array('B1','B1','B1','B1','B1','A2','A1','A1')
-                                               );
-                                               $ss=$sec[$sec_occup-1][$sec_educ-1];
-                                               $sd='';
-                                               if($ss=='A1')
-                                                   $sd=1;
-                                               else if($ss=='A2')
-                                                   $sd=1;
-                                               else if($ss=='B1')
-                                                   $sd=2;
-                                               else if($ss=='B2')
-                                                   $sd=2;
-                                               else if($ss=='C')
-                                                   $sd=3;
-                                               else if($ss=='D')
-                                                   $sd=4;
-                                               else if($ss=='E1')
-                                                   $sd=5;
-                                               else if($ss=='E2')
-                                                   $sd=5;
-                                               else
-                                                   $sd=6;
-                     
+                   
+                } 
+                
+                else {   
+                    while($obj = mysqli_fetch_assoc($qresult)){
+                           $ustatus = $obj['status']; 
+                           $userid = $obj['user_id']; 
+           if(($ustatus == '0') &&  ($verfyStatus == '1') ){
+            $sq1="UPDATE `app_user`  SET `status` = '1' WHERE `user_id` = $userid";
+            $rs1=mysqli_query($conn, $sq1);
+            if($rs1){
 
-                 $sq2="INSERT INTO `respondent_detail`(`user_id`, `name`, `mobile`, `email`, `address`,`nresp_age_yrs`,`nresp_gender`,`nresp_reg_dt`,`nresp_dob`,nresp_sec_educ,nresp_sec_occup,nresp_educ,nresp_occup,nresp_tot_kids,nresp_income,nresp_m_status,city,state,nresp_hfd,nresp_hfd_frequency,nresp_twowheeler,nresp_fourwheeler,`nresp_sec`,nresp_working_st, nresp_hh_mob_user_cnt,plang,imei,oprator_name,network_circlr_location,phone_type,pin_code, nresp_sec) VALUES 
+                $msg = "you already registered, successfully sign in : Welcome";
+                    $status = 'true';
+                    $data= null;
 
-($touser_id,'$name','$mobile','$email','$address',$age,'$gender','$dt','$nresp_dob','$nresp_sec_educ','$nresp_sec_occup','$nresp_educ','$nresp_occup','$nresp_tot_kids','$nresp_income','$nresp_m_status','$city','$state','$nresp_hfd','$nresp_hfd_frequency','$nresp_twowheeler','$nresp_fourwheeler','$nresp_sec','$nresp_working_st','$nresp_hh_mob_user_cnt','$plang','$imei','$oprator_name','$net_loc','$phone_type','$pin_code', '$sd')";
+         $this->apireturnResponse($conn, $instance, $status, $msg, $userid, $data);
+
+            }  
+           
+                
+               }
+            if($ustatus == '2'){
+                $msg = "you already registered, but block by admin please contact admin@quantumcs.com";
+                $status = 'true';
+                $data= null;
+
+     $this->apireturnResponse($conn, $instance, $status, $msg, $userid, $data);
+                
+                }
+
+                if($ustatus == '1'){
+                $msg = "successful signing : Welcome ";
+                $status = 'true';
+                $data= null;
+
+     $this->apireturnResponse($conn, $instance, $status, $msg, $userid, $data);
+                    }
+
+
+
+                    }
+
+
+                } 
+                
+               
+
+
+            
 
                 
+        } 
+    }    
+
+
+    //COMMENT BY SHASHI
+
+    //                                     if($key == 'plang')
+	// 	              		{   $plang=$val;}
+
+    //                                     if($key == 'imei')
+	// 	              		{   $imei=$val;}
+    //                                     if($key == 'oprator_name')
+	// 	              		{   $oprator_name=$val;}
+    //                                     if($key == 'network_circlr_location')
+	// 	              		{   $net_loc=$val;}
+    //                                     if($key == 'phone_type')
+	// 	              		{   $phone_type=$val;}
+    //                                     if($key == 'pin_code')
+	// 	              		{   $pin_code=$val;}
+	//            	}
+    //             }
+            
+    //         } 
+ 
+    //           $qchk="SELECT user_id FROM app_user WHERE user='$email' or mobil='$mobile' ";
+    //           $rchk=mysqli_query($conn, $qchk);  
+    //         if($rchk->num_rows < 1)
+    //         {
+    //                $sq1="INSERT INTO `app_user`(`user_name`, `user`, `mobil`, `pass`, `role`,`status`,`create_date`) VALUES ('$name','$email','$mobile','$pwd',5,1,'$dt')";
+    //                $rs1=mysqli_query($conn, $sq1);
+    //                $touser_id=mysqli_insert_id($conn);
+
+			
+    //        $qq1="INSERT INTO `mangopinion_57`(q_id,`resp_id`, `r_name`, `mobile`,`gender_57`, `email`, `nresp_educ`, `age_yrs`, `address`, `nresp_working_st`, `state`, `city`, `ref`, `imei`, `oprator_name`, `network_circlr_location`, `phone_type`, `nresp_dob`, plang) VALUES (57,$touser_id,'$name','$mobile','$gender','$email','$nresp_educ','$age_yrs','$address','$nresp_working_st','$state','$city','$ref','$imei','$oprator_name','$network_circle_location','$phone_type','$nresp_dob','$plang')";
+    //          $aa=mysqli_query($conn, $qq1);
+
+    //                          function generateRandomString($length = 6) 
+    //            {
+    //                   //$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    //                   $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    //                   $charactersLength = strlen($characters);
+    //                   $randomString = '';
+    //                   for ($i = 0; $i < $length; $i++) {
+    //                   $randomString .= $characters[rand(0, $charactersLength - 1)];
+    //                   }
+    //                  return $randomString;
+    //             }
+    //             $tokenparta = generateRandomString(6);
+
+    //            $qrr1="INSERT INTO `app_refralcode_detail`( `user_id`, `refcode`, `remarks`) VALUES ($touser_id,'$tokenparta','$name')";
+    //            $a2=mysqli_query($conn, $qrr1);
+    //            $rfid=mysqli_insert_id($conn);
+    //             if($rfid<1)
+    //             {   $strt=$touser_id; $strt.=substr($name,0,3);
+    //                 $qrr2="INSERT INTO `app_refralcode_detail`( `user_id`, `refcode`, `remarks`) VALUES ($touser_id,'$strt','$name')";
+    //                 $a3=mysqli_query($conn, $qrr2);      
+    //             }
+
+    //             //to credit Rs 50/- for each user
+    //             $qw1="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`, `remarks`) VALUES ($touser_id,0,'$dt',50,'Welcome points')";
+    //                          mysqli_query($conn, $qw1);
+
+    //            if($ref!='')
+    //            {   
+    //                  //$fruid=intval(preg_replace('/[^0-9]+/', '', $ref), 10);
+
+    //                  // $rr= "SELECT `user_id`, `user_name`, `user`, `mobil`, `pass`, `salt`, `role`, `create_date`, `last_login`, `status` FROM `app_user` WHERE `user_id`=$fruid";
+    //                  //and `user_name`like 'gre%'
+    //                  //$rk=mysqli_query($conn, $rr);
+
+    //                if(is_numeric($ref))
+    //                {
+    //                      $irr="SELECT `intvr_id`, `remarks`, `centre`, `irefcode` FROM `mangop_interviewer_referral_detail` WHERE `irefcode`= $ref";
+    //                      $irk=mysqli_query($conn, $irr);
+    //                      if($irk->num_rows > 0)
+    //                      {        $iruid='';$irmk='';
+    //                         while ($ire = $irk->fetch_assoc()) 
+    //         	            {
+    //               	        $iruid=$ire["intvr_id"];
+    //               	        $cen=$ire["centre"];
+    //                         }
+    //                         $iq3="INSERT INTO `mangop_interviewer_app_user_ref`(`user_id`, refcode, `intvr_id`, `dtime`,centre) VALUES ($touser_id,'$ref',$iruid,'$dt',$cen)";
+    //                         mysqli_query($conn, $iq3); 
+    //                      }
         
-                  $aa=mysqli_query($conn, $sq2);
-                  foreach ($marr as $mkey => $mval) 
-                  {
-                           foreach ($mval as $xkey => $xval)
-                           {                     
-                		if($aval != ' ')
-                		{ //echo "<br>".$xkey.=$xval;
-                                   $xx="INSERT INTO `respondent_detail`(`user_id`,$xkey) VALUES ($touser_id,'$xval')";  
-                                   mysqli_query($conn, $xx);
-                                }
-                           }
-                  }
-        */
+    //                }
+    //                else if(!is_numeric($ref))
+    //                {
+    //                  echo $rr="SELECT `id`, `user_id`, `refcode`, `remarks` FROM `app_refralcode_detail` WHERE `refcode`= '$ref'";
+    //                   $rk=mysqli_query($conn, $rr);
+    //                   if($rk->num_rows > 0)
+    //                   {   $ruid='';$rmk='';
+    //                       while ($re = $rk->fetch_assoc()) 
+    //         	          {
+    //               	     $ruid=$re["user_id"];
+    //               	     $rmk=$re["remarks"];
+    //                       }
+    //           	         echo $q3="INSERT INTO `app_user_ref`(`to_user_id`, `ref_code`,fr_user_id,dtime) VALUES ($touser_id,'$ref',$ruid,'$dt')";
+    //           	         mysqli_query($conn, $q3);
 
-           $qq1="INSERT INTO `mangopinion_57`(q_id,`resp_id`, `r_name`, `mobile`,`gender_57`, `email`, `nresp_educ`, `age_yrs`, `address`, `nresp_working_st`, `state`, `city`, `ref`, `imei`, `oprator_name`, `network_circlr_location`, `phone_type`, `nresp_dob`, plang) VALUES (57,$touser_id,'$name','$mobile','$gender','$email','$nresp_educ','$age_yrs','$address','$nresp_working_st','$state','$city','$ref','$imei','$oprator_name','$network_circle_location','$phone_type','$nresp_dob','$plang')";
-             $aa=mysqli_query($conn, $qq1);
-
-              
-	    		    //DB::getInstance()->query("INSERT INTO `appuser_project_map`(`project_id`,`appuser_id`,  `status`) VALUES ($qset,$touser_id,0)");
-                     
-	    		    //DB::getInstance()->query("UPDATE `appuser_project_map` SET  `cr_point`=10  WHERE `appuser_id`=$touser_id AND `project_id`=57 AND `status`=0");
-               
-               function generateRandomString($length = 6) 
-               {
-                      //$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                      $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-                      $charactersLength = strlen($characters);
-                      $randomString = '';
-                      for ($i = 0; $i < $length; $i++) {
-                      $randomString .= $characters[rand(0, $charactersLength - 1)];
-                      }
-                     return $randomString;
-                }
-                $tokenparta = generateRandomString(6);
-
-               $qrr1="INSERT INTO `app_refralcode_detail`( `user_id`, `refcode`, `remarks`) VALUES ($touser_id,'$tokenparta','$name')";
-               $a2=mysqli_query($conn, $qrr1);
-               $rfid=mysqli_insert_id($conn);
-                if($rfid<1)
-                {   $strt=$touser_id; $strt.=substr($name,0,3);
-                    $qrr2="INSERT INTO `app_refralcode_detail`( `user_id`, `refcode`, `remarks`) VALUES ($touser_id,'$strt','$name')";
-                    $a3=mysqli_query($conn, $qrr2);      
-                }
-
-                //to credit Rs 50/- for each user
-                $qw1="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`, `remarks`) VALUES ($touser_id,0,'$dt',50,'Welcome points')";
-                             mysqli_query($conn, $qw1);
-
-               if($ref!='')
-               {   
-                     //$fruid=intval(preg_replace('/[^0-9]+/', '', $ref), 10);
-
-                     // $rr= "SELECT `user_id`, `user_name`, `user`, `mobil`, `pass`, `salt`, `role`, `create_date`, `last_login`, `status` FROM `app_user` WHERE `user_id`=$fruid";
-                     //and `user_name`like 'gre%'
-                     //$rk=mysqli_query($conn, $rr);
-
-                   if(is_numeric($ref))
-                   {
-                         $irr="SELECT `intvr_id`, `remarks`, `centre`, `irefcode` FROM `mangop_interviewer_referral_detail` WHERE `irefcode`= $ref";
-                         $irk=mysqli_query($conn, $irr);
-                         if($irk->num_rows > 0)
-                         {        $iruid='';$irmk='';
-                            while ($ire = $irk->fetch_assoc()) 
-            	            {
-                  	        $iruid=$ire["intvr_id"];
-                  	        $cen=$ire["centre"];
-                            }
-                            $iq3="INSERT INTO `mangop_interviewer_app_user_ref`(`user_id`, refcode, `intvr_id`, `dtime`,centre) VALUES ($touser_id,'$ref',$iruid,'$dt',$cen)";
-                            mysqli_query($conn, $iq3); 
-                         }
-        
-                   }
-                   else if(!is_numeric($ref))
-                   {
-                     echo $rr="SELECT `id`, `user_id`, `refcode`, `remarks` FROM `app_refralcode_detail` WHERE `refcode`= '$ref'";
-                      $rk=mysqli_query($conn, $rr);
-                      if($rk->num_rows > 0)
-                      {   $ruid='';$rmk='';
-                          while ($re = $rk->fetch_assoc()) 
-            	          {
-                  	     $ruid=$re["user_id"];
-                  	     $rmk=$re["remarks"];
-                          }
-              	         echo $q3="INSERT INTO `app_user_ref`(`to_user_id`, `ref_code`,fr_user_id,dtime) VALUES ($touser_id,'$ref',$ruid,'$dt')";
-              	         mysqli_query($conn, $q3);
-
-                           // $qw="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`, `remarks`) VALUES ($touser_id,0,'$dt',0,'refered by his friend with userid: $ruid $rmk')";
-                           // mysqli_query($conn, $qw);
-                              $qw1="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`, `remarks`) VALUES ($ruid,0,'$dt',0,'refered to his friend of userid: $touser_id')";
-                             mysqli_query($conn, $qw1);
-                       }
-                    }
+    //                        // $qw="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`, `remarks`) VALUES ($touser_id,0,'$dt',0,'refered by his friend with userid: $ruid $rmk')";
+    //                        // mysqli_query($conn, $qw);
+    //                           $qw1="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`, `remarks`) VALUES ($ruid,0,'$dt',0,'refered to his friend of userid: $touser_id')";
+    //                          mysqli_query($conn, $qw1);
+    //                    }
+    //                 }
                     
 
-               } 
-                $status = 1;
-                $msg = "Sign Up Successfully";
-                  if($email!='')
-		  {	
-		  	$headers  = 'MIME-Version: 1.0' . "\r\n";
-			$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-			$headers .= 'From: contact@mangopinion.com' . "\r\n" .'Reply-To: $email';
-			$m.='Dear '.$name.', <br><br><br> Welcome from Mangopinion! <br> Please login to continue to attend the contest and earn the reward points. <br><br><br> Thanks,<br>Admin<br><img  src=www.digiadmin.quantumcs.com/images/mangopinion_full_logo.png height=50 width=100><br>';
-			$s="Mangopinion user account created ";
+    //            } 
+    //             $status = 1;
+    //             $msg = "Sign Up Successfully";
+    //       if($email!='')
+	// 	  {	
+	// 	  	$headers  = 'MIME-Version: 1.0' . "\r\n";
+	// 		$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+	// 		$headers .= 'From: contact@mangopinion.com' . "\r\n" .'Reply-To: $email';
+	// 		$m.='Dear '.$name.', <br><br><br> Welcome from Mangopinion! <br> Please login to continue to attend the contest and earn the reward points. <br><br><br> Thanks,<br>Admin<br><img  src=www.digiadmin.quantumcs.com/images/mangopinion_full_logo.png height=50 width=100><br>';
+	// 		$s="Mangopinion user account created ";
 			
-			$fs= mail($email, $s, nl2br($m), $headers);
-     		}		
+	// 		$fs= mail($email, $s, nl2br($m), $headers);
+    //  		}		
 
-            }
-            else {$status=2; $msg="User already registered with this mobile/email";}
-          //}
-            //else {$status=0; $msg="Duplicate imei";} 
-        }
-        $this->_returnResponse($conn, $instance, $status, $msg, null);
-    }
+    //         }
+    //         else {$status=2; $msg="User already registered with this mobile/email";}
+    //       //}
+    //         //else {$status=0; $msg="Duplicate imei";} 
+    //     }
+    //     $this->_returnResponse($conn, $instance, $status, $msg, null);
+    // }
     
     
     /* query for applogin result  details */
@@ -853,15 +807,25 @@ class NewQueryManager
     {
         $tag = "**_gcmgetUser**";
         $conn = DBConnector::getDBInstance();
+
         $msg = "Unable To get user reg details";
-        $status = 0;$mobile='';$type=0;
+        $status = 0;
+        $mobile='';
+        $type=0;
+
         if ($conn->connect_error) {
             $this->_returnError($conn, $instance, $tag);
             die("Connection failed: " . $conn->connect_error);
         } else {
             $jsonPost = stripslashes($_REQUEST['userdata']);
 
-            $userid=null;$gcmid=null;$status='';$name='';$email='';$mob='';
+            $userid=null;
+            $gcmid=null;
+            $status='';
+            $name='';
+            $email='';
+            $mob='';
+            
             $result = json_decode($jsonPost); 
             foreach ($result as $json) 
             {
@@ -2681,5 +2645,14 @@ $cmnt='check';
         $conn->close();
         $instance->onSuccessMobi($status, $msg, $response);
     }
+
+    private
+    function apiReturnResponse($conn, $instance, $status, $msg, $userid, $data)
+    {   
+        $conn->close();
+        $instance->apionSuccess($status, $msg, $userid, $data);
+    }
+
+    
 
 }

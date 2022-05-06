@@ -17,8 +17,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | environments.
 |
 */
-//$config['base_url'] = 'https://digiadmin.quantumcs.com/quantumdigiadmin/';
-$config['base_url'] = 'http://localhost/quantumdigiadmin';
+//$config['base_url'] = 'https://digiadmin.quantumcs.com/digiamin-web/';
+$config['base_url'] = 'http://localhost/digiamin-web';
 //console.log('Inside config');
 /*
 |--------------------------------------------------------------------------

@@ -114,7 +114,7 @@ include_once('survey-function.php');
                     DB::getInstance()->query($qqa);
                     //session_destroy();
 
-                       echo $newURL="http://localhost/quantumdigiadmin/survey/fp234.php?q=$qset";
+                       echo $newURL="http://localhost/digiamin-web/survey/fp234.php?q=$qset";
                      header('Location: '.$newURL);
 
 	}

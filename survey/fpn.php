@@ -185,7 +185,7 @@ if(!Session::exists('resp'))
 <td class="tbl2_td" align="center">
 <span style="padding: 10px;">
 <!--<img src="https://vareniacims.com/siteadmin/public/img/logos/varenia_logo2.png" style="height:100px; width:160px;padding: 15px; ">-->
-<img src="http://localhost/quantumdigiadmin/public/img/logos/quantum-logo-big.png" width="80px" height="80px">
+<img src="http://localhost/digiamin-web/public/img/logos/quantum-logo-big.png" width="80px" height="80px">
 </span>
 </td>
 <td class="tbl2_td" align="center">
@@ -223,7 +223,7 @@ if(!Session::exists('resp'))
 											DB::getInstance()->query($qqa);
 											$pnn=$_SESSION['pn'];
 											session_destroy();
-											echo $newURL="http://localhost/quantumdigiadmin/survey/thanks.php?name=$pnn";
+											echo $newURL="http://localhost/digiamin-web/survey/thanks.php?name=$pnn";
 											header('Location: '.$newURL);
 											}
 

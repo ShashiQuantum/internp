@@ -110,9 +110,7 @@
         }
 
         function onSubmit(){
-            //prj = $('#project').val();
-            //qcount = $('#qcount').val();
-            //console.log('count q : '+qcount);
+            
 		arr=[];
             for(let i=1; i<= qcount;i++){
                 let pqid = $('#pqid'+i).val();
@@ -129,8 +127,10 @@
 	    }
                 let ar = JSON.stringify(arr);
 		let js = {"prj":prj,"qcount":qcount,"data":ar};
+        //console.log(js);
 		//let ar = JSON.stringify(arr);
 	  	$.ajax({
+              
         	 	url:'<?php echo base_url("message/savemsg/");?>',
         		data: js,
         		type: "POST",

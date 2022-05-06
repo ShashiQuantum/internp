@@ -16,7 +16,7 @@
 
 	define("APP_ROOT", dirname(__FILE__));
 	
-	$GLOBALS['config']=array(										//Globals array to store standard constant values
+	$GLOBALS['config']=array(		//Globals array to store standard constant values
 		'mysql' => 		array(		'host' => 'localhost',
 							'user'=>'root',
 							'pass'=>'',
@@ -31,7 +31,7 @@
 					'token_name' =>'token'
 							),
 
-		'url' => array( 'base' => 'http://localhost/quantumdigiadmin/',
+		'url' => array( 'base' => 'http://localhost/digiamin-web/',
 				'blog' => 'http://blog.digiadmin.quantumcs.com/',
 				'image' => 'https://www.digiadmin.quantumcs.com/images' ),
 		

@@ -11,9 +11,17 @@ class DBConnector
     /**
      * @var Singleton The reference to *Singleton* instance of this class
      */
-    private static $servername = "database-1.c1mggasso0hp.ap-south-1.rds.amazonaws.com";
-    private static $username = "qcsrdsadmin";
-    private static $password = "Pa7du#ah$098";
+   // OLD DATABASE VARIABLE DEFINE 
+    // private static $servername = "database-1.c1mggasso0hp.ap-south-1.rds.amazonaws.com";
+    // private static $username = "qcsrdsadmin";
+    // private static $password = "Pa7du#ah$098";
+    // private static $conn = null;
+
+
+
+    private static $servername = "localhost";
+    private static $username = "root";
+    private static $password = "";
     private static $conn = null;
 
 // Create connection

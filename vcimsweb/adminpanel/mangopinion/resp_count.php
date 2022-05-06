@@ -13,7 +13,7 @@ include_once('../../functions.php');
 <form name="tFORM" method=post action="respondent_filter_count.php">
 <center><input type=submit name="get_resp" value="View"></center>
  
-<br><br>Age Between </td><td> <input type=num minsize=5 maxsize=80 name=fr size=1 placeholder="min age"> & <input type=num min=5 max=80 name=to size=1 placeholder="max age"><br><br>
+<br><br>Age Between </td><td> <input type=num minsize=5 maxsize=80 name=fr size=4 placeholder="min age"> & <input type=num min=5 max=80 name=to size=4 placeholder="max age"><br><br>
 
 
 <?php

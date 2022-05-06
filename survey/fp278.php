@@ -265,7 +265,7 @@ if(isset($_POST['subinfo']))
                  $_SESSION['resp']=$da->first()->resp_id;
                  $_SESSION['lang']=$lang;
                  echo $resp_id=$_SESSION['resp'];
-			$newURL="http://localhost/quantumdigiadmin/survey/fpn.php";
+			$newURL="http://localhost/digiamin-web/survey/fpn.php";
 			if($qset == 234) $newURL="https://www.vareniacims.com/survey/fpn_234.php";
                      	header('Location: '.$newURL);
             }

@@ -1,3 +1,3 @@
 <?php
-$con=mysqli_connect('localhost','root','','shashiautoBoat');
+$con=mysqli_connect('localhost','root','','chatbotdb');
 ?>

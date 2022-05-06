@@ -5,6 +5,7 @@ class Message extends CI_Controller
     function __construct() {
         parent::__construct();
         $this->load->model('MApi');
+        $this->load->library('session');
                 date_default_timezone_set('Asia/Kolkata');
     }
 
@@ -86,7 +87,7 @@ class Message extends CI_Controller
         if($ds){
                 $flag=1;
                 //echo $flag; die();
-                $surl = "https://digiadmin.quantumcs.com/quantumdigiadmin/message/arq/$pid";
+                $surl = "https://digiadmin.quantumcs.com/digiamin-web/message/arq/$pid";
                 $usql ="UPDATE `vcimsdev`.`autoreply_questionset` SET qcnt=$cnt, data='$jedata', server_url= '$surl', updated_at='$dt' WHERE pid='$pid'";
                 $id = $this->MApi->doSqlDML($usql);
                 $flag = 1;
@@ -103,16 +104,19 @@ class Message extends CI_Controller
 
     function savemsg()
     {
+            
 	$flag =0;
 	$cnt =  $_POST['qcount'];
         $prj = strtolower($_POST['prj']);
-	//var_dump( $_POST['data'] );
-        //$jdata =  stripslashes( $_POST['data'] ) ;
-	$jdata = json_decode( $_POST['data'] )  ;
+	$jdata = json_decode( $_POST['data'] );
+
+        $arr_asso_data = json_decode( $_POST['data'],true);
+        $totl_row =count($arr_asso_data);
+       
+       
 	$jedata = json_encode($jdata);
 	$jedata = stripslashes($jedata);
-	//print_r( $jedata);
-	//echo $jdata;
+	
 	$dt = date('Y-m-d H:i:s');
 
 	//TO check project name existence
@@ -124,23 +128,45 @@ class Message extends CI_Controller
 	}
 	else
 	{
-		$st=1;
+	$st=1;
 		//to inser data in table
-		$isql = "INSERT INTO `vcimsdev`.`autoreply_questionset` (`title`,`qcnt`,`data`,`created_at`,`status`) VALUES ('$prj',$cnt,'$jedata','$dt',1);";
-		//$tdata = array("title"=>$prj,"qcnt"=>$cnt,"data"=>$jedata,"created_at"=>$dt,"status"=>$st);
-		//$id=$this->MApi->insertIntoTable('vcimsdev.autoreplay_questionset',$tdata);
-		$idd = $this->MApi->doSqlDML($isql);
+        $isql = "INSERT INTO `vcimsdev`.`autoreply_questionset` (`title`,`qcnt`,`data`,`created_at`,`status`) VALUES ('$prj',$cnt,'$jedata','$dt',1);";
+        $idd = $this->MApi->doSqlDML($isql);
 		//end of insert
-		$pid;
-	        $qsql2= "select * from `vcimsdev`.`autoreply_questionset` WHERE title = '$prj';";
-        	$ds2 = $this->MApi->getDataBySql($qsql);
-        	if($ds2){
-                	foreach($ds2 as $dp){
-				$pid=$dp->pid;
-			}
-	        }
 
-		$surl = "https://digiadmin.quantumcs.com/quantumdigiadmin/message/arq/$pid";
+        // $sqlmaxid = "select max(pid) from `vcimsdev`.`autoreply_questionset`";
+        // $pid = $this->MApi->getDataBySql($sqlmaxid);  
+        // if($pid){
+        //         foreach($pid as $dp){
+        //                 $pid=$dp->pid;
+        //         }
+        // }
+
+        $qsql2= "select * from `vcimsdev`.`autoreply_questionset` WHERE title = '$prj';";
+        $ds2 = $this->MApi->getDataBySql($qsql);
+        if($ds2){
+                foreach($ds2 as $dp){
+                        $pid=$dp->pid;
+                }
+        }
+        
+        for($i=0;$i<$totl_row; $i++)
+{      
+	$pqid=  $arr_asso_data[$i]['pqid'];
+	$tv=  $arr_asso_data[$i]['tv'];
+	$qid=  $arr_asso_data[$i]['sq'];
+	$mt=  $arr_asso_data[$i]['mt'];
+	$ov=  $arr_asso_data[$i]['op'];
+	$qst=  $arr_asso_data[$i]['msg'];
+	
+        if($pqid=='')$pqid=0;
+                $isql = "INSERT INTO `vcimsdev`.`pro_ques_set` (`pid`,`pqid`,`tv`,`qsid`,`mt`,`opval`,`question`) VALUES ('$pid','$pqid','$tv','$qid','$mt','$ov','$qst');";
+                $this->MApi->doSqlDML($isql);
+}
+
+	       
+
+		$surl = "https://digiadmin.quantumcs.com/digiamin-web/message/arq/$pid";
 		$usql ="UPDATE `vcimsdev`.`autoreply_questionset` SET server_url= '$surl' WHERE pid=$pid";
 		$id = $this->MApi->doSqlDML($usql);
 		$flag = 1;
@@ -408,26 +434,132 @@ class Message extends CI_Controller
 	}
 
     }
+//  ***************************************//
+// NEW API DEVELOPED BY SHASHI
+function arq($pid) {
+       
+            // CHECKING VALID URL PARAMETER
+           if($pid == 'null' || $pid == ''){
+                echo 'Error! Invalid URL attempted!'; return;
+            }
+
+            // CHECKING THE QUESTION SET EXIST OR NOT IN DATABASE.
+            $qsql= "select max(id) as mxval from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid';";
+            $ds = $this->MApi->getDataBySql($qsql);
+           if($ds['0']->mxval < 1) {
+                echo 'Error! Invalid URL attempted !!!!'; return;
+           }
+           // TAKING INPUT FROM THE USERS
+            $msg = trim(strtolower($this->input->post('message')));
+            $app = $this->input->post('app');
+            $sender = $this->input->post('sender');
+            $this->session->unset_userdata('ENdQ');
+          // $this->session->unset_userdata('sessUserId');
+ if(!$this->session->userdata('sessUserId')) {
+        
+        
+                $qsql= "select max(id) as mx from`vcimsdev`.`user_session_tab`";
+                $maxId = $this->MApi->getDataBySql($qsql);
+        $maxSessId =  $maxId['0']->mx; 
+        $maxSessId++;
+        $this->session->set_userdata('sessUserId', $maxSessId); 
+        $userSesId =$this->session->userdata('sessUserId');
+                $sql = "insert into `vcimsdev`.`user_session_tab` (qset_no) VALUES ('$pid')";
+                $sessds= $this->MApi->doSqlDML($sql);
+                             
+
+            // PREPARE FOR FIRST QUESTION SETTING AND ASKING
+            $qsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' AND pqid ='0' AND  tv like '%$msg%'";
+            $ds1 = $this->MApi->getDataBySql($qsql);
+            
+            if($ds1){
+                    
+            $firstQest = $ds1['0']->question;
+            $pqid = $ds1['0']->qsid;
+            $this->session->set_userdata('pqId', $pqid);
+             
+            //PRINT FIRST QUESTION FOR THE USER AFTER CHEKING THE FIRST TRIGGER VALUES 
+                $reply = array("reply"=>$firstQest );
+                echo json_encode($reply);
+                 $this->session->set_userdata('ENdQ', 'NOTEND');   
+        
+            // INSERT THE USER DATA INTO THE TABLE FOR THE REPORT GENRATION 
+        $sql = "insert into `vcimsdev`.`msglog` (pid,sid,app,user_session_id,sender,qid,tv,questions,msg) VALUES ('$pid','0','$app','$userSesId','$sender','$pqid','$msg','$firstQest','')";
+        $this->MApi->doSqlDML($sql);
+            
+                $qCount =1;  
+
+                 //FIND THE TOTAL NUMBER OF QUESTION IN THE QUESTION SET
+                        $qsql= "select count(*) as totalQest from`vcimsdev`.`pro_ques_set` WHERE pid ='$pid'";
+                        $totQ = $this->MApi->getDataBySql($qsql);
+                        $totalQest = $totQ['0']->totalQest; 
+                        $this->session->set_userdata('totalQset', $totalQest);                   
+            } 
+        
+ }  // PRINT FIRST QUESTION SECTION IF IS ENDED HERE. 
+
+ //FIND THE SECOUND OR NEXT QUESTION 
+        elseif($this->session->userdata('sessUserId')) {
+          $pqId =$this->session->userdata('pqId');
+          $userSesId =$this->session->userdata('sessUserId');
+          
+
+          $updsql = "update `vcimsdev`.`msglog` set msg = '$msg' where qid='$pqId' and user_session_id =$userSesId";
+          $this->MApi->doSqlDML($updsql);
+
+            $qsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' AND pqid ='$pqId' AND  tv like '$msg' ";
+            $ds2 = $this->MApi->getDataBySql($qsql);
+            if($ds2){
+                
+             $pqid =  $ds2['0']->qsid;
+             $this->session->set_userdata('pqId', $pqid); 
+             $nQuestion  =$ds2['0']->question;
+             $reply = array("reply"=>$nQuestion );
+             echo json_encode($reply);
+             $this->session->set_userdata('ENdQ', 'NOTEND'); 
+             $qCount++;
+
+          $sql = "insert into `vcimsdev`.`msglog` (pid,sid,app,user_session_id,sender,qid,tv,questions,msg) VALUES ('$pid','0','$app','$userSesId','$sender','$pqid','$msg','$nQuestion','')";
+          $this->MApi->doSqlDML($sql);
+             
+            }
+        
+ }
+        //IF THE MESSAGE IS NOT MATCH THEN SHOW ERROR OR TERMINATE THE AUTO REPLY BY THANK YOU MESSAGE.
+      
+        if($this->session->userdata('ENdQ') !='NOTEND' ){
+                
+                if($msg === 'end'){
+                $replymsg = 'Thanks for your valuable reply!!';
+                $reply = array("reply"=>$replymsg );
+                echo json_encode($reply);
+                $this->session->unset_userdata('sessUserId'); 
+                }
+                else {
+                $replymsg = 'The message which you have type is incorrect please type the correct answer or type the END to terminate';
+                $reply = array("reply"=>$replymsg );
+                echo json_encode($reply); 
+                }
+        }
+
+
+        }
+           
+// *********************************************//
 
     //for autoreply on whatsapp working with routes condition
-    function arq($pid){
-        //echo "PID : $pid";
+  
+  
+  function arq_old_api($pid){
         if($pid == 'null' || $pid == ''){
             echo 'Error! Invalid URL attempted!'; return;
         }
         $msg = trim(strtolower($_POST['message']));
         $app = strtolower($_POST['app']);
         $sender = strtolower($_POST['sender']);
-        //$msg="2";
-        //$sender='5';
-        //$app='test';
-
         $msg =sprintf($msg);
-
-        //echo "PID : $pid <br>"; //die();
         $qcount=0;
         $qdata='';
-        //TO check project name existence
         $qsql= "select * from `vcimsdev`.`autoreply_questionset` WHERE pid = $pid;";
         $ds = $this->MApi->getDataBySql($qsql);
         if($ds){
@@ -435,9 +567,7 @@ class Message extends CI_Controller
                         $qdata = $d->data;
                         $qcount = $d->qcnt;
                 }
-                //echo "cnt: $qcount, qdata: $qdata";
                 $qarr = json_decode($qdata);
-
                 //to check the last response of a sender for this project and return the max sequence id
                 $max_sq = 0; $max_qid=0;
                 $qdsql = "select max(sid) as mx, max(qid) as qid from vcimsdev.msglog where sender = '$sender' AND pid = $pid";
@@ -447,25 +577,18 @@ class Message extends CI_Controller
                         foreach($qds as $qd){
                                 $max_sq = $qd->mx != '' ? $qd->mx : 0;
                                 $max_qid = $qd->qid != '' ? $qd->qid : -1;
-                                //if($max_sq == 0) $max_sq=1;
                         }
                 }
                 $nsq = (int) $max_qid + 1;
                 $nnsq = (int) $nsq+1;
-                //echo "max_sq:$max_sq, max_qid:$max_qid, nsq:$nsq, nnsq: $nnsq <br>";
 
                 if($max_sq >= $nnsq ){ $nsq = $max_sq; }
-                //echo "<br>final nsq: $nsq <br>";
-                //echo "nsq: $nsq , max_sq: $max_sq , max_qid: $max_qid"; return;
-                
                 if($nsq > $qcount)
                 {
-                        //echo "No more questions to reply. Thanks!";
                         $reply = array("reply"=>"It seems you have replied already all messages. Thank you!");
                         echo json_encode($reply);
                         return;
                 }
-                //echo "<br> max nsq: $nsq <br>";
                 $q_mt_arr=array();
                 $op_nsq_arr = array();
                 $q_op_arr = array(); //to store qid as key and its options as value
@@ -485,8 +608,6 @@ class Message extends CI_Controller
                         if($qsq == $nsq){
                                 $op_nsq_arr=$arr_op;
                         }
-                        //echo "<br> --$nsq nsq value for op_nsq_arr: "; print_r($op_nsq_arr);
-
                         $rsq=$qsq-1;
                         $arr_pqid = array();
                         if( $pqid != 'undefined' || $pqid != '' ){
@@ -495,9 +616,7 @@ class Message extends CI_Controller
                         $q_op_arr[ $qsq ] = $arr_op;
                         $q_mt_arr[ $qsq ] = $qmt;
                         $pcnt = count($arr_pqid);
- 
-                        //trigger to the start question
-                        //echo "<br> START qsq: $qsq , nsq: $nsq ";
+                        
                         if($nsq == 0 && $qsq == 1 ){ 	//echo "<br>IN tv: $tv, msg: $msg";
                                 if(strstr($tv,$msg)){ //echo "<br> GO $qsq ....";
                                         $reply = array("reply"=>$qmsg );
@@ -509,8 +628,6 @@ class Message extends CI_Controller
                         }
 
                         if($qsq == 1 ) continue;
-
-                        //print_r($arr_pqid);
                         $pval_arr =array();
                         $all_pop = array();
                         if(!empty($arr_pqid) && $qsq > 1){
@@ -529,8 +646,6 @@ class Message extends CI_Controller
                                 {
                                         foreach($pqs as $q){
                                                 $pms = $q->msg;
-                                                //array_push($pval_arr,$pms);
-                                                //convert pms value if multiple separeted by comma in an array 
                                                 $ar = explode(',',$pms);
                                                 foreach($ar as $a){
                                                         array_push($pval_arr,$a);
@@ -541,52 +656,33 @@ class Message extends CI_Controller
                                 
                                 $pval_arr = array_unique($pval_arr);
                                 $pval_str = implode(" ",$pval_arr);
-                                //echo "<br> pqid op resp as pval_arr: "; print_r($pval_arr); echo "<br>";
-                                //if(empty($pval_arr)) continue;
-                        } //end of if
-                         
-                        //to check for first qid and set op as tv
-                        //if($qsq == 1 || $pqid == '') array_push($all_pop,$tv);
+                               
+                        } 
                         $all_pop = array_unique($all_pop);
                         $pval_arr = array_unique($pval_arr);        
 
                         if( $qsq > $nsq )
                         {
-                            //echo "<br> pqid= $pqid , nsq:$nsq, qsq:$qsq, msg: $msg <br> "; print_r($all_pop); print_r($op_nsq_arr); echo "<br>";
-                          //if previous question exists
+                            
                           if( count($arr_pqid) > 0 && $qsq >= $nsq+1 ){
-                            //check msg value among options of qsq qid
-               
-                                //echo "<br>qsq: $qsq ,arr_tv = "; print_r($arr_tv);
                             if(! empty($arr_tv))
                             foreach($arr_tv as $op){
-                                //foreach($pval_arr as $op){
                                 $op = trim(sprintf($op));
-                                //echo "<br> checking tv value with pqid for, qsq:$qsq, OP is : $op , MSG : $msg ff<br>";
-                                //print_r($pval_arr);
-                                
-                                //if( strcmp($msg,$op) == 0){
-                                //if( $msg == $op){
                                 $pq1 = substr($pqid,0,1);
                                 $pqid_mt = $q_mt_arr[$pq1];
-                                        //echo "<br>mt: $qmt, pmt: $pqid_mt, pqid: $pqid, pval_str: $pval_str, op:$op <br>"; print_r($pval_arr);
-                                //check trigger value among response values of pids
                                 if($pqid_mt == 1 ){  
                                         if( in_array($op,$pval_arr) || $qsq == $qcount){
                                                 $reply = array("reply"=>$qmsg );
                                                 echo json_encode($reply);
-                                                // do msg insert in msglog table here
                                                 $sql = "insert into vcimsdev.msglog (msg, app, sender, pid, qid, sid) VALUES ('$msg', '', '$sender', $pid, $nsq,$qsq)";
                                                 $this->MApi->doSqlDML($sql);
                                                 return;
                                         }
                                 }
                                 if($pqid_mt == 2 ){  
-                                        //echo "<br>mt: $qmt, pval_str: $pval_str, op:$op <br>";
                                         if( strstr($pval_str,$op) || $qsq == $qcount){
                                                 $reply = array("reply"=>$qmsg );
                                                 echo json_encode($reply);
-                                                // do msg insert in msglog table here
                                                 $sql = "insert into vcimsdev.msglog (msg, app, sender, pid, qid, sid) VALUES ('$msg', '', '$sender', $pid, $nsq,$qsq)";
                                                 $this->MApi->doSqlDML($sql);
                                                 return;
@@ -595,19 +691,13 @@ class Message extends CI_Controller
                             }
                           }
                           else{
-                                  //if pqid does not exist
-                                  //echo "<br>pqid id is empty <br>";
                                 if( ! in_array($msg,$arr_op)){
-                                //if( ! in_array($msg,$all_pop)){
                                         $reply = array("reply"=>"Invalid Response, Please check and send the correct reply." );
                                         echo json_encode($reply);
                                         //echo "Incorrect response!";
                                         return;
                                     }
-                                    //*/
-                                        //print_r($arr_tv);
                                     foreach($arr_tv as $op){
-                                        //foreach($pval_arr as $op){
                                         $op = trim(sprintf($op));
                                         //chech trigger value among response values of pids
                                         if($qmt == 1 ){        
@@ -640,17 +730,10 @@ class Message extends CI_Controller
         {
                 $reply = array("reply"=>"Invalid pid is requested in URL." );
                 echo json_encode($reply);
-                //echo "Invalid id is passed in URL!";
                 return;
         }
-
-
-    } //end of function arq()
+    } //end of function arq method
     
-
-
-
-
 
     //for autoreply from whatsauto of whatsapp messages
     function ar($pid)

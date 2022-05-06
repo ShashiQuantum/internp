@@ -58,7 +58,7 @@ $qset = $_GET['q'];
 <tr><td class="tbl2_td" align="center">
 <span style="padding: 15px;">
 <!--<img src="https://vareniacims.com/siteadmin/public/img/logos/varenia_logo2.png" style="height:100px; width:160px;padding: 15px; ">-->
-<img src="http://localhost/quantumdigiadmin/public/img/logos/quantum-logo-big.png" width="80px" height="80px">
+<img src="http://localhost/digiamin-web/public/img/logos/quantum-logo-big.png" width="80px" height="80px">
 </span>
 </td><td class="tbl2_td" align="center">
 <span style="padding: 15px;">
@@ -349,8 +349,8 @@ if(isset($_POST['subinfo']))
 			echo $sqt = "INSERT INTO $table ( `q_id`,`resp_id`, st , $fpt ) VALUES ($qset,$resp_id,0, '$fpv')";
                 	$ds = DB::getInstance()->query($sqt);
 
-                     	$newURL="http://localhost/quantumdigiadmin/survey/fpn276.php?resp=$resp_id&lang=$lang&qset=$qset&sid=0&table=$table&maxsid=$maxsid";
-			if($qset == 234) $newURL="http://localhost/quantumdigiadmin/survey/fpn_234.php";
+                     	$newURL="http://localhost/digiamin-web/survey/fpn276.php?resp=$resp_id&lang=$lang&qset=$qset&sid=0&table=$table&maxsid=$maxsid";
+			if($qset == 234) $newURL="http://localhost/digiamin-web/survey/fpn_234.php";
 
                     	header('Location: '.$newURL);
                 }

@@ -8,7 +8,7 @@
     }
     else
     {
-	if(!isset($_SESSION['sauserid'])) Redirect::to('https://digiadmin.quantumcs.com/quantumdigiadmin');
+	if(!isset($_SESSION['sauserid'])) Redirect::to('https://digiadmin.quantumcs.com/digiamin-web');
             $vuid=$_SESSION['sauserid'];
 ?>
 <!DOCTYPE html>

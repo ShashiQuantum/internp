@@ -31,7 +31,7 @@
 					'token_name' =>'token'
 							),
 
-		'url' => array( 'base' => 'http://localhost/quantumdigiadmin',
+		'url' => array( 'base' => 'http://localhost/digiamin-web',
 				'blog' => 'http://blog.vareniacims.com/',
 				'image' => 'http://www.vareniacims.com/images' ),
 		

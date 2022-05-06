@@ -16,6 +16,9 @@ INSERT INTO `chatbot_hints` (`id`, `question`, `reply`) VALUES
 
 -- --------------------------------------------------------
 
+--
+-- Table structure for table `message`
+--
 
 CREATE TABLE `message` (
   `id` int(11) NOT NULL,
