@@ -73,7 +73,7 @@ class NewQueryManager
         } 
         
         else {
-$jsonPost = stripslashes($_REQUEST['appsignup']);
+$jsonPost = stripslashes($_POST['appsignup']);
    
     
     $result = json_decode($jsonPost,true); 
@@ -88,9 +88,9 @@ $jsonPost = stripslashes($_REQUEST['appsignup']);
                                 $verfyStatus=$val;
                             }
 
-                            if($key == 'gcmid')
+                            if($key == 'fcm_token')
 			                {     
-                                $gcmid=$val;
+                                $fcm_token=$val;
                             }
 		              	
                 } 
@@ -100,7 +100,7 @@ $jsonPost = stripslashes($_REQUEST['appsignup']);
 
                 if($qresult->num_rows < 1){
                     
-                   $sq1="INSERT INTO `app_user`(`mobile`, `status`,`gcmid`) VALUES ('$mobile','$verfyStatus','$gcmid')";
+                   $sq1="INSERT INTO `app_user`(`mobile`, `status`,`fcm_token`) VALUES ('$mobile','$verfyStatus','$fcm_token')";
                    $rs1=mysqli_query($conn, $sq1);
                    if($rs1){
                     $userid=  mysqli_insert_id($conn);
@@ -149,19 +149,11 @@ $jsonPost = stripslashes($_REQUEST['appsignup']);
      $this->apireturnResponse($conn, $instance, $status, $msg, $userid, $data);
                     }
 
-
-
                     }
 
 
                 } 
-                
-               
-
-
-            
-
-                
+             
         } 
     }    
 

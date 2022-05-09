@@ -140,12 +140,13 @@ class NewController implements Responder
         if (!isset($_POST['applogin']))
             $this->returnResponse(0, "Request is not valid.", null);
         else
+        
             $this->model->_appLogin($this);
     }
     /* app user sign up details*/
-    private function appSignUp()
+    public function appSignUp()
     {
-        if (!isset($_REQUEST['appsignup']))
+        if (!isset($_POST['appsignup']))
             $this->returnResponse(0, "Result is Not Given", null);
         else
             $this->model->_appSignUp($this);
