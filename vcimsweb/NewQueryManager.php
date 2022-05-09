@@ -75,26 +75,54 @@ class NewQueryManager
         else {
 $jsonPost = stripslashes($_POST['appsignup']);
    
-    
+$mobileKeyFlag =0;
+$verfyKeyStatus =0;
+$fcmKeyToken =0;
     $result = json_decode($jsonPost,true); 
      foreach ($result as $key => $val) 
                 {    
-	                        if($key == 'mobile')
+	                    if($key == 'mobile')
 			                {   
                                   $mobile=$val;
-                            }
-			                if($key == 'verfyStatus')
+                                  $mobileKeyFlag =1;
+                            }       
+			                if($key == 'verifyStatus')
 			                {     
                                 $verfyStatus=$val;
-                            }
-
+                                $verfyKeyStatus =1;
+                            } 
                             if($key == 'fcm_token')
 			                {     
                                 $fcm_token=$val;
+                                $fcmKeyToken =1;
                             }
-		              	
+                            
                 } 
-                
+
+                 //VALIDATING THE VARIABLE 
+    if(($mobileKeyFlag != 1) || ($verfyKeyStatus != 1) || ($fcmKeyToken != 1) ) {
+            
+        $status = false;
+        $msg = 'Invalid variable is assigned !';
+        $userid = null;
+        $data = null;
+        $this->apiReturnError( $status, $msg, $userid, $data);
+
+}
+
+      //VALIDATING THE MOBILE NUMBER          
+    if((!preg_match("/^\d+\.?\d*$/",$mobile)) || (strlen($mobile)!=10)  )
+        {
+            $status = false;
+            $msg = 'Mobile number is not valid !';
+            $userid = null;
+            $data = null;
+            $this->apiReturnError( $status, $msg, $userid, $data);
+            
+
+            
+        }
+              
                 $qry="SELECT * FROM `app_user` WHERE  `mobile` ='$mobile' "; 
                 $qresult=mysqli_query($conn, $qry);
 
@@ -403,19 +431,22 @@ $jsonPost = stripslashes($_POST['appsignup']);
     }
     
     /* query for appuser project map  details */
-    public
-    function _appUserProject(NewController $instance)
+   // NEW API 
+    public function _appUserProject(NewController $instance)
     {
         $tag = "**_appUserProject**";
         $conn = DBConnector::getDBInstance();
-        $msg = "Unable To Find appuserProject ";
+       // $msg = "Unable To Find appuserProject ";
         $status = 0;
-         $response = array();
+          $response = array();
+         $userid =  stripslashes($_POST['appuserid']);
+
+         
         if ($conn->connect_error) {
             $this->_returnError($conn, $instance, $tag);
             die("Connection failed: " . $conn->connect_error);
         } else {
-               $sqlTAB = "SELECT `appuser_id`, `project_id`, `cr_point`,`status` FROM `appuser_project_map` WHERE status=0 and project_id in (select project_id from project where `survey_end_date` >= DATE( NOW( ) ) ) AND  appuser_id=".$_REQUEST['appuserid'];
+               $sqlTAB = "SELECT `appuser_id`, `project_id`, `cr_point`,`status` FROM `appuser_project_map` WHERE status=0 and project_id in (select project_id from project where `survey_end_date` >= DATE( NOW( ) ) ) AND  appuser_id=$userid";
 
             $rsTAB = mysqli_query($conn, $sqlTAB);
             if (!$rsTAB) {
@@ -2624,8 +2655,17 @@ $cmnt='check';
         exit();
     }
 
-    private
-    function _returnResponse($conn, $instance, $status, $msg, $response)
+   
+  private  function _apireturnError($conn, $instance, $tag)
+    {
+        $instance->onError($tag . "->" . mysqli_error($conn));
+        $conn->close();
+        exit();
+    }
+
+
+    
+    private  function _returnResponse($conn, $instance, $status, $msg, $response)
     {   //print_r($response);
         $conn->close();
         $instance->onSuccess($status, $msg, $response);
@@ -2645,6 +2685,22 @@ $cmnt='check';
         $instance->apionSuccess($status, $msg, $userid, $data);
     }
 
+    function apiReturnError( $status, $msg, $userid, $data)
+    {   
+        
+        $data =[$data];
+           
+           $dataarray[]  = [
+                "status" => $status,
+               "msg" => $msg,
+               "user_id" => $userid,
+                
+               "data" => $data
+           ];
+           
+           echo json_encode($dataarray,true);
+           die;
+    }
     
 
 }

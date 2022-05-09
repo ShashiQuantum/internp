@@ -140,7 +140,7 @@ class NewController implements Responder
         if (!isset($_POST['applogin']))
             $this->returnResponse(0, "Request is not valid.", null);
         else
-        
+            
             $this->model->_appLogin($this);
     }
     /* app user sign up details*/
@@ -156,7 +156,7 @@ class NewController implements Responder
      /*appuser project details*/
      private function appUserProject()
     {
-        if (!isset($_REQUEST['appuserid']))
+        if (!isset($_POST['appuserid']))
             $this->returnResponse(0, "AppUserid is not found", null);
         else
             $this->model->_appUserProject($this);
@@ -333,27 +333,6 @@ class NewController implements Responder
     private function apireturnResponse($status, $msg, $userid, $data)
     {  
         
-        // $data  = [
- 
-	 
-        //     array(
-        //             "userdata" => 'userDataDetails',
-        //            "datavalue" => 'userDataValueDetails',
-        //            "userdataFlag" => 'userDataFlagValue',
-        //           ),
-           
-           
-        //        array(
-                   
-        //            "userdata" => 'userDataDetails',
-        //            "datavalue" => 'userDataValueDetails',
-        //            "userdataFlag" => 'userDataFlagValue',
-        //           )	
-            
-           
-           
-        //    ];
-        
         $data =[$data];
            
            $dataarray[]  = [
@@ -365,7 +344,6 @@ class NewController implements Responder
            ];
            
            echo json_encode($dataarray,true);
-        
        
     } 
     private function returnResponseMobi($status, $msg, $response)
