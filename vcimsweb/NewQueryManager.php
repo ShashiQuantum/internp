@@ -86,7 +86,7 @@ $fcmKeyToken =0;
                                   $mobile=$val;
                                   $mobileKeyFlag =1;
                             }       
-			                if($key == 'verifyStatus')
+			                if($key == 'verifystatus')
 			                {     
                                 $verfyStatus=$val;
                                 $verfyKeyStatus =1;
