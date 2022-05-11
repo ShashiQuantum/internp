@@ -436,53 +436,43 @@ $fcmKeyToken =0;
     {
         $tag = "**_appUserProject**";
         $conn = DBConnector::getDBInstance();
-       // $msg = "Unable To Find appuserProject ";
-        $status = 0;
-          $response = array();
-         $userid =  stripslashes($_POST['appuserid']);
-
-         
-        if ($conn->connect_error) {
+        
+        $userid =  stripslashes($_POST['appuserid']);
+        if ($conn->connect_error) 
+        {
             $this->_returnError($conn, $instance, $tag);
             die("Connection failed: " . $conn->connect_error);
-        } else {
-               $sqlTAB = "SELECT `appuser_id`, `project_id`, `cr_point`,`status` FROM `appuser_project_map` WHERE status=0 and project_id in (select project_id from project where `survey_end_date` >= DATE( NOW( ) ) ) AND  appuser_id=$userid";
-
+        } 
+        else {
+               $sqlTAB = "SELECT appuser_project_map.appuser_id , appuser_project_map.project_id , appuser_project_map.status , appuser_project_map.response_type , appuser_project_map.survey_type , project.data_table, project.research_type, project.brand , project.category,project.tot_visit FROM appuser_project_map INNER join project ON appuser_project_map.project_id= project.project_id WHERE appuser_project_map.status=0 AND appuser_project_map.exp_date >= DATE( NOW( ) ) AND appuser_project_map.appuser_id = $userid";
             $rsTAB = mysqli_query($conn, $sqlTAB);
-            if (!$rsTAB) {
-                $this->_returnError($conn, $instance, $tag);
-            } else {
-                if ($rsTAB->num_rows > 0) {
-                    if ($rsTAB->num_rows > 0) {
-                        // output data of each row
-                        while ($row = $rsTAB->fetch_assoc()) 
-                        {
-                            	$pid =  $row["project_id"];
-                                $cpnt=$row["cr_point"];
-                            	$rq="SELECT * from project where project_id=$pid";
-                            	$qqr=mysqli_query($conn,$rq);
-                            	if ($qqr->num_rows > 0) 
-                            	{
-                        		// output data of each row
-                       			while ($row = $qqr->fetch_assoc()) 
-                        		{
-                        			$p = array("project_id" => (int)$row["project_id"], "project_name" => $row["name"], "company_name" => $row["company_name"],
-                                    "brand" => $row["brand"], "research_type" => $row["research_type"],"start_date" => $row["survey_start_date"],"end_date" => $row["survey_end_date"],"reward_point" => $cpnt,"tot_visit" => (int)$row["tot_visit"], "data_table" => $row["data_table"], "discription" => $row["background"]);
-                                        	array_push($response, $p);
-                        		}
-                        	}
-                        	
-                        }
-                        $status = 1;
-                        $msg = "Project Ids is Here";
-                    }
-                } else {
-                    $msg = "No Project Id is Found mapped with you";
-                }
-            }
-        }
 
-        $this->_returnResponse($conn, $instance, $status, $msg, $response);
+            if ($rsTAB->num_rows < 1) 
+            {  
+               
+                $status = 'true';
+                $msg = 'user_data_not_found';
+                $userid = $userid;
+                $data = null;
+                $this->apiReturnError( $status, $msg, $userid, $data);
+            } 
+            else 
+            {
+                $data = mysqli_fetch_all ($rsTAB, MYSQLI_ASSOC);
+
+                $status = 'true';
+                $msg = 'data_found';
+                $userid = $userid;
+                $data = $data;
+
+               $this->apireturnResponse($conn, $instance, $status, $msg, $userid, $data);
+    
+            } 
+                
+            }
+        
+
+        
     }
     
 

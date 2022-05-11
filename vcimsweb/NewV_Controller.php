@@ -157,7 +157,16 @@ class NewController implements Responder
      private function appUserProject()
     {
         if (!isset($_POST['appuserid']))
-            $this->returnResponse(0, "AppUserid is not found", null);
+        {
+                $status = false;
+                $msg = 'Invalid variable !';
+                $userid = null;
+                $data = null;
+                $this->apiReturnError( $status, $msg, $userid, $data);
+
+
+        }
+           // $this->returnResponse(0, "AppUserid is not found", null);
         else
             $this->model->_appUserProject($this);
 
@@ -332,9 +341,11 @@ class NewController implements Responder
 
     private function apireturnResponse($status, $msg, $userid, $data)
     {  
-        
+        if(($data == null) ||($data == '')) {
         $data =[$data];
-           
+        }else{
+            $data =$data;  
+        } 
            $dataarray[]  = [
                 "status" => $status,
                "msg" => $msg,
@@ -383,6 +394,24 @@ class NewController implements Responder
     {  
         $this->apireturnResponse($status, $msg, $userid, $data);
     }
+
+    function apiReturnError( $status, $msg, $userid, $data)
+    {   
+        
+        $data =[$data];
+           
+           $dataarray[]  = [
+                "status" => $status,
+               "msg" => $msg,
+               "user_id" => $userid,
+                
+               "data" => $data
+           ];
+           
+           echo json_encode($dataarray,true);
+           die;
+    }
+    
 
 
 }
