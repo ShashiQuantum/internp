@@ -103,7 +103,7 @@ $fcmKeyToken =0;
     if(($mobileKeyFlag != 1) || ($verfyKeyStatus != 1) || ($fcmKeyToken != 1) ) {
             
         $status = false;
-        $msg = 'Invalid variable is assigned !';
+        $msg = 'Invalid parameter!';
         $userid = null;
         $data = null;
         $this->apiReturnError( $status, $msg, $userid, $data);
@@ -432,49 +432,104 @@ $fcmKeyToken =0;
     
     /* query for appuser project map  details */
    // NEW API 
-    public function _appUserProject(NewController $instance)
-    {
-        $tag = "**_appUserProject**";
-        $conn = DBConnector::getDBInstance();
-        
-        $userid =  stripslashes($_POST['appuserid']);
-        if ($conn->connect_error) 
-        {
-            $this->_returnError($conn, $instance, $tag);
-            die("Connection failed: " . $conn->connect_error);
-        } 
-        else {
-               $sqlTAB = "SELECT appuser_project_map.appuser_id , appuser_project_map.project_id , appuser_project_map.status , appuser_project_map.response_type , appuser_project_map.survey_type , project.data_table, project.research_type, project.brand , project.category,project.tot_visit FROM appuser_project_map INNER join project ON appuser_project_map.project_id= project.project_id WHERE appuser_project_map.status=0 AND appuser_project_map.exp_date >= DATE( NOW( ) ) AND appuser_project_map.appuser_id = $userid";
-            $rsTAB = mysqli_query($conn, $sqlTAB);
+   
+   public function _appUserProject(NewController $instance)
+   {
+       $tag = "**_appUserProject**";
+       $conn = DBConnector::getDBInstance();
+       
+       $userid =  stripslashes($_POST['appuserid']);
+       if ($conn->connect_error) 
+       {
+           $this->_returnError($conn, $instance, $tag);
+           die("Connection failed: " . $conn->connect_error);
+           die;
+       } 
 
-            if ($rsTAB->num_rows < 1) 
-            {  
+       
+   $sqlTAB = "SELECT appuser_project_map.project_id , appuser_project_map.status as surveyStatus ,  appuser_project_map.response_type , appuser_project_map.survey_type , appuser_project_map.cr_point, project.name , project.company_name , project.brand, project.sample_size, project.data_table, project.research_type, project.survey_start_date ,  project.survey_end_date, project.category,project.tot_visit, project.status as projectStatus FROM appuser_project_map INNER join project ON appuser_project_map.project_id= project.project_id WHERE appuser_project_map.status=0 AND appuser_project_map.exp_date >= DATE( NOW( ) ) AND appuser_project_map.appuser_id = $userid";
+   $rsTAB = mysqli_query($conn, $sqlTAB);
+
+           if ($rsTAB->num_rows < 1) 
+           {  
+               $status = 'true';
+               $msg = 'user_data_not_found';
+               $userid = $userid;
+               $data = null;
+               $this->apiReturnError( $status, $msg, $userid, $data);
+           } 
+
+
+           //IF FIRST TIME QUERY EXCUTE
+           else 
+           {
+               $dataArray1 = mysqli_fetch_all ($rsTAB, MYSQLI_ASSOC);
+       
+             //  print_r($dataArray1);die;
+
+
+               //MAIN FOREACH LOOP 
+               $j=0;
+        foreach($dataArray1 as $data1){
+
+           $k=0;
+           if($data1['survey_type'] == 1)
+                  {
+       $projectid= $data1['project_id'];
+       $remidsql = "SELECT interval_hours, occurence, restrict_occurance_between ,excution_time FROM reminder  WHERE project_id = $projectid";
+       $resRem = mysqli_query($conn, $remidsql);
+       $dataArray2 = mysqli_fetch_all ($resRem, MYSQLI_ASSOC);
+                 
+            
+                //SECOUND FOREACH LOOP
+                $i=0;   
+                foreach($dataArray2 as $data2){
+                  $timestringe =($data2['excution_time']);
+                  
+
+                  $timeArray = explode(",",$timestringe);
+                  $data2['excution_time'] =$timeArray;
+
+                  $i++;
+              
                
-                $status = 'true';
-                $msg = 'user_data_not_found';
-                $userid = $userid;
-                $data = null;
-                $this->apiReturnError( $status, $msg, $userid, $data);
-            } 
-            else 
-            {
-                $data = mysqli_fetch_all ($rsTAB, MYSQLI_ASSOC);
+                }  
+                    //END SECOUND FOREACH 
 
-                $status = 'true';
-                $msg = 'data_found';
-                $userid = $userid;
-                $data = $data;
 
-               $this->apireturnResponse($conn, $instance, $status, $msg, $userid, $data);
-    
-            } 
+                $data1['reminder'] = $data2;
+              
+                  }
+                 //END IF CONDITION IF SURVEY TYPE 1          
+
+               
+                 // IF SURVEY IS SINGLE TYPES
+                  else 
+                  {
+                   
+                   $remNullArray = array();
+                   $data1['reminder'] =  $remNullArray;
+                   
+                   
                 
-            }
-        
+               }
+               $datalast[$j]= $data1;  
+               $j++;
 
-        
-    }
+                 }
+               }
+               
+               $status = 'true';
+               $msg = 'data_found';
+               $userid = $userid;
+               $data =  $datalast;
+
+              $this->apireturnResponse($conn, $instance, $status, $msg, $userid, $data);
+   
+           } 
+               
     
+
 
     function _getRoutineDetails(NewController $instance)
     {

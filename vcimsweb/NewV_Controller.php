@@ -146,8 +146,19 @@ class NewController implements Responder
     /* app user sign up details*/
     public function appSignUp()
     {
+        if ($_SERVER["REQUEST_METHOD"] == "GET")
+        {
+            echo "Forbiden !";
+            die;
+        }
         if (!isset($_POST['appsignup']))
-            $this->returnResponse(0, "Result is Not Given", null);
+        {
+                $status = false;
+                $msg = 'Invalid parameter!';
+                $userid = null;
+                $data = null;
+                $this->apiReturnError( $status, $msg, $userid, $data);
+        }  
         else
             $this->model->_appSignUp($this);
 
@@ -156,10 +167,15 @@ class NewController implements Responder
      /*appuser project details*/
      private function appUserProject()
     {
+        if ($_SERVER["REQUEST_METHOD"] == "GET")
+        {
+            echo "Forbiden !";
+            die;
+        }
         if (!isset($_POST['appuserid']))
         {
                 $status = false;
-                $msg = 'Invalid variable !';
+                $msg = 'Invalid parameter!';
                 $userid = null;
                 $data = null;
                 $this->apiReturnError( $status, $msg, $userid, $data);
