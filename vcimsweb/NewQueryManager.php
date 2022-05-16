@@ -105,7 +105,7 @@ $fcmKeyToken =0;
         $status = false;
         $msg = 'Invalid parameter!';
         $userid = null;
-        $data = null;
+        $data = array();
         $this->apiReturnError( $status, $msg, $userid, $data);
 
 }
@@ -116,7 +116,7 @@ $fcmKeyToken =0;
             $status = false;
             $msg = 'Mobile number is not valid !';
             $userid = null;
-            $data = null;
+            $data = array();
             $this->apiReturnError( $status, $msg, $userid, $data);
             
 
@@ -134,7 +134,7 @@ $fcmKeyToken =0;
                     $userid=  mysqli_insert_id($conn);
                     $msg = "user register successfully ";
                     $status = 'true';
-                    $data= null;
+                    $data= array();
                     $this->apireturnResponse($conn, $instance, $status, $msg, $userid, $data);
                    }
 
@@ -152,7 +152,7 @@ $fcmKeyToken =0;
 
                 $msg = "you already registered, successfully sign in : Welcome";
                     $status = 'true';
-                    $data= null;
+                    $data= array();
 
          $this->apireturnResponse($conn, $instance, $status, $msg, $userid, $data);
 
@@ -163,7 +163,7 @@ $fcmKeyToken =0;
             if($ustatus == '2'){
                 $msg = "you already registered, but block by admin please contact admin@quantumcs.com";
                 $status = 'true';
-                $data= null;
+                $data= array();
 
      $this->apireturnResponse($conn, $instance, $status, $msg, $userid, $data);
                 
@@ -172,7 +172,7 @@ $fcmKeyToken =0;
                 if($ustatus == '1'){
                 $msg = "successful signing : Welcome ";
                 $status = 'true';
-                $data= null;
+                $data= array();
 
      $this->apireturnResponse($conn, $instance, $status, $msg, $userid, $data);
                     }
@@ -455,7 +455,7 @@ $fcmKeyToken =0;
                $status = 'true';
                $msg = 'user_data_not_found';
                $userid = $userid;
-               $data = null;
+               $data = array();
                $this->apiReturnError( $status, $msg, $userid, $data);
            } 
 
@@ -2733,7 +2733,7 @@ $cmnt='check';
     function apiReturnError( $status, $msg, $userid, $data)
     {   
         
-        $data =[$data];
+        $data =$data;
            
            $dataarray[]  = [
                 "status" => $status,

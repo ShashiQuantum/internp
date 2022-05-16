@@ -156,7 +156,7 @@ class NewController implements Responder
                 $status = false;
                 $msg = 'Invalid parameter!';
                 $userid = null;
-                $data = null;
+                $data = array();
                 $this->apiReturnError( $status, $msg, $userid, $data);
         }  
         else
@@ -177,7 +177,7 @@ class NewController implements Responder
                 $status = false;
                 $msg = 'Invalid parameter!';
                 $userid = null;
-                $data = null;
+                $data = array();
                 $this->apiReturnError( $status, $msg, $userid, $data);
 
 
@@ -358,7 +358,7 @@ class NewController implements Responder
     private function apireturnResponse($status, $msg, $userid, $data)
     {  
         if(($data == null) ||($data == '')) {
-        $data =[$data];
+        $data =$data;
         }else{
             $data =$data;  
         } 
@@ -414,7 +414,7 @@ class NewController implements Responder
     function apiReturnError( $status, $msg, $userid, $data)
     {   
         
-        $data =[$data];
+        $data =$data;
            
            $dataarray[]  = [
                 "status" => $status,
