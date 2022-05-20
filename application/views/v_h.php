@@ -2316,7 +2316,8 @@ function createProjectTypes()
         $('#tr_firstpage_info').show();
         $('#tr_research_name').show();
         $('#tr_surveyround_name').hide(); 
-        $('#tr_firstpage_info').hide(); 
+        $('#tr_firstpage_info').hide();
+        $('#tr_questionversion_name').hide(); 
          
     }
     if(apptypeproject == "insightfix")
