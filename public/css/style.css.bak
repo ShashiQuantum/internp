@@ -330,3 +330,7 @@ table tr td
   color: #111;
   border-top: 1px solid #FFF;}
   
+  .form-group.required .control-label:after {
+  content:"*";
+  color:red;
+}

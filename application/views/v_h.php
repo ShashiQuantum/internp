@@ -2093,9 +2093,74 @@ function showhideqop(id) {
     <script src="<?php echo base_url(); ?>public/metismenu/metisMenu.min.js"></script>
 <!-- check for submit button confirmation -->
 <script type="text/javascript">
+
+function validateproject()
+{
+    var appprotypes = document.getElementById("select_project_types").value;
+    if(appprotypes == ''){
+        alert('Please select project Types');
+        return false;
+
+    }
+   
+    var projectName = document.getElementById("pname").value;
+    if(projectName == ''){
+        alert('Please Enter project Name');
+        document.getElementById("pname").focus()
+        return false;
+        
+    }
+    var brandName = document.getElementById("brand").value;
+    if(brandName == ''){
+        alert('Please Enter brand name Name');
+        document.getElementById("brand").focus()
+        return false;
+
+    }
+    var surveySize = document.getElementById("ss").value;
+    if(surveySize == ''){
+        alert('Please Enter survey Size');
+        document.getElementById("ss").focus()
+        return false;
+
+    }
+    var surveySrartdate = document.getElementById("ssdt").value;
+    if(surveySrartdate == ''){
+        alert('Please Enter Survey Start date');
+        document.getElementById("ssdt").focus()
+        return false;
+
+    }
+
+    var surveyEndtdate = document.getElementById("esdt").value;
+    if(surveyEndtdate == ''){
+        alert('Please Enter Survey End date');
+        document.getElementById("esdt").focus()
+        return false;
+
+    }
+    var surveyTypes = document.getElementById("survey_type").value;
+    if(surveyTypes == 1){
+       
+        var surveyTimes = document.getElementById("occurancetimes").value;
+        if(surveyTimes == ''){
+        alert('Please Enter Survey Times');
+        document.getElementById("occurancetimes").focus()
+        return false;
+        }
+    }
+    var r=confirm("Do you want to continue this?")
+    if (r==true)
+      return true;
+    else
+      return false;
+
+
+}
+
 function validate()
 {
-     var r=confirm("Do you want to continue this?")
+    var r=confirm("Do you want to continue this?")
     if (r==true)
       return true;
     else
@@ -2190,7 +2255,7 @@ $(function() {
 <script type="text/javascript">
     var expanded = false;
 
-	function showCheckboxes() {
+function showCheckboxes() {
 	  var checkboxes = document.getElementById("fp");
 	  if (!expanded) {
 	    checkboxes.style.display = "block";
@@ -2199,6 +2264,89 @@ $(function() {
 	    checkboxes.style.display = "none";
 	    expanded = false;
 	  }
+}
+function surveyType() {
+    
+	var surveyType = document.getElementById("survey_type").value;
+    if(surveyType == 1)
+    {   
+        $('#survey_times').show(); 
+        $('#surve_time').show();
+        $('#surve_occurance').show(); 
+        $('#survey_occurrence').show();  
+        $('#occurance_time').show();  
+        $('#restrict_occurance').show(); 
+
+
+    }
+    if(surveyType == 0)
+	{
+        $('#survey_times').hide(); 
+        $('#surve_time').hide();
+        $('#surve_occurance').hide(); 
+        $('#survey_occurrence').hide(); 
+        $('#occurance_time').hide();  
+        $('#restrict_occurance').hide(); 
+
+    }
+	
+	}
+	
+    
+
+</script>
+<script type="text/javascript">
+
+function createProjectTypes()
+{
+    var apptypeproject = document.getElementById("select_project_types").value;
+    
+
+    if(apptypeproject == "servegenix")
+    {   
+       
+        $('#tr_proj_name').show(); 
+        $('#tr_brand_name').show();
+        $('#tr_client_name').show(); 
+        $('#tr_samplesize_name').show();  
+        $('#tr_survestartdate').show();  
+        $('#tr_rewardpoint_name').show();
+        $('#tr_survenddate').show();  
+        $('#tr_surveytypes_name').show(); 
+        $('#tr_firstpage_info').show();
+        $('#tr_research_name').show();
+        $('#tr_surveyround_name').hide(); 
+        $('#tr_firstpage_info').hide(); 
+         
+    }
+    if(apptypeproject == "insightfix")
+	{
+       
+       
+        $('#tr_proj_name').show(); 
+        $('#tr_brand_name').show();
+        $('#tr_client_name').show(); 
+        $('#tr_samplesize_name').show();  
+        $('#tr_survestartdate').show(); 
+        $('#tr_survenddate').show(); 
+        $('#tr_questionversion_name').show(); 
+        $('#tr_samplesize_name').show(); 
+        $('#tr_rewardpoint_name').show(); 
+        $('#tr_surveyround_name').show(); 
+        $('#tr_firstpage_info').show(); 
+        $('#surve_occurance').hide();     
+        $('#surve_time').hide(); 
+        $('#occurance_time').hide(); 
+        $('#restrict_occurance').hide(); 
+        $('#tr_surveytypes_name').hide(); 
+
+
+    }
+
+   
+
+
+
 }
 </script>
 	<!-- script to update tab status for a project based on dbl click -->

@@ -3903,34 +3903,65 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        
 	}
         public function createproject()
-        {       //print_r($_POST);
-                        $this->load->view('v_h');
-                       echo "<br><br><br><br><br><br> <div style='margin-left:50px;'>";
-			$dt = date('Y-m-d H:i:s');
-			$login=$this->session->userdata('sauserid');
+        {      // print_r($_POST); echo "<br>";
 
-                       $pn= trim($this->input->post('pname')); 
-                       $b= $this->input->post('brand'); 
-                       $ccn= $this->input->post('ccn');
-                       $bd= $this->input->post('bd'); 
-                       $ss= $this->input->post('ss'); 
-                       $v= $this->input->post('visit');
-                       $ssid= $this->input->post('ssdt'); 
-                       $esid= $this->input->post('esdt'); 
-                       $rt=4; // $this->input->post('rt');
+
+                        $this->load->view('v_h');
+                        echo "<br><br><br><br><br><br> <div style='margin-left:50px;'>";  
+                        $dt = date('Y-m-d H:i:s');
+                        $login=$this->session->userdata('sauserid'); 
+                       $projectTypes= trim($this->input->post('select_project_types')); 
+                       $projectName= trim($this->input->post('pname')); 
+                       $brandName= $this->input->post('brand'); 
+                       $clientCompanyName= $this->input->post('ccn');
+                       if($clientCompanyName =='')  $clientCompanyName= null;
+                       $questionVersion= $this->input->post('bd'); 
+                       if( $questionVersion=='')  $questionVersion=1;
+                       $surveySampleSize= $this->input->post('ss'); 
+                       if($surveySampleSize=='')   $surveySampleSize= 49;
+                       $surveyround= $this->input->post('visit');
+                       if($surveyround=='') $surveyround =1;
+                       $surveyStartDate= $this->input->post('ssdt'); 
+                       $surveyEndDate= $this->input->post('esdt');   
+                       $researchTypes= $this->input->post('reserch_type');
+                       if($researchTypes=='') $researchTypes =4;
+                       $surveyTypes= $this->input->post('survey_type');
+                       if($surveyTypes== '') $surveyTypes= 0;
+                       $surveyOccurance= $this->input->post('survey_occurrence');
+                       if($surveyOccurance== '') $surveyOccurance= 'None';
+                       $surveyTimes= $this->input->post('survey_times');
+                       if($surveyTimes== '') $surveyTimes= 1;
+                       $occuranceTimes= $this->input->post('occurancetimes');   
+                       if($occuranceTimes== '') $occuranceTimes= 1;   
+                       $restrictHours= $this->input->post('restictHour');
+                       if($restrictHours== '') $restrictHours= 1;
+                       $rewardPoint= $this->input->post('rp'); 
+                       if($rewardPoint== '') $rewardPoint= 0;
+                       
+                       //ENTRY FOR THE SERVEGENICS
+                      
+
+                      // $rt=4; // $this->input->post('rt');
                        //$pcat= $this->input->post('pcat');
-		       $pcat=4; 
-                       $rp= $this->input->post('rp'); 
+		      // $pcat=4; 
+                     //  $rp= $this->input->post('rp'); 
                        $fps=$this->input->post('fp');
 
-                       $parr=array('name'=>$pn,'company_name'=>$ccn,'brand'=>$b,'research_type'=>$rt,'tot_visit'=>$v,'background'=>$bd,'sample_size'=>$ss,'survey_start_date'=>$ssid,'survey_end_date'=>$esid,'category'=>$pcat,'reward_point'=>$rp,'created_at'=>$dt, 'updated_at'=>$dt,'uid'=>$login);
-                      if($pn!=''){
+                       //$parr=array('name'=>$pn,'company_name'=>$ccn,'brand'=>$b,'research_type'=>$rt,'tot_visit'=>$v,'background'=>$bd,'sample_size'=>$ss,'survey_start_date'=>$ssid,'survey_end_date'=>$esid,'category'=>$pcat,'reward_point'=>$rp,'created_at'=>$dt, 'updated_at'=>$dt,'uid'=>$login);
+                       $parr=array('name'=>$projectName,'project_type'=>$projectTypes,'company_name'=>$clientCompanyName,'brand'=>$brandName,'research_type'=>$researchTypes, 'survey_types'=>$surveyTypes,'sample_size'=>$surveySampleSize,'survey_start_date'=>$surveyStartDate,'survey_end_date'=>$surveyEndDate,'reward_point'=>$rewardPoint,'created_at'=>$dt, 'uid'=>$login);
+ 
+                       if($projectName!=''){
 		
 	               $this->load->model('MProject');
-                       $chkp=$this->MProject->getDataBySql("select * from project where name='$pn'");
+                       $chkp=$this->MProject->getDataBySql("select * from project where name='$projectName'");
                        if(!$chkp)
                        {
                          $pid=$this->MProject->insertIntoTable('project',$parr);
+                        
+                         if($pid !='' && $projectTypes == 1){
+                 $remarray = array('project_id'=>$pid,'occurence'=>$surveyOccurance,'excution_time'=>$surveyTimes,'restrict_occurance_between'=>$restrictHours);
+                                $this->MProject->insertIntoTable('reminder',$remarray);
+                         }
                          $dtn=trim($this->MProject->get_project_name($pid));
                          $dtn=strtolower($dtn);
 			 $dtn.='_'.$pid;

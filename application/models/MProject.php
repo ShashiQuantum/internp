@@ -959,33 +959,49 @@ Rule for PSM in Order </option><option value=2> Rule for Quata </option><option 
 	        public function getcreateproject()
 	        {
 	                $projects=$this->getProjects();
-	                $str="<table width='100%'><tr> <td colspan=2 style='height:50px;'> <div class='text-center bg-primary'> CREATE NEW PROJECT <div> </td> </tr> <tr><td>Project Name *</td>
-<td> <input type=text class='form-control' name=pname id=pname onkeypress='return IsAlphaNumber(event);' required >  <span id=error style='color: Red; display: none'> Space or any Special Characters does not allowed </span></td></tr>";
-	                $str.="<tr><td>Brand * </td><td><input type=text class='form-control' name=brand id=brand requird></td></tr>";
-	                $str.="<tr><td>Client Company Name * </td><td><input class='form-control' type=text name=ccn id=ccn required></td></tr>";
-	                $str.="<tr><td>Questionnare Version * </td><td><input type=text class='form-control' name=bd id=bd placeholder=1 required></td></tr>";
-	                $str.="<tr><td>Survey Sample Size * </td><td><input type=number class='form-control' name=ss id=ss placeholder=100 required></td></tr>";
-	                $str.="<tr><td>Reward Point* </td><td><input type=number name=rp class='form-control' id=rp placeholder=0 required></td></tr>";
-	                $str.="<tr><td>Total Survey Round * </td><td><input type=number class='form-control' name=visit id=visit placeholder=1 required></td></tr>";
-	                $str.="<tr><td>Start Survey Date * </td><td><input type=date class='form-control' name=ssdt id=ssdt required></td></tr>";
-	                $str.="<tr><td>End Survey Date * </td><td><input type=date class='form-control' name=esdt id=esdt required></td></tr>";
-	                /* $str.="<tr><td>Project Category * </td><td><select name=pcat id=pcat><option value=0>--Select--</option><option value=1>HFD 
+
+					
+
+	                $str="<table width='100%'>";
+		
+					$str.="<tr> <td colspan=2 style='height:50px;'> <div class='text-center bg-primary'> CREATE NEW PROJECT <div> </td> </tr>";
+					$str.="<tr><td> App Types <span style='color: red'>*</span> </td><td><select name='select_project_types' id='select_project_types' class='form-control'onchange='createProjectTypes(this.value)' required>  <option value=''>--Select Project Types--</option> <option value='servegenix'>Survegenix</option> <option value='insightfix'>InsightFix</option></select></td></tr>";
+					$str.="<tr id='tr_proj_name' style='display: none'><td>Project Name <span style='color: red'>*</span></td> <td> <input type=text class='form-control' name=pname id=pname onkeypress='return IsAlphaNumber(event);' required  placeholder = 'Enter Project Name'>  <span id=error style='color: Red; display: none'> Space or any Special Characters does not allowed </span></td></tr>";
+	                $str.="<tr id='tr_brand_name' style='display: none'><td>Brand <span style='color: red'>*</span> </td><td><input type=text class='form-control' name=brand id=brand  placeholder = 'Enter Brand Name'></td></tr>";
+	                $str.="<tr id='tr_client_name' style='display: none'><td>Client Company Name <span style='color: red'>*</span> </td><td><input class='form-control' type=text name=ccn id=ccn placeholder = 'Enter Company Name' ></td></tr>";
+					$str.="<tr id='tr_research_name' style='display: none'><td>Research Type <span style='color: red'>*</span> </td><td><input class='form-control' type=text name=reserch_type id=reserch_type placeholder = 'Enter Research Type' ></td></tr>";
+	                $str.="<tr id='tr_questionversion_name' style='display: none'><td>Questionnare Version  </td><td><input type=text class='form-control' name=bd id=bd placeholder='Enter questinnare version' ></td></tr>";
+	                $str.="<tr id='tr_samplesize_name' style='display: none'><td>Survey Sample Size <span style='color: red'>*</span> </td><td><input type=number class='form-control' name=ss id=ss placeholder='Enter survey size' ></td></tr>";
+	                $str.="<tr id='tr_rewardpoint_name' style='display: none'><td>Reward Point </td><td><input type=number name=rp class='form-control' id=rp placeholder='Enter reward point' ></td></tr>";
+	                $str.="<tr id='tr_surveyround_name' style='display: none'><td>Total Survey Round  </td><td><input type=number class='form-control' name=visit id=visit placeholder='Enter survey round' ></td></tr>";
+	                $str.="<tr id='tr_survestartdate' style='display: none'><td>Start Survey Date <span style='color: red'>*</span> </td><td><input type=date class='form-control' name=ssdt id=ssdt required ></td></tr>";
+	                $str.="<tr id='tr_survenddate' style='display: none'><td>End Survey Date <span style='color: red'>*</span> </td><td><input type=date class='form-control' name=esdt id=esdt required ></td></tr>";
+					
+					$str.="<tr id='tr_surveytypes_name' style='display: none'><td> Survey types <span style='color: red'>*</span> </td><td><select name='survey_type' id='survey_type' class='form-control'onchange='surveyType(this.value)'> <option value='0'>Single survey</option>  <option value='1'>Multiple Survey</option> </select></td></tr>";
+					$str.="<tr id='surve_occurance' style='display: none'><td> Survey Occurrence <span style='color: red'>*</span> </td><td><select name='survey_occurrence' id='survey_occurrence' class='form-control' style='display: none'> <option value='everyday'>Every Days</option>  <option value='weekly'>Weekly</option> <option value='monthly'>Monthly</option> </select></td></tr>";
+					$str.="<tr id='surve_time' style='display: none'><td> Survey  Occurrence Times <span style='color: red'>*</span> </td><td><select name='survey_times' id='survey_times' class='form-control' style='display: none'> <option value='1'>Single Times</option>  <option value='2'>Two times</option> <option value='3'>Three times</option> </select></td></tr>";
+
+					$str.="<tr id='occurance_time' style='display: none'><td>Enter Survey Time <span style='color: red'>*</span> </td><td><input class='form-control' type=text name=occurancetimes id=occurancetimes placeholder= 'Enter time like 8AM, 10PM'></td></tr>";
+					$str.="<tr id='restrict_occurance' style='display: none'><td>Restrict occurance hours  </td><td><input type=number class='form-control' name=restictHour id=restictHour placeholder= 'Minimum Time Duration Between two Survey'></td></tr>";
+ 
+					
+					/* $str.="<tr><td>Project Category * </td><td><select name=pcat id=pcat><option value=0>--Select--</option><option value=1>HFD 
 Consumer</option><option value=2>Milk Product Consumer</option><option value=3>Wine Consumer</option><option value=4>KFC Product Consumer</option><option 
 value=5>Electronic Product Consumer</option><option value=6>Ola</option><option value=7>Others</option></select></td></tr>";
 	                */
-			$str.="<tr><td>App First Page Details * </td><td><div class='multiselect'> <div class='selectBox' onclick='showCheckboxes()'> <select> 
+			$str.="<tr id='tr_firstpage_info' style='display: none'><td>App First Page Details <span class='text-danger'>*</span> </td><td><div class='multiselect'> <div class='selectBox' onclick='showCheckboxes()'> <select> 
 <option>Select First Page options</option></select> <div class='overSelect'></div></div> <div id='fp'>";
-                        $fplist=$this->getProjectFirstPageList();
+             $fplist=$this->getProjectFirstPageList();
 			foreach($fplist as $f)
 			{
 				$fpid=$f->id;
 				$fptitle=$f->title;
 				$fpterm=$f->term;
-                            $str.="<label for='$fpterm'><input type='checkbox' name='fp[]' id='$fpterm' value='$fpid' /> $fptitle </label>";
+                            $str.="<label for='$fpterm'><input type='checkbox' name='fp[]' id='$fpterm' value='$fpid'> $fptitle </label>";
 			}
 			$str.=" </div> </div> </td></tr>";
-			$str.="<tr><td colspan=2><center><input type=submit class='btn btn-primary' name=cp_submit onclick='return(validate());' value='Create 
-Project'></center></td></tr>";
+			$str.="<tr><td colspan=2><center><input type=submit class='btn btn-primary' name='cp_submit' id='cp_submit' onclick='return(validateproject());' value='CreateProject'> 
+</center></td></tr>";
 			$str.="</div></div></div>";
 	              return $str;
 	              
