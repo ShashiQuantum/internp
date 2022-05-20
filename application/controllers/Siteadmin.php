@@ -3973,7 +3973,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                                  {
                                      $rdd3=$this->MProject->doSqlDML("ALTER TABLE $dtn ADD index rsp$pid (resp_id)");
                                      $rdd4=$this->MProject->doSqlDML("UPDATE `project` SET  `data_table`='$dtn' ,`status`=1 WHERE `project_id`=$pid");
-                                     $sdata="Project ' $pn ' created successfully";
+                                     $sdata="Project ' $projectName ' created successfully";
                                  }
                                 //for adding project fisrt page details 
 				if(!empty($fps))
