@@ -507,7 +507,8 @@ function arq($pid) {
           $updsql = "update `vcimsdev`.`msglog` set msg = '$msg' where qid='$pqId' and user_session_id =$userSesId";
           $this->MApi->doSqlDML($updsql);
 
-            $qsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' AND pqid ='$pqId' AND  tv like '$msg' ";
+            //$qsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' AND pqid ='$pqId' AND  tv like '$msg' ";
+            $qsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' AND pqid ='$pqId' AND  LOWER(tv) = '$msg' ";
             $ds2 = $this->MApi->getDataBySql($qsql);
             if($ds2){
                 
