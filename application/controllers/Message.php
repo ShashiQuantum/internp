@@ -434,117 +434,205 @@ class Message extends CI_Controller
 	}
 
     }
-//  ***************************************//
-// NEW API DEVELOPED BY SHASHI
-function arq($pid) {
-       
-            // CHECKING VALID URL PARAMETER
-           if($pid == 'null' || $pid == ''){
-                echo 'Error! Invalid URL attempted!'; return;
-            }
 
-            // CHECKING THE QUESTION SET EXIST OR NOT IN DATABASE.
-            $qsql= "select max(id) as mxval from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid';";
-            $ds = $this->MApi->getDataBySql($qsql);
-           if($ds['0']->mxval < 1) {
-                echo 'Error! Invalid URL attempted !!!!'; return;
-           }
-           // TAKING INPUT FROM THE USERS
-            $msg = trim(strtolower($this->input->post('message')));
-            $app = $this->input->post('app');
-            $sender = $this->input->post('sender');
-            $this->session->unset_userdata('ENdQ');
-          // $this->session->unset_userdata('sessUserId');
- if(!$this->session->userdata('sessUserId')) {
+
+    function arq($pid) {
+       
+        // CHECKING VALID URL PARAMETER
+       if($pid == 'null' || $pid == ''){
+            echo 'Error! Invalid URL attempted!'; return;
+        }
+
+        // CHECKING THE QUESTION SET EXIST OR NOT IN DATABASE.
+        $qsql= "select max(id) as mxval from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid';";
+        $ds = $this->MApi->getDataBySql($qsql);
+       if($ds['0']->mxval < 1) {
+            echo 'Error! Invalid URL attempted !!!!'; return;
+       }
+      
+       // TAKING INPUT FROM THE USERS
+        $msg = trim(strtolower($this->input->post('message')));
+        $app = $this->input->post('app');
+        $sender = $this->input->post('sender');
+        $currTime = time();
+        $todayDate = date("Y-m-d");
+
+        $qsql= "select * from `vcimsdev`.`msglog` WHERE sender = '$sender' AND send_date = '$todayDate' AND at <= '$currTime' AND id =(select max(id) from `vcimsdev`.`msglog` WHERE sender = '$sender' AND send_date = '$todayDate' AND at <= '$currTime' )  ";
+      
+        $ds1 = $this->MApi->getDataBySql($qsql);
+        if($ds1)
+        {
+               
+                $pqid = $ds1['0']->pqid; 
+                $opval =$ds1['0']->opval; 
+               
+
+                                if($opval == ''){
+                                        $reply = array("reply"=>'Thanks for your valuable feedback!');
+                                        echo json_encode($reply);
+                                } else{
+                                 
+                $sequsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' AND pqid ='$pqid' AND  LOWER(tv) = '$msg' ";
+                $qds = $this->MApi->getDataBySql($sequsql);
+               
+
+                if($qds){
+                $question = $qds['0']->question;
+                $pqid     = $qds['0']->qsid;
+                $opVal    = $qds['0']->opval; 
+                $currTime = time();
+                $todayDate = date("Y-m-d");
+                $insql = "insert into `vcimsdev`.`msglog` (pid,sid,pqid,app,sender,questions,msg,at,send_date,opval) VALUES ('$pid','0','$pqid','$app','$sender','$question','$msg','$currTime','$todayDate','$opVal')";
+                $this->MApi->doSqlDML($insql);
+
+
+                $reply = array("reply"=>$question);
+                 echo json_encode($reply);
+              
+
+                }
+
+                                   }
+               
+
+        }
+        //SELECTING FIRST QUESTION 
+        else{
+               
+               $seqsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' and pqid = '0' and (tv like '%hi' or tv like '%hello' or tv like '%hello')";
+               $ds1 = $this->MApi->getDataBySql($seqsql);  
+               if($ds1){
+               $firstQest = $ds1['0']->question;
+               $pqid = $ds1['0']->qsid;
+               $opVal = $ds1['0']->opval;
+               $expTime = time() + 900;
+               $todayDate = date("Y-m-d");
+               $insql = "insert into `vcimsdev`.`msglog` (pid,sid,pqid,app,sender,questions,msg,at,send_date,opval) VALUES ('$pid','0','$pqid','$app','$sender','$firstQest','$msg','$currTime','$todayDate','$opVal')";
+               $this->MApi->doSqlDML($insql);
+               $reply = array("reply"=>$firstQest);
+               echo json_encode($reply);
+               }
+
+        }
+        
+} //END THE API 
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+//  ***************************************//
+// NEW API DEVELOPED BY SHASHI SESSION BASED
+// function arq($pid) {
+       
+//             // CHECKING VALID URL PARAMETER
+//            if($pid == 'null' || $pid == ''){
+//                 echo 'Error! Invalid URL attempted!'; return;
+//             }
+
+//             // CHECKING THE QUESTION SET EXIST OR NOT IN DATABASE.
+//             $qsql= "select max(id) as mxval from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid';";
+//             $ds = $this->MApi->getDataBySql($qsql);
+//            if($ds['0']->mxval < 1) {
+//                 echo 'Error! Invalid URL attempted !!!!'; return;
+//            }
+//            // TAKING INPUT FROM THE USERS
+//             $msg = trim(strtolower($this->input->post('message')));
+//             $app = $this->input->post('app');
+//             $sender = $this->input->post('sender');
+//             $this->session->unset_userdata('ENdQ');
+//           // $this->session->unset_userdata('sessUserId');
+//  if(!$this->session->userdata('sessUserId')) {
         
         
-                $qsql= "select max(id) as mx from`vcimsdev`.`user_session_tab`";
-                $maxId = $this->MApi->getDataBySql($qsql);
-        $maxSessId =  $maxId['0']->mx; 
-        $maxSessId++;
-        $this->session->set_userdata('sessUserId', $maxSessId); 
-        $userSesId =$this->session->userdata('sessUserId');
-                $sql = "insert into `vcimsdev`.`user_session_tab` (qset_no) VALUES ('$pid')";
-                $sessds= $this->MApi->doSqlDML($sql);
+//                 $qsql= "select max(id) as mx from`vcimsdev`.`user_session_tab`";
+//                 $maxId = $this->MApi->getDataBySql($qsql);
+//         $maxSessId =  $maxId['0']->mx; 
+//         $maxSessId++;
+//         $this->session->set_userdata('sessUserId', $maxSessId); 
+//         $userSesId =$this->session->userdata('sessUserId');
+//                 $sql = "insert into `vcimsdev`.`user_session_tab` (qset_no) VALUES ('$pid')";
+//                 $sessds= $this->MApi->doSqlDML($sql);
                              
 
-            // PREPARE FOR FIRST QUESTION SETTING AND ASKING
-            $qsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' AND pqid ='0' AND  tv like '%$msg%'";
-            $ds1 = $this->MApi->getDataBySql($qsql);
+//             // PREPARE FOR FIRST QUESTION SETTING AND ASKING
+//             $qsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' AND pqid ='0' AND  tv like '%$msg%'";
+//             $ds1 = $this->MApi->getDataBySql($qsql);
             
-            if($ds1){
+//             if($ds1){
                     
-            $firstQest = $ds1['0']->question;
-            $pqid = $ds1['0']->qsid;
-            $this->session->set_userdata('pqId', $pqid);
+//             $firstQest = $ds1['0']->question;
+//             $pqid = $ds1['0']->qsid;
+//             $this->session->set_userdata('pqId', $pqid);
              
-            //PRINT FIRST QUESTION FOR THE USER AFTER CHEKING THE FIRST TRIGGER VALUES 
-                $reply = array("reply"=>$firstQest );
-                echo json_encode($reply);
-                 $this->session->set_userdata('ENdQ', 'NOTEND');   
+//             //PRINT FIRST QUESTION FOR THE USER AFTER CHEKING THE FIRST TRIGGER VALUES 
+//                 $reply = array("reply"=>$firstQest );
+//                 echo json_encode($reply);
+//                  $this->session->set_userdata('ENdQ', 'NOTEND');   
         
-            // INSERT THE USER DATA INTO THE TABLE FOR THE REPORT GENRATION 
-        $sql = "insert into `vcimsdev`.`msglog` (pid,sid,app,user_session_id,sender,qid,tv,questions,msg) VALUES ('$pid','0','$app','$userSesId','$sender','$pqid','$msg','$firstQest','')";
-        $this->MApi->doSqlDML($sql);
+//             // INSERT THE USER DATA INTO THE TABLE FOR THE REPORT GENRATION 
+//         $sql = "insert into `vcimsdev`.`msglog` (pid,sid,app,user_session_id,sender,qid,tv,questions,msg) VALUES ('$pid','0','$app','$userSesId','$sender','$pqid','$msg','$firstQest','')";
+//         $this->MApi->doSqlDML($sql);
             
-                $qCount =1;  
+//                 $qCount =1;  
 
-                 //FIND THE TOTAL NUMBER OF QUESTION IN THE QUESTION SET
-                        $qsql= "select count(*) as totalQest from`vcimsdev`.`pro_ques_set` WHERE pid ='$pid'";
-                        $totQ = $this->MApi->getDataBySql($qsql);
-                        $totalQest = $totQ['0']->totalQest; 
-                        $this->session->set_userdata('totalQset', $totalQest);                   
-            } 
+//                  //FIND THE TOTAL NUMBER OF QUESTION IN THE QUESTION SET
+//                         $qsql= "select count(*) as totalQest from`vcimsdev`.`pro_ques_set` WHERE pid ='$pid'";
+//                         $totQ = $this->MApi->getDataBySql($qsql);
+//                         $totalQest = $totQ['0']->totalQest; 
+//                         $this->session->set_userdata('totalQset', $totalQest);                   
+//             } 
         
- }  // PRINT FIRST QUESTION SECTION IF IS ENDED HERE. 
+//  }  // PRINT FIRST QUESTION SECTION IF IS ENDED HERE. 
 
- //FIND THE SECOUND OR NEXT QUESTION 
-        elseif($this->session->userdata('sessUserId')) {
-          $pqId =$this->session->userdata('pqId');
-          $userSesId =$this->session->userdata('sessUserId');
+//  //FIND THE SECOUND OR NEXT QUESTION 
+//         elseif($this->session->userdata('sessUserId')) {
+//           $pqId =$this->session->userdata('pqId');
+//           $userSesId =$this->session->userdata('sessUserId');
           
 
-          $updsql = "update `vcimsdev`.`msglog` set msg = '$msg' where qid='$pqId' and user_session_id =$userSesId";
-          $this->MApi->doSqlDML($updsql);
+//           $updsql = "update `vcimsdev`.`msglog` set msg = '$msg' where qid='$pqId' and user_session_id =$userSesId";
+//           $this->MApi->doSqlDML($updsql);
 
-            //$qsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' AND pqid ='$pqId' AND  tv like '$msg' ";
-            $qsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' AND pqid ='$pqId' AND  LOWER(tv) = '$msg' ";
-            $ds2 = $this->MApi->getDataBySql($qsql);
-            if($ds2){
+//             //$qsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' AND pqid ='$pqId' AND  tv like '$msg' ";
+//             $qsql= "select * from `vcimsdev`.`pro_ques_set` WHERE pid = '$pid' AND pqid ='$pqId' AND  LOWER(tv) = '$msg' ";
+//             $ds2 = $this->MApi->getDataBySql($qsql);
+//             if($ds2){
                 
-             $pqid =  $ds2['0']->qsid;
-             $this->session->set_userdata('pqId', $pqid); 
-             $nQuestion  =$ds2['0']->question;
-             $reply = array("reply"=>$nQuestion );
-             echo json_encode($reply);
-             $this->session->set_userdata('ENdQ', 'NOTEND'); 
-             $qCount++;
+//              $pqid =  $ds2['0']->qsid;
+//              $this->session->set_userdata('pqId', $pqid); 
+//              $nQuestion  =$ds2['0']->question;
+//              $reply = array("reply"=>$nQuestion );
+//              echo json_encode($reply);
+//              $this->session->set_userdata('ENdQ', 'NOTEND'); 
+//              $qCount++;
 
-          $sql = "insert into `vcimsdev`.`msglog` (pid,sid,app,user_session_id,sender,qid,tv,questions,msg) VALUES ('$pid','0','$app','$userSesId','$sender','$pqid','$msg','$nQuestion','')";
-          $this->MApi->doSqlDML($sql);
+//           $sql = "insert into `vcimsdev`.`msglog` (pid,sid,app,user_session_id,sender,qid,tv,questions,msg) VALUES ('$pid','0','$app','$userSesId','$sender','$pqid','$msg','$nQuestion','')";
+//           $this->MApi->doSqlDML($sql);
              
-            }
+//             }
         
- }
-        //IF THE MESSAGE IS NOT MATCH THEN SHOW ERROR OR TERMINATE THE AUTO REPLY BY THANK YOU MESSAGE.
+//  }
+//         //IF THE MESSAGE IS NOT MATCH THEN SHOW ERROR OR TERMINATE THE AUTO REPLY BY THANK YOU MESSAGE.
       
-        if($this->session->userdata('ENdQ') !='NOTEND' ){
+//         if($this->session->userdata('ENdQ') !='NOTEND' ){
                 
-                if($msg === 'end'){
-                $replymsg = 'Thanks for your valuable reply!!';
-                $reply = array("reply"=>$replymsg );
-                echo json_encode($reply);
-                $this->session->unset_userdata('sessUserId'); 
-                }
-                else {
-                $replymsg = 'The message which you have type is incorrect please type the correct answer or type the END to terminate';
-                $reply = array("reply"=>$replymsg );
-                echo json_encode($reply); 
-                }
-        }
+//                 if($msg === 'end'){
+//                 $replymsg = 'Thanks for your valuable reply!!';
+//                 $reply = array("reply"=>$replymsg );
+//                 echo json_encode($reply);
+//                 $this->session->unset_userdata('sessUserId'); 
+//                 }
+//                 else {
+//                 $replymsg = 'The message which you have type is incorrect please type the correct answer or type the END to terminate';
+//                 $reply = array("reply"=>$replymsg );
+//                 echo json_encode($reply); 
+//                 }
+//         }
 
 
-        }
+//         }
            
 // *********************************************//
 
