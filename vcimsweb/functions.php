@@ -35,12 +35,22 @@ function get_projects_details_test()
 //to get all project details
 function get_projects_details()
 {
-    $q=DB::getInstance()->query("select * from project ORDER BY project_id desc");
+    $q=DB::getInstance()->query("select * from project WHERE project_type ='servegenix' ORDER BY project_id desc;");
     if($q)
         return $q->results();
     else
         return false;
 }
+
+function get_projects_details_serveygenics()
+{
+    $q=DB::getInstance()->query("select * from project WHERE project_type ='servegenix' ORDER BY project_id desc;");
+    if($q)
+        return $q->results();
+    else
+        return false;
+}
+
 
 //to get all project list based on userid
 function get_project_list($uid=null)

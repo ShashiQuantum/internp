@@ -435,7 +435,6 @@ class Message extends CI_Controller
 
     }
 
-
     function arq($pid) {
        
         // CHECKING VALID URL PARAMETER
@@ -484,11 +483,13 @@ class Message extends CI_Controller
                 $todayDate = date("Y-m-d");
                 $insql = "insert into `vcimsdev`.`msglog` (pid,sid,pqid,app,sender,questions,msg,at,send_date,opval) VALUES ('$pid','0','$pqid','$app','$sender','$question','$msg','$currTime','$todayDate','$opVal')";
                 $this->MApi->doSqlDML($insql);
+                       
+                        $reply = array("reply"=>$question);
+                        echo json_encode($reply);
 
-
-                $reply = array("reply"=>$question);
-                 echo json_encode($reply);
-              
+                }else{
+                        $reply = array("reply"=>'We not recognise your message ! Please enter correct Message!');
+                        echo json_encode($reply);
 
                 }
 
