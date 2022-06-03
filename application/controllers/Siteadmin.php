@@ -3908,6 +3908,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $this->load->view('v_h');
                         echo "<br><br><br><br><br><br> <div style='margin-left:50px;'>";  
                         $dt = date('Y-m-d H:i:s');
+                        $crDt = date('Y-m-d');
                        $login=$this->session->userdata('sauserid'); 
                        $projectTypes= trim($this->input->post('select_project_types')); 
                        $projectName= trim($this->input->post('pname')); 
@@ -3966,7 +3967,17 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                                  {
                                      $rdd3=$this->MProject->doSqlDML("ALTER TABLE $dtn ADD index rsp$pid (resp_id)");
                                      $rdd4=$this->MProject->doSqlDML("UPDATE `project` SET  `data_table`='$dtn' ,`status`=1 WHERE `project_id`=$pid");
-                                     $sdata="Project ' $projectName ' created successfully";
+                                    // CREATE Q-SET ID FOR SERVEGENICS 
+                                    $qStparr=array('qset_id'=>$pid,'project_id'=>$pid,'visit_no'=>1,'created_at'=>$crDt, 'updated_at'=>$crDt,'uid'=>$login); 
+                                    $qSetid=$this->MProject->insertIntoTable('questionset',$qStparr);
+                                    
+                                    //$sdata="Qset ID ' $pid ' visit $visit created successfully";
+
+
+                                    // END THE CREATION OF SERVEGENIC Q-SET ID CREATION 
+                                    
+                                    
+                                     $sdata=" Project ' $projectName ' with Q-set Id '$pid' is created successfully";
                                  }
                                 //for adding project fisrt page details 
 				if(!empty($fps))
