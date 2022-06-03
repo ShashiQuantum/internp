@@ -3994,19 +3994,39 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 
                        $pid= $this->input->post('pn'); 
                        $visit= $this->input->post('visit'); 
-                       $parr=array('project_id'=>$pid,'visit_no'=>$visit,'created_at'=>$dt, 'updated_at'=>$dt,'uid'=>$login);
+                       
 	               $this->load->model('MProject');
+                       
+                       // CODE FOR SERVEGENICS
+                        $chkPro=$this->MProject->getDataBySql("select * from project where project_id=$pid AND project_type='servegenix' ");
+                     // var_dump($chkp);die;
+                     if($chkPro){
+                        $chkpQset=$this->MProject->getDataBySql("select * from questionset where project_id=$pid AND visit_no=$visit"); 
+                        if(!$chkpQset)
+                        {  
+                        $parr=array('qset_id'=>$pid,'project_id'=>$pid,'visit_no'=>$visit,'created_at'=>$dt, 'updated_at'=>$dt,'uid'=>$login); 
+                          $qSetid=$this->MProject->insertIntoTable('questionset',$parr);
+                          $sdata="Qset ID ' $pid ' visit $visit created successfully";
+                        }
+                        if($chkpQset) $sdata="Qset id: ' $pid ' with visit: $visit already exist in database";
+                        echo $arrdata['msg']=$sdata;
+
+                     }
+                      
+                     //  END THE SERVEGENICS CODE
+                     if(!$chkPro){
                        $chkp=$this->MProject->getDataBySql("select * from questionset where project_id=$pid AND visit_no=$visit");
                        if(!$chkp)
                        {  
-                         $pid=$this->MProject->insertIntoTable('questionset',$parr);
+                        $parr=array('qset_id'=>$pid,'project_id'=>$pid,'visit_no'=>$visit,'created_at'=>$dt, 'updated_at'=>$dt,'uid'=>$login); 
+                         $qSetpid=$this->MProject->insertIntoTable('questionset',$parr);
                          $sdata="Qset ID ' $pid ' visit $visit created successfully";
                        }
                        if($chkp) $sdata="Qset id: ' $pid ' with visit: $visit already exist in database";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
-	}
+	}  }
         public function createquestion()
         {         
                         $this->load->view('v_h');
