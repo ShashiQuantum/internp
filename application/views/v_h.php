@@ -2317,7 +2317,8 @@ function createProjectTypes()
         $('#tr_research_name').show();
         $('#tr_surveyround_name').hide(); 
         $('#tr_firstpage_info').hide();
-        $('#tr_questionversion_name').hide(); 
+        $('#tr_questionversion_name').hide();
+        $('#tr_response_types').show(); 
          
     }
     if(apptypeproject == "insightfix")
@@ -2340,6 +2341,7 @@ function createProjectTypes()
         $('#occurance_time').hide(); 
         $('#restrict_occurance').hide(); 
         $('#tr_surveytypes_name').hide(); 
+        $('#tr_response_types').hide(); 
 
 
     }

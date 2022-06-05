@@ -126,7 +126,7 @@ class Siteadmin extends CI_Controller {
 				$t= $email;
 				$s='Digiadmin Password Reset Requested';
 				$msg = "
-					Hello ,<br><br> Received your password reset request.<br> Click here on <a href='http://localhost/digiamin-web/siteadmin/reset_password/$token'>Reset Password</a>  link to reset your new password. This link is valid for 30 minutes only else get expired.<br><br> Thanks,<br>Team SiteAdmin 
+					Hello ,<br><br> Received your password reset request.<br> Click here on <a href='http://13.232.11.235/digiamin-web/siteadmin/reset_password/$token'>Reset Password</a>  link to reset your new password. This link is valid for 30 minutes only else get expired.<br><br> Thanks,<br>Team SiteAdmin 
 				";
 				if(mail($t, $s, $msg, $headers))
 		 		{}
@@ -1222,7 +1222,7 @@ onclick="return confirm('Are you sure to set project quota?');"></td></tr>
 
                                 ?>			
 				<?php echo form_close(); ?> 
-				<label class='btn btn-light' style='margin-left: 15%;'> <a href='http://localhost/digiamin-web/vcimsweb/adminpanel/1236.php' target="_blank">See Translated Questionnare </a> </label>
+				<label class='btn btn-light' style='margin-left: 15%;'> <a href='http://13.232.11.235/digiamin-web/vcimsweb/adminpanel/1236.php' target="_blank">See Translated Questionnare </a> </label>
 				</div></div>
 		<?php
 			break;
@@ -1746,7 +1746,7 @@ onclick="return confirm('Are you sure to set project quota?');"></td></tr>
                                 			
 				echo form_close();
  				*/
-				header("Location: http://localhost/digiamin-web/vcimsweb/adminpanel/question_trans.php?st=101");
+				header("Location: http://13.232.11.235/digiamin-web/vcimsweb/adminpanel/question_trans.php?st=101");
                               ?>
 		<?php
 			break;
@@ -2782,7 +2782,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 			//$_SESSION['ctpn'] = $pn;
 			//print_r($_SESSION);
 		}
-                redirect("http://localhost/digiamin-web/vcimsweb/crosstabh.php?ctp=$pid&pn=$pn");
+                redirect("http://13.232.11.235/digiamin-web/vcimsweb/crosstabh.php?ctp=$pid&pn=$pn");
         }
         public function viewtransdataupload()
         {
@@ -2795,7 +2795,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         //$_SESSION['ctpn'] = $pn;
                         //print_r($_SESSION);
                 }
-                redirect("http://localhost/digiamin-web/dataupload/viewtransqop.php?ctp=$pid&pn=$pn");
+                redirect("http://13.232.11.235/digiamin-web/dataupload/viewtransqop.php?ctp=$pid&pn=$pn");
         }
 
         public function transdataupload()
@@ -2809,7 +2809,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         //$_SESSION['ctpn'] = $pn;
                         //print_r($_SESSION);
                 }
-                redirect("http://localhost/digiamin-web/dataupload/transqop.php?ctp=$pid&pn=$pn");
+                redirect("http://13.232.11.235/digiamin-web/dataupload/transqop.php?ctp=$pid&pn=$pn");
         }
 
         public function dummydataupload()
@@ -2823,7 +2823,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         //$_SESSION['ctpn'] = $pn;
                         //print_r($_SESSION);
                 }
-                redirect("http://localhost/digiamin-web/dataupload/dummydataupload.php?ctp=$pid&pn=$pn");
+                redirect("http://13.232.11.235/digiamin-web/dataupload/dummydataupload.php?ctp=$pid&pn=$pn");
         }
 
         public function dummycrosstab()
@@ -2835,7 +2835,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $this->load->model('MProject');
                         $pn = $this->MProject->get_project_name($pid);
                 }
-                redirect("http://localhost/digiamin-web/vcimsweb/dummycrosstabh.php?ctp=$pid&pn=$pn");
+                redirect("http://13.232.11.235/digiamin-web/vcimsweb/dummycrosstabh.php?ctp=$pid&pn=$pn");
         }
 	public function viewpshowcards()
 	{
@@ -3029,7 +3029,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        $pid= $this->input->post('pn'); 
 	               $this->load->model('MProject');
                        $sdata=$this->MProject->getEditRoutineDetail($pid);
- 			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/editroutine'> Edit Routine </a></font> ";
+ 			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/editroutine'> Edit Routine </a></font> ";
                        $arrdata['rqpost']='';
                        echo "<br><br><br><br> <div style='margin-left:50px;'>";
                        echo $arrdata['msg']=$sdata;
@@ -3923,8 +3923,9 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        $surveyEndDate= $this->input->post('esdt');   
                        $researchTypes= $this->input->post('reserch_type');
                        if($researchTypes=='') $researchTypes =4;
+                       $response_type= $this->input->post('response_types');
                        $surveyTypes= $this->input->post('survey_type');
-                       if($surveyTypes== '') $surveyTypes= 0;
+                       
                        $surveyOccurance= $this->input->post('survey_occurrence');
                        if($surveyOccurance== '') $surveyOccurance= 'None';
                        $surveyTimes= $this->input->post('survey_times');
@@ -3941,7 +3942,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        $fps=$this->input->post('fp');
                         //previous entry for insightfix
                        //$parr=array('name'=>$pn,'company_name'=>$ccn,'brand'=>$b,'research_type'=>$rt,'tot_visit'=>$v,'background'=>$bd,'sample_size'=>$ss,'survey_start_date'=>$ssid,'survey_end_date'=>$esid,'category'=>$pcat,'reward_point'=>$rp,'created_at'=>$dt, 'updated_at'=>$dt,'uid'=>$login);
-                       $parr=array('name'=>$projectName,'project_type'=>$projectTypes,'company_name'=>$clientCompanyName,'brand'=>$brandName,'research_type'=>$researchTypes, 'survey_types'=>$surveyTypes,'sample_size'=>$surveySampleSize,'survey_start_date'=>$surveyStartDate,'survey_end_date'=>$surveyEndDate,'reward_point'=>$rewardPoint,'created_at'=>$dt, 'uid'=>$login);
+                       $parr=array('name'=>$projectName,'project_type'=>$projectTypes,'company_name'=>$clientCompanyName,'brand'=>$brandName,'research_type'=>$researchTypes, 'survey_types'=>$surveyTypes,'response_type'=>$response_type,'sample_size'=>$surveySampleSize,'survey_start_date'=>$surveyStartDate,'survey_end_date'=>$surveyEndDate,'reward_point'=>$rewardPoint,'created_at'=>$dt, 'uid'=>$login);
  
                        if($projectName!=''){
 		
@@ -3963,7 +3964,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                          {
                                  //$rdd2=$this->MProject->doSqlDML("CREATE TABLE IF NOT EXISTS $dtn  (id int(5) primary key AUTO_INCREMENT,resp_id bigint(20) not null, q_id int(5) not null, r_name varchar(30) not null, mobile varchar(11) not null, centre_$pid varchar(2), i_date_$pid datetime, e_date_$pid datetime, latt varchar(30) null, lang varchar(30) null, sec_$pid varchar(1) not null, gender_$pid varchar(1) not null, week_day_$pid char(1) not null, age_$pid varchar(2) not null, st_$pid varchar(2) not null, age_yrs_$pid varchar(2) not null, store_$pid varchar(1) not null, product_$pid varchar(1) not null)ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci ");
                                  $rdd2=$this->MProject->doSqlDML("CREATE TABLE IF NOT EXISTS $dtn (id int(10) primary key AUTO_INCREMENT, resp_id bigint(20) not null, q_id int(5) not null, r_name varchar(30)  null, mobile varchar(11)  null, centre varchar(6) null ,timestamp varchar(20)  null, c_area varchar(4) null, c_sub_area varchar(4)  null,  i_name varchar(30) null, i_mobile varchar(11)  null, i_date datetime  null, e_date datetime  null,address varchar(40) null, o_sec varchar(1) null , n_sec varchar(1) null, gender varchar(1) null, week_day char(1)  null, age varchar(2) null, st varchar(2)  null, age_yrs varchar(2)  null, store varchar(2)  null, product varchar(2)  null, ref_no varchar(15) null, latt varchar(30) null, lang varchar(30) null) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci ");
-				 if($rdd2)
+                                 if($rdd2)
                                  {
                                      $rdd3=$this->MProject->doSqlDML("ALTER TABLE $dtn ADD index rsp$pid (resp_id)");
                                      $rdd4=$this->MProject->doSqlDML("UPDATE `project` SET  `data_table`='$dtn' ,`status`=1 WHERE `project_id`=$pid");
@@ -3996,7 +3997,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 		
 		
 	}
-        public function createqset()
+                public function createqset()
         {       
                         $this->load->view('v_h');
                        echo "<br><br><br><br><br><br> <div style='margin-left:50px;'>";
@@ -4052,7 +4053,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 			
 			$_SESSION['pid']=$pn;
 			$_SESSION['qset']=$pid;
-			$sdata.= "<br><br>Click to more <font clolor=red> <a href = 'http://localhost/digiamin-web/siteadmin/user_action/createquestion'> New Question </a></font> "; 
+			$sdata.= "<br><br>Click to more <font clolor=red> <a href = 'http://13.232.11.235/digiamin-web/siteadmin/user_action/createquestion'> New Question </a></font> "; 
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4162,7 +4163,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                              		} //end of  if $
                        } //end of foreach
                        $sdata= "<br>Question Routine added successfully";
-		       $sdata.= "<br><br>Click here to <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/createroutine'> Add Routine </a></font> ";
+		       $sdata.= "<br><br>Click here to <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/createroutine'> Add Routine </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4207,7 +4208,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        $rr=$this->MProject->isQOp($qid,$code);
                        if(!$rr)
                        {   $sd=$this->MProject->insertIntoTable('question_option_detail',$arr);
-                           if($sd) $sdata="Sucessfully Added Option in qid:$qid as $opt <br><br>Click here to <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/addqop'> Add More Options</a>";
+                           if($sd) $sdata="Sucessfully Added Option in qid:$qid as $opt <br><br>Click here to <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/addqop'> Add More Options</a>";
                            if(!$sd) $sdata="Unable to Add Option in qid:$qid as $opt";
                        }
                        if($rr) $sdata="Already exist in our database-- Option in qid:$qid as $opt";
@@ -4277,7 +4278,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 	               $this->load->model('MProject');
                        $arr=array('qset_id'=>$qset,'qid'=>$qid, 'sid'=>$sid,'chkflag'=>0);
                         $sd=$this->MProject->insertIntoTable('question_sequence',$arr);
-                           if($sd) $sdata="Sucessfully Sequence Added qid:$qid of Qset:$qset <br><br>Click here to <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/addsequence'> Add more sequence</a>";
+                           if($sd) $sdata="Sucessfully Sequence Added qid:$qid of Qset:$qset <br><br>Click here to <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/addsequence'> Add more sequence</a>";
                            if(!$sd) $sdata="Unable to Sequence Added qid:$qid of Qset:$qset";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
@@ -4320,7 +4321,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 	                        $sd=$this->MProject->insertIntoTable('centre_project_details',$arr);
 				if($sd) $sdata="Sucessfully Centre(s) Added to Qset:$qset";
 			}
-                       $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/addpcentre'> Add Centre </a></font> ";
+                       $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/addpcentre'> Add Centre </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4340,7 +4341,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $sd=$this->MProject->insertIntoTable('project_product_map',$arr);
                            if($sd) $sdata="Sucessfully Product Added :$prdn to Qset:$qset";
                            if(!$sd) $sdata="Unable to Product Added :$prdn to Qset:$qset";
-                      $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/addpproduct'> Add Product </a></font> ";
+                      $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/addpproduct'> Add Product </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4360,7 +4361,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $sd=$this->MProject->insertIntoTable('project_store_loc_map',$arr);
                            if($sd) $sdata="Sucessfully Store Added :$sn to Qset:$qset";
                            if(!$sd) $sdata="Unable to Store Added :$sn to Qset:$qset";
-                      $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/addpstore'> Add Store </a></font> ";
+                      $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/addpstore'> Add Store </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4379,7 +4380,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $sd=$this->MProject->insertIntoTable('project_sec_map',$arr);
                            if($sd) $sdata="Sucessfully SEC Added :$sn to Qset:$qset";
                            if(!$sd) $sdata="Unable to SEC Added :$sn to Qset:$qset";
-                      $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/addpsec'> Add SEC </a></font> ";
+                      $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/addpsec'> Add SEC </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4399,7 +4400,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $sd=$this->MProject->insertIntoTable('project_age_map',$arr);
                            if($sd) $sdata="Sucessfully Age Added :$sn to Qset:$qset";
                            if(!$sd) $sdata="Unable to Age Added :$sn to Qset:$qset";
-                       $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/addpage'> Add Age </a></font> ";
+                       $sdata.= "<br><br>Click on  <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/addpage'> Add Age </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4437,7 +4438,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $sd=$this->MProject->insertIntoTable('project_centre_area_map',$arr);
                            if($sd) $sdata="Sucessfully Area Added :$area";
                            if(!$sd) $sdata="Unable to Area Added :$area";
-			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/addarea'> Add Area </a></font> ";
+			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/addarea'> Add Area </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4460,7 +4461,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $sd=$this->MProject->insertIntoTable('project_centre_subarea_map',$arr);
                            if($sd) $sdata="Sucessfully SubArea Added :$area";
                            if(!$sd) $sdata="Unable to SubArea Added :$area";
-			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/addsubarea'> Add Sub-Area </a></font> ";
+			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/addsubarea'> Add Sub-Area </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4476,7 +4477,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        $qid= $this->input->post('qid');  $qno=strtolower($qno);
 	               $this->load->model('MProject');
                        $sdata=$this->MProject->copyquestioninproject($pid, $qset, $qid, $qno);
-			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/copyqbquest'> Copy Question </a></font> ";
+			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/copyqbquest'> Copy Question </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4494,7 +4495,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 	               $this->load->model('MProject');
 			//print_r($qids);
                        $sdata = $this->MProject->copyquestioninproject($pid, $qset, $qids, $qno);
-			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/copyquestionop'> Copy Question Options </a></font> ";
+			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/copyquestionop'> Copy Question Options </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4592,7 +4593,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        $sa=$this->MProject->doSqlDML($qi); 
                        $sdata="Not deleted";
                        if($sa) $sdata="Question Routine of QSET: $qset, Deleted Successfully";
-			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/deleteroutine'> Delete Routine </a></font> ";
+			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/deleteroutine'> Delete Routine </a></font> ";
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
@@ -4935,7 +4936,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        if($rt!=0 && $qset!=0)  $sdata=$this->MProject->doaddrule($_POST);
                        $msg=" Done";
                        if($sdata==1) $msg="Successfully added rule for Questions";
-			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://localhost/digiamin-web/siteadmin/user_action/addrule'> Add Rule </a></font> ";
+			$sdata.= "<br><br>Click on  <font clolor=red> <a href='http://13.232.11.235/digiamin-web/siteadmin/user_action/addrule'> Add Rule </a></font> ";
                        $ardata['rqpost']=''; 
                        echo $ardata['msg']=$msg; 
                        $this->load->model('MSausermodel');
