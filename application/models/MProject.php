@@ -3367,7 +3367,7 @@ resp_id";
                             }
                  $colmsqno=array();$colms=array();$rdata=array();$mcolms=array();$mcolms2=array();
                  //$sql2="SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'vcims' AND TABLE_NAME = '$dtable'";
-		$sql2="SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'vcims' AND TABLE_NAME = '$dtable' AND COLUMN_NAME NOT IN (SELECT distinct term FROM vcims.question_option_detail WHERE q_id IN (SELECT qid FROM vcims.question_sequence where qset_id= $qset order by sid ) )";
+		$sql2="SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'vcims' AND TABLE_NAME = '$dtable' AND COLUMN_NAME NOT IN (SELECT distinct(term) FROM vcims.question_option_detail WHERE q_id IN (SELECT qid FROM vcims.question_sequence where qset_id= $qset order by sid  asc) )";
 
                  $rs2=$this->getDataBySql($sql2);
                  if($rs2)
