@@ -3532,11 +3532,12 @@ resp_id";
                     if($yrs>2016)
                     { */
                           //$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND month(i_date_$qset)=$sm AND year(i_date_$qset)=$yrs order by resp_id";
-			 $qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by timestamp,resp_id;";
+//// OLD CODE  $qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by timestamp,resp_id;";
+$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by resp_id desc;";
                           if($sl >= 0 && $el > 0) 
 				//$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND month(i_date)=$sm AND year(i_date)=$yrs order 
 				//by resp_id limit $sl,$el";
-			$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by timestamp, resp_id limit $sl,$el";
+			$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by resp_id desc limit $sl,$el";
                           // if($qset==40)
                                 //$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND month(visit_month_$qset)=$sm AND year(visit_month_$qset)=$yrs order by resp_id";
                     //}
@@ -3596,6 +3597,8 @@ resp_id";
 	        	return false;
              } else return false;
     }
+
+	
     public function get_r_detailm($resp=null,$qset=null,$dtable=null,$colmn,$isd=null,$sm=null,$em=null,$yrs=null,$mcolmn)
     {
 	        $rrdata=array(); $tmpdata=array();
