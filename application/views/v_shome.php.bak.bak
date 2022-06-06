@@ -1,1029 +1,222 @@
 <?php
 //print_r($_SESSION);
   $isSALogin= $this->session->userdata('isSALogin');
-    if(!$isSALogin)
+    if($isSALogin=='')
     { 
             //Redirect::to('index.php');
-             //$this->load->view('sadm_login_form');
+             $this->load->view('sadm_login_form');
     }
-    else
-    {
-	if(!isset($_SESSION['sauserid'])) Redirect::to('https://digiadmin.quantumcs.com/digiamin-web');
-            $vuid=$_SESSION['sauserid'];
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 
 <head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>QuantumCS | MyAccount</title>
-
-    <!-- Bootstrap Core CSS -->
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>public/vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>public/css/my2.css" rel="stylesheet">
-
-    <!-- Custom Fonts -->
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>public/vendor/font-awesome/css/font-awesome.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
-
-    <!-- Theme CSS & topbar-->
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>public/css/agency2.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>public/css/agency2.min.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>public/css/sb-admin-2.css">
-    <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>public/css/sb-admin-2.min.css">
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-
-<script>
- $(".parent ul li ul").css("display", "none");
- $(".parent li").click(function (e) {
-     e.stopPropagation();
-     $(this).children('ul').toggle();
- });
-</script>
-
-<style>
-.w3-hide{display:none!important}.w3-show-block,.w3-show{display:block!important}.w3-show-inline-block{display:inline-block!important}
-</style>
-
-<style>
-.multiselect {
-  width: 200px;
-}
-
-.selectBox {
-  position: relative;
-}
-
-.selectBox select {
-  width: 100%;
-  font-weight: bold;
-}
-
-.overSelect {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-
-#fp {
-  display: none;
-  border: 1px #dadada solid;
-}
-
-#fp label {
-  display: block;
-}
-
-#fp label:hover {
-  background-color: #1e90ff;
-}
-</style>
-
-<style>
-.parent {display: block;position: relative;float: left;line-height: 30px;background-color: #FFF;border-right:#CCC 1px solid;}
-.parent a{margin: 10px;color: #FFFFFF;text-decoration: none;}
-.parent:hover > ul {display:block;position:absolute;}
-
-.child {display: none;}
-.child li {background-color: #E4EFF7;line-height: 30px;border-bottom:#CCC 1px solid;border-right:#CCC 1px solid; width:100%;}
-.child li a{color: #000000;}
-ul{list-style: none;margin: 0;padding: 0px; min-width:15em;}
-ul ul ul{left: 100%;top: 0;margin-left:1px;}
-li:hover {background-color: #95B4CA;}
-.parent li:hover {background-color: #F0F0F0;}
-.expand{font-size:12px;float:right;margin-right:5px;}
-</style>
-
-
-<script type="text/javascript">
-    var expanded = false;
-
-	function showCheckboxes() {
-	  var checkboxes = document.getElementById("fp");
-	  if (!expanded) {
-	    checkboxes.style.display = "block";
-	    expanded = true;
-	  } else {
-	    checkboxes.style.display = "none";
-	    expanded = false;
-	  }
-}
-</script>
-
-
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>QuantumCS | Digiadmin</title>
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta name="author" content="Digiadmin" />
+	<link rel="shortcut icon" href="<?php echo base_url(); ?>public/img/logos/quantum-logo-big.png">
+	<!-- food icons -->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>public/menu/css/organicfoodicons.css" />
+	 <!-- demo styles -->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>public/menu/css/demo.css" />
+	<!-- menu styles -->
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>public/menu/css/component.css" />
+	<script src="<?php echo base_url(); ?>public/menu/js/modernizr-custom.js"></script>
 </head>
 
+<body  style="background:#fff">
+	<!-- Main container -->
+	<div class="container" style="">
 
-<body id="page-top" class="index" style="background-color:#dff0d8;">
-
-    <!-- Navigation -->
-    <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top" style="background-color:white; border-bottom: 3px solid #DCEDC8;">
-<div style="margin-left: 20px;float:left;position: relative;width:55px;"><a href="#page-top"><img src="<?php echo base_url(); ?>public/img/logos/quantum-logo-big.png" height=80px width=80px/></a></div>
-        <div class="container"> 
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header page-scroll"> 
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
-                </button>
-            <a class="navbar-brand page-scroll" href="#page-top"> </a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="hidden">
-                        <a href="#page-top"></a>
-                    </li>
-<!-- begin -->
-                         <?php  
-                          
-                         //print_r($_SESSION);
-			  $role=$this->session->userdata('sauseridrole');
-                     		//     $role=$_SESSION['sauseridrole']; 
-				$permission=$_SESSION['permission'];
-               if(empty($permission))
-                              echo 'You have no access permissions';
+		<!-- Blueprint header -->
+		<header class="bp-header cf">
+			<div class="dummy-logo">
+				<!-- <div class="dummy-icon foodicon foodicon--coconut"></div> -->
+				<h2 class="dummy-heading"> <img src="<?php echo base_url(); ?>public/img/logos/quantum-logo-big.png" width=80px height=80px></h2>
+			</div>
+		<!-- -->
+				<div class="bp-header__main">
+				<span class="bp-header__present" style="color:green;"> <a href="<?php echo base_url(); ?>siteadmin/salogout" style="color:green;"> Logout </a>|  DIGIADMIN <span class="bp-tooltip bp-icon bp-icon--about" data-content="The SiteAdmin is a collection of basic tools to administrate Varenia's operational tasks."></span></span>
+		<!--		<h1 class="bp-header__title">Multi-Level Menu</h1>
+				<nav class="bp-nav">
+					<a class="bp-nav__item bp-icon bp-icon--prev" href="http://tympanus.net/Blueprints/PageStackNavigation/" data-info="previous Blueprint"><span>Previous Blueprint</span></a>
+		-->			<!--a class="bp-nav__item bp-icon bp-icon--next" href="" data-info="next Blueprint"><span>Next Blueprint</span></a-->
+		<!--			<a class="bp-nav__item bp-icon bp-icon--drop" href="http://tympanus.net/codrops/?p=25521" data-info="back to the Codrops article"><span>back to the Codrops article</span></a>
+					<a class="bp-nav__item bp-icon bp-icon--archive" href="http://tympanus.net/codrops/category/blueprints/" data-info="Blueprints archive"><span>Go to the archive</span></a>
+				</nav>
+			</div>
+		-->
+		</header>
+		<button class="action action--open" aria-label="Open Menu"><span class="icon icon--menu"></span></button>
+		<nav id="ml-menu" class="menu">
+			<button class="action action--close" aria-label="Close Menu" style="background:black;"><span class="icon icon--cross"></span></button>
+			<div class="menu__wrap">
+              <?php 
+			$role=$this->session->userdata('sauseridrole');
+			$permission=$_SESSION['permission'];
+              if(empty($permission))
+                              echo 'You have no access permissions. Please contact to Admin.';
               else
               {
-                         /* if(in_array('1',$permission))
-                              echo 'Found'.in_array('2',$permission);
-                          else
-                              echo 'Not found';
-                           */
-                           
-                        if($role==1 || $role==2)
-                        {
-                          
-                        ?>
-	<li class="parent"><a href="#">Admin</a>
-	<ul class="child">
-		<li class="parent"><a href="#">User <span class="expand">&raquo;</span></a>
-			<ul class="child">
-			<li><a onClick = "userAction('usradd','');">New User</a></li>
-			<li><a href="#">View User</a></li>
-			<li><a href="#">Delete User</a></li>
-			</ul>
-		</li>
-		<li class="parent"><a href="#">Permission <span class="expand">&raquo;</span></a>
-			<ul class="child">
-			<li><a href="#">New Permission</a></li>
-			<li><a href="#">Assign To User</a></li>
-			<li><a href="#">View UserPermission</a></li>
-			<li><a href="#">Revoke UPermission</a></li>
-			</ul>
-		</li>
-	</ul>
-	</li>
+		?>
+				<ul data-menu="main" class="menu__level" tabindex="-1" role="menu" aria-label="All">
+					<?php 
+					if(in_array('1',$permission) || in_array('2',$permission) || in_array('3',$permission)){ ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" data-submenu="submenu-1" aria-owns="submenu-1" href="#">Admin User</a></li>
+					<?php } if(in_array('20',$permission) ) { ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" data-submenu="submenu-hr" aria-owns="submenu-hr" href="#">HR </a></li>
+					<?php } ?>
+                                        <?php
+                                        if(in_array('4',$permission) || in_array('5',$permission) || in_array('6',$permission)  || in_array('7',$permission)){ ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" data-submenu="submenu-2" aria-owns="submenu-2" href="#">Questionnaire</a></li>
+					<?php }
+                                        if(in_array('11',$permission) || in_array('12',$permission)){ ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" data-submenu="submenu-3" aria-owns="submenu-3" href="#">Device </a></li>
+                                        <?php }
+                                        if(in_array('13',$permission) || in_array('14',$permission) ){ ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" data-submenu="submenu-4" aria-owns="submenu-4" href="#">Mangopinion </a></li>
+					<?php } ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" data-submenu="submenu-5" aria-owns="submenu-5" href="#">More Tools </a></li>
+					<li class="menu__item" role="menuitem"><a class="menu__link" data-submenu="submenu-6" aria-owns="submenu-6" href="#">Report </a></li>
 
-<?php
-	}
-
-?>
-
-	<li class="parent"><a href="#">Questionnaire</a>
-	<ul class="child">
-                                 <?php if(in_array('4',$permission)) { ?>
-		<li class="parent"><a href="#">Create<span class="expand">&raquo;</span></a>
-			<ul class="child">
-			<li><a onClick = "userAction('createproject','');">Project</a></li>
-			<li><a onClick = "userAction('createqset','');">QuestionSet</a></li>
-			<li><a onClick = "userAction('createquestion','');">Question</a></li>
-			<li><a onClick = "userAction('createsequence','');">Sequence</a></li>
-			<li><a onClick = "userAction('createroutine','');">Routine</a></li>
-			</ul>
-		</li>
-                                 <?php } if(in_array('4',$permission)) { ?>
-		<li class="parent"><a href="#">Add<span class="expand">&raquo;</span></a>
-			<ul class="child">
-			<li><a onClick = "userAction('addqbquest','');">Question of QBank</a></li>
-			<li><a href="https://digiadmin.quantumcs.com/vcimsweb/adminpanel/question_trans.php?st=101" target="_blank">Translated Question</a></li>
-			<li><a onClick = "userAction('addqbquest','');">Question to QB</a></li>
-			<li><a onClick = "userAction('addmedia','');">Question Media</a></li>
-			<li><a onClick = "userAction('addqop','');">Question Option</a></li>
-			<li><a onClick = "userAction('addsequence','');">Sequence</a></li>
-			<li><a href="viewaddpcentre">Project Centre</a></li>
-			<li><a onClick = "userAction('addpproduct','');">Project Product</a></li>
-			<li><a onClick = "userAction('addpstore','');">Project Store</a></li>
-			<li><a onClick = "userAction('addpage','');">Project Age</a></li>
-			<li><a onClick = "userAction('addpsec','');">Project SEC</a></li>
-			<li><a onClick = "userAction('addarea','');">Area of Centre</a></li>
-			<li><a onClick = "userAction('addsubarea','');">Subarea of Centre</a></li>
-			<li><a onClick = "userAction('addcentre','');">New Centre</a></li>
-			<li><a onClick = "userAction('addrule','');">Rule</a></li>
-			</ul>
-		</li>
-                                 <?php } if(in_array('5',$permission)) { ?>
-		<li class="parent"><a href="#">Edit<span class="expand">&raquo;</span></a>
-			<ul class="child">
-			<li><a onClick = "userAction('editproject','');">Project</a></li>
-			<li><a onClick = "userAction('editquestion','');">Question</a></li>
-			<li><a onClick = "userAction('editquestionop','');">Question Option</a></li>
-			<li><a onClick = "userAction('editsequence','');">Sequence</a></li>
-			<li><a onClick = "userAction('editroutine','');">Routine</a></li>
-			<li><a onClick = "userAction('updatesequence','');">Update Sequence</a></li>
-			<li><a onClick = "userAction('editpcentre','');">Centre/Age/Product/SEC</a></li>
-			<li><a onClick = "userAction('editpfp','');">Project First Page</a></li>
-			<li><a href="https://digiadmin.quantumcs.com/vcimsweb/adminpanel/modify_quest.php?st=103" target="_blank">Translated Question</a></li>
-			<li><a onClick = "userAction('editrule','');">Rule</a></li>
-			</ul>
-		</li>
-                                 <?php } if(in_array('6',$permission)) { ?>
-		<li class="parent"><a href="#">View<span class="expand">&raquo;</span></a>
-			<ul class="child">
-			<li><a onClick = "userAction('viewproject','');">Project</a></li>
-			<li><a href="https://digiadmin.quantumcs.com/vcimsweb/adminpanel/project_showcard.php" target="_blank">Project Showcard</a></li>
-			<li><a onClick = "userAction('viewqb','');">QuestionBank</a></li>
-			<li><a onClick = "userAction('viewqnre','');">Questionnaire</a></li>
-			<li><a onClick = "userAction('viewquestion','');">Question</a></li>
-			<li><a onClick = "userAction('viewquestionop','');">Question Options</a></li>
-			<li><a onClick = "userAction('viewsequence','');">Sequence</a></li>
-			<li><a onClick = "userAction('viewroutine','');">Routine</a></li>
-			<li><a onClick = "userAction('viewpcentre','');">Centre/Age/Product/SEC</a></li>
-			<li><a onClick = "userAction('viewprule','');">Rule</a></li>
-			</ul>
-		</li>
-                                 <?php } if(in_array('6',$permission)) { ?>
-		<li class="parent"><a href="#">Copy<span class="expand">&raquo;</span></a>
-			<ul class="child">
-			<li><a onClick = "userAction('copyqbquest','');">Question of QBank</a></li>
-			<li><a href="https://digiadmin.quantumcs.com/vcimsweb/QuestAdmin/project_questions_copy.php" target="_blank">Project All Questions</a></li>
-			<li><a onClick = "userAction('copyquestionop','');">QuestionOption</a></li>
-			<li><a href="copytquestionop" target="_blank">Translated Option</a></li>
-			<li><a onClick = "userAction('copyproutine','');">Routine</a></li>
-			</ul>
-		</li>
-                                 <?php } if(in_array('7',$permission)) { ?>
-		<li class="parent"><a href="#">Delete<span class="expand">&raquo;</span></a>
-			<ul class="child">
-			<li><a onClick = "userAction('deleteproject','');">Project</a></li>
-			<li><a onClick = "userAction('deletequestion','');">Question</a></li>
-			<li><a onClick = "userAction('deletequestionop','');">Question Options</a></li>
-			<li><a onClick = "userAction('deletesequence','');">Sequence</a></li>
-			<li><a onClick = "userAction('deleteroutine','');">Routine</a></li>
-			</ul>
-		</li>
-                                 <?php } ?>
-	</ul>
-	</li>
-	<li class="parent"><a href="#">Data Report</a>
-	<ul class="child">
-                                 <?php if(in_array('15',$permission)) { ?>
-		<li><a onClick = "userAction('projectdata','');">CAPI Projects</a></li>
-			<?php } ?>
-			<?php if(in_array('18',$permission)) { ?>
-		<li><a onClick = "userAction('viewpcrosstab','');">CossTab</a></li>
-	                                 <?php } ?>
-	</ul>
-	</li>
-
-
-	<li class="parent"><a href="#">Tablet</a>
-	<ul class="child">
-                                 <?php if(in_array('11',$permission)) { ?>
-		<li class="parent"><a href="#">Tablet Issue <span class="expand">&raquo;</span></a>
-			<?php if(in_array('11',$permission)){ ?>
-			<ul class="child">
-			<li><a onClick = "userAction('addtab','');">New Tablet</a></li>
-			<li><a onClick = "userAction('issuetab','');">Issue Tablet</a></li>
-			<li><a onClick = "userAction('receivetab','');">Receive Tablet</a></li>
-			<li><a onClick = "userAction('addinterv','');">Add Interviewer</a></li>
-			<li><a onClick = "userAction('tabreport','');">Report - Tablet Issue </a></li>
-			</ul>
-			<?php } ?>
-		</li>
-                                 <?php } if(in_array('12',$permission)) { ?>
-		<li class="parent"><a href="#">Tablet Permission<span class="expand">&raquo;</span></a>
-			<?php if(in_array('12',$permission)){ ?>
-			<ul class="child">
-			<li><a onClick = "userAction('tabprm','');">Tablet Permission</a></li>
-			<li><a onClick = "userAction('rgtrresp','');">Register Respondent</a></li>
-			<li><a onClick = "userAction('reporttabpermission','');">Report - Tablet Permission</a></li>
-			</ul>
-			<?php } ?>
-		</li>
+				</ul>
 		<?php } ?>
-	</ul>
-	</li>
+                                <!-- Submenu hr -->
+                                <ul data-menu="submenu-hr" id="submenu-hr" class="menu__level" tabindex="-1" role="menu" aria-label="HR">
+                                        <li class="menu__item" role="menuitem"><a class="menu__link" href="#">HR Action</a></li>
+                                        <li class="menu__item" role="menuitem"><a class="menu__link" href="#">HR Report</a></li>
+                                </ul>
 
-	<li class="parent"><a href="#">More Tools</a>
-	<ul class="child">
-		<li class="parent"><a href="#">Action <span class="expand">&raquo;</span></a>
-			<ul class="child">
-			<li><a href="<?php echo base_url(); ?>index.php/sachangepass">Change Password</a></li>
-                                 <?php if(in_array('13',$permission)) { ?>
-			<li><a href="#">Surveygenics Panel</a></li>
-				 <?php } ?>
-			<li><a onClick = "userAction('createqbcat','');">Create QuestionBank</a></li>
-                                 <?php if(in_array('4',$permission)) { ?>
-			<li><a onClick = "userAction('createemptytable','');">Create Dummy Table</a></li>
-                        <li><a  onClick = "userAction('transdataupload','');">Trans Ques Upload</a></li>
-			<li><a  onClick = "userAction('dummydataupload','');">Dummy Data Upload</a></li>
-			<li><a onClick = "userAction('setpquota','');">SET QUOTA</a></li>
-				<?php } ?>
-			</ul>
-		</li>
-		<li class="parent"><a href="#">View <span class="expand">&raquo;</span></a>
-			<ul class="child">
-                        <li><a  onClick = "userAction('viewtransdataupload','');">Translation Template</a></li>
-			<li><a href='https://digiadmin.quantumcs.com/crosstab' target='_blank'>Client CrossTab</a></li>
-			<li><a href='https://digiadmin.quantumcs.com/quota' target='_blank'>VField WebLink</a></li>
-			<li><a href='https://digiadmin.quantumcs.com/survey/fp.php?q=243' target='_blank'>Centre Quota</a></li>
-			</ul>
-		</li>
-	</ul>
-	</li>
-
-        <li class="parent"><a href="<?php echo base_url(); ?>/salogout"><i class="fa fa-user"></i> Sign Out</a>
-        </li>
-
-<?php } ?>
-
-<!-- End -->
-<!--
-                    <li>
-                        <a href="<?php echo base_url(); ?>siteadmin/salogout"><i class="fa fa-user"></i> Sign Out</a>
-                    </li>
---> 
-                </ul>
-            </div>
-            <!-- /.navbar-collapse -->
-        </div>
-        <!-- /.container-fluid -->
-    </nav>
-
-
-
-
-<div class="navbar-default sidebar" role="navigation" style="background-color: #dff0d8;">
-                <div class="sidebar-nav navbar-collapse2">
-                    <ul class="nav" id="side-menu">
-                        <li style="margin-top:30px;">
-                              <i class="fa"></i>
-                        </li>
-                      
-                       
-                         
-<!-- begin -->
-<!-- END -->
-
-
-                         <?php  
-                          
-                         //print_r($_SESSION);
-			  $role=$this->session->userdata('sauseridrole');
-                     		//     $role=$_SESSION['sauseridrole']; 
-				$permission=$_SESSION['permission'];
-               if(empty($permission))
-                              echo 'You have no access permissions';
-              else
-              {
-                         /* if(in_array('1',$permission))
-                              echo 'Found'.in_array('2',$permission);
-                          else
-                              echo 'Not found';
-                           */
-                           
-                        if($role==1 || $role==2)
-                        {
-                          
-                        ?>
-                         <li>
-                            <a href='<?php base_url(); ?>samylogin'><i class="fa fa-comment fa-fw"></i> Action <span class="fa arrow"></span></a>
-
-                            <ul class="nav nav-second-level">
-
-                                <li>
-                                    <a href="samylogin"> <i class="fa fa-comment fa-fw"></i>User <span class="fa arrow"></span></a>
-                                
-                                     <ul class="nav nav-third-level">
-
-                                    <li>
-                                    <a   onClick = "userAction('usradd','');">Add </a>
-                                    </li>
-                                    <li>
-                                    <a   onClick = "userAction('usredit','');">Edit </a>
-                                    </li>
-                                    <li>
-                                    <a   onClick = "userAction('usrview','');">View </a>
-                                    </li>
-                                  <?php if($role==1) { ?>
-                                    <li>
-                                    <a onClick = "userAction('usrremove','');"> Remove </a>
-                                    </li>
-                                  <?php } ?>
-                                   </ul>
-                                </li>
-                                <li>
-                                    <a href="#"> <i class="fa fa-comment fa-fw"></i>Permission <span class="fa arrow"></span></a>
-                                
-                                     <ul class="nav nav-third-level">
-
-                                    <li>
-                                    <a onClick = "userAction('prmadd','');">New </a>
-                                    </li>
-                                    <li>
-                                    <a onClick = "userAction('prmassign','');">Assign  </a>
-                                    </li>
-                                    <li>
-                                    <a onClick = "userAction('prmview','');">View </a>
-                                    </li>
-                                     <?php if($role==1 ) { ?>
-                                    <li>
-                                    <a onClick = "userAction('prmrevoke','');"> Revoke </a>
-                                    </li>
-                                     <?php } ?>
-                                   </ul>
-                                </li>
+				<!-- Submenu 1 -->
+				<ul data-menu="submenu-1" id="submenu-1" class="menu__level" tabindex="-1" role="menu" aria-label="Admin User">
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">User</a></li>
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">Permission</a></li>
 				</ul>
 
-                    
-                         
-                             
-                            <!-- /.nav-second-level -->
 
-                        </li>
-               <?php } ?>  <!-- End or Role for Action Menu -->
- 
-                         <li>
-                            <a href="#"><i class="fa fa-dashboard fa-fw"></i> Questionnaire <span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                 <?php if(in_array('4',$permission)) { ?>
-                                <li>
-                                    <a href="#"> <i class="fa fa-dashboard fa-fw"></i>Create <span class="fa arrow"></span></a>                                
-                                     <ul class="nav nav-third-level">                                    
-                                     		    <li>
-		                                    <a onClick = "userAction('createqbcat','');">QBCategory </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('createproject','');">Project </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('createqset','');">QuestionSet </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('createquestion','');">Question </a>
-		                                    </li>
-		                                     <li>
-		                                    <a onClick = "userAction('createsequence','');">Sequence </a>
-		                                    </li>
-		                                     <li>
-		                                    <a onClick = "userAction('createroutine','');">Routine </a>
-		                                    </li>		                                
-                                   </ul>
-                                  </li>
-                                  <?php } ?>
-                                  <?php if(in_array('5',$permission)) { ?>
-                                   <li>
-                                   <a href="#"> <i class="fa fa-dashboard fa-fw"></i>Edit <span class="fa arrow"></span></a>                                
-                                     <ul class="nav nav-third-level">
-                                    <li>                                     		
-		                                    <li>
-		                                    <a onClick = "userAction('editproject','');">Project </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('editquestion','');">Question </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('editquestionop','');">Question Option </a>
-		                                    </li>
-		                                     <li>
-		                                    <a onClick = "userAction('editsequence','');">Sequence </a>
-		                                    </li>
-		                                     <li>
-		                                    <a onClick = "userAction('editroutine','');">Routine </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('updatesequence','');">Update Sequence </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('editpcentre','');">Centre/Product/Store/SEC </a>
-		                                    </li>
-						    <li>
-                                                    <a onClick = "userAction('editpfp','');">Project First Page </a>
-                                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('editrule','');">Rule </a>
-		                                    </li>
-                                                    <li>
-                                                    <a href = "https://digiadmin.quantumcs.com/vcimsweb/adminpanel/modify_quest.php?st=103" target="_blank"> Translated Question </a>
-                                                    </li>
-                                         </li>
-                                   </ul>
-                                  </li>
-                                  <?php } ?>
-                                  <?php if(in_array('4',$permission)) { ?>
-                                  <li>
-                                   <a href="#"> <i class="fa fa-dashboard fa-fw"></i>Add <span class="fa arrow"></span></a>                                
-                                     <ul class="nav nav-third-level">
-                                    <li>
-                                     		    <li>
-		                                    <a onClick = "userAction('addqbquest','');">QuestionBank Question </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('addqop','');">Question Option </a>
-		                                    </li>
-		                                     <li>
-		                                    <a onClick = "userAction('addsequence','');">Sequence </a>
-		                                    </li>
-		                                    <li>
-		                                   <!-- <a onClick = "userAction('addpcentre','');">Project Centre </a> -->
-							<a href = "viewaddpcentre">Project Centre </a>
+				<!-- Submenu 2 -->
+<?php if(in_array('4',$permission) || in_array('5',$permission) || in_array('6',$permission) || in_array('7',$permission) ) { ?>
+				<ul data-menu="submenu-2" id="submenu-2" class="menu__level" tabindex="-1" role="menu" aria-label="Questionnaire">
+<?php if(in_array('4',$permission)) { ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">Create</a></li>
+<?php }if(in_array('6',$permission)) { ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">View</a></li>
+<?php }if(in_array('7',$permission)) { ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">Delete</a></li>
+<?php }if(in_array('7',$permission)) { ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">Add</a></li>
+<?php }if(in_array('7',$permission)) { ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">Edit</a></li>
+<?php }if(in_array('4',$permission)) { ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">Copy</a></li>
+<?php } ?>
+				</ul>
+<?php } ?>
+				<!-- Submenu 3 -->
+				<ul data-menu="submenu-3" id="submenu-3" class="menu__level" tabindex="-1" role="menu" aria-label="Device">
+					<li class="menu__item" role="menuitem"><a class="menu__link" data-submenu="submenu-3-1" aria-owns="submenu-3-1"  href="#">Allocation</a></li>
+					<li class="menu__item" role="menuitem"><a class="menu__link" data-submenu="submenu-3-2" aria-owns="submenu-3-2" href="#">Permission</a></li>
+				</ul>
+				<!-- Submenu 3-1 -->
+                                        <?php 
+                                        if(in_array('11',$permission)){ ?>
+				<ul data-menu="submenu-3-1" id="submenu-3-1" class="menu__level" tabindex="-1" role="menu" aria-label="Allocation">
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">Allocation Action</a></li>
+                                        <li class="menu__item" role="menuitem"><a class="menu__link" href="#">Allocation Report</a></li>
+				</ul>
+                                <!-- Submenu 3-2 -->
+                                        <?php }
+                                        if(in_array('12',$permission)){ ?>
+                                <ul data-menu="submenu-3-2" id="submenu-3-2" class="menu__level" tabindex="-1" role="menu" aria-label="Permission">
+                                        <li class="menu__item" role="menuitem"><a class="menu__link" href="#">Permission Action</a></li>
+                                        <li class="menu__item" role="menuitem"><a class="menu__link" href="#">Permission Report</a></li>
+                                </ul>
+					<?php } ?>
+				<!-- Submenu 4 -->
+                                        <?php
+                                        if(in_array('13',$permission) || in_array('14',$permission) ){ ?>
 
-		                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('addpproduct','');">Project Product </a>
-		                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('addpstore','');">Project Store </a>
-		                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('addpsec','');">Project SEC </a>
-		                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('addpage','');">Project Age </a>
-		                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('addmedia','');">Project Question Media </a>
-		                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('addpcrosstab','');">Project CrossTab </a>
-		                                    </li>
-                                                    <li>
-		                                    <a href = "https://digiadmin.quantumcs.com/vcimsweb/adminpanel/question_trans.php?st=101" target="_blank">Translated Question</a>
-		                                    </li>
-                                                    <li>
-		                                    <a href = "https://digiadmin.quantumcs.com/vcimsweb/adminpanel/question_trans.php?st=102" target="_blank">Translated Q. Option</a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('addcentre','');">New Centre </a>
-		                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('addrule','');">Rule </a>
-		                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('addarea','');">Area of Centre </a>
-		                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('addsubarea','');">Sub Area of Centre</a>
-		                                    </li>
-                                                    
-		                      </li>         
-                                   </ul>
-                                  </li>
-                                  <?php } ?>
-                                  <?php if(in_array('6',$permission)) { ?>
-                                  <li>
-                                   <a href="#"> <i class="fa fa-dashboard fa-fw"></i>Copy <span class="fa arrow"></span></a>                                
-                                     <ul class="nav nav-third-level">
-                                     	            <li>
-		                                    <a onClick = "userAction('copyqbquest','');">Question From QBank  </a>
-		                                    </li>
-		                                    <li>
-		                                    <a href = "https://digiadmin.quantumcs.com/vcimsweb/QuestAdmin/project_questions_copy.php" target="_blank">Project All Questions </a>
-                                                    <li>
-		                                    <a onClick = "userAction('copyquestionop','');">Question with Option</a>
-		                                    </li>
-                                                    <li>
-							<a href = "copytquestionop" target="_blank">Translated Option</a>
-                                                    <li>
-		                                     <li>
-		                                    <a onClick = "userAction('copypsequence','');">Sequence </a>
-		                                    </li>
-		                                     <li>
-		                                    <a onClick = "userAction('copyproutine','');">Routine </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('copypcentre','');">Project Centre </a>
-		                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('copypproduct','');">Project Product </a>
-		                                    </li>
-                                   </ul>
-                                   </li>
-                                   <?php } ?>
-                                  <?php if(in_array('6',$permission)) { ?>
-                                  <li>
-                                   <a href="#"> <i class="fa fa-dashboard fa-fw"></i>View <span class="fa arrow"></span></a>                                
-                                     <ul class="nav nav-third-level">
-                                     	
-		                                    <li>
-		                                    <a onClick = "userAction('viewproject','');">Project </a>
-		                                    </li>
-						    <li>
-						    <a href = "https://digiadmin.quantumcs.com/vcimsweb/adminpanel/project_showcard.php" target="_blank">Showcard Questions</a>
-						    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('viewqb','');">QuestionBank </a>
-		                                    </li>
-						    <li>
-		                                    <a onClick = "userAction('viewqnre','');">Questionnaire </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('viewquestion','');">Question </a>
-		                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('viewquestionop','');">Question Option</a>
-		                                    </li>
-		                                     <li>
-		                                    <a onClick = "userAction('viewsequence','');">Sequence </a>
-		                                    </li>
-		                                     <li>
-		                                    <a onClick = "userAction('viewroutine','');">Routine </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('viewpcentre','');">Product/Centre/Store/SEC </a>
-		                                    </li>
-                                                    <li>
-                                                    <a onClick = "userAction('viewprule','');">Rule</a>
-                                                    </li>
+				<ul data-menu="submenu-4" id="submenu-4" class="menu__level" tabindex="-1" role="menu" aria-label="Mangopinion">
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">Panel</a></li>
+				</ul>
+				<?php } ?>
+				<!-- Submenu 5 -->
+				<ul data-menu="submenu-5" id="submenu-5" class="menu__level" tabindex="-1" role="menu" aria-label="More Tools">
+                                <?php
+                                        if(in_array('15',$permission) || in_array('9',$permission) || in_array('4',$permission)  || in_array('6',$permission) ){ ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">More Action</a></li>
+					<?php } ?>
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">More Report</a></li>
+				</ul>
+				<!-- Submenu 6 -->
+				<?php
+                                        if(in_array('15',$permission) || in_array('9',$permission) ){ ?>
+				<ul data-menu="submenu-6" id="submenu-6" class="menu__level" tabindex="-1" role="menu" aria-label="Report">
+					<li class="menu__item" role="menuitem"><a class="menu__link" href="#">Project Report</a></li>
+				</ul>
+					<?php } ?>
 
-                                   </ul>
-                                   </li>
-                                   <?php } ?>
-                                   <?php if(in_array('7',$permission)) { ?>
-                                  <li>
-                                  <a href="#"> <i class="fa fa-dashboard fa-fw"></i>Delete <span class="fa arrow"></span></a>                                
-                                     <ul class="nav nav-third-level">
-                                    <li>                                     		
-		                                    <li>
-		                                    <a onClick = "userAction('deletequestion','');">Question </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('deletequestionop','');">Question Option </a>
-		                                    </li>
-		                                     <li>
-		                                    <a onClick = "userAction('deletesequence','');">Sequence </a>
-		                                    </li>
-		                                     <li>
-		                                    <a onClick = "userAction('deleteroutine','');">Routine </a>
-		                                    </li>
-		                                    <li>
-		                                    <a onClick = "userAction('deletecentre','');">Project Centre </a>
-		                                    </li>
-                                                    <li>
-		                                    <a onClick = "userAction('deleteproduct','');">Project Product </a>
-		                                    </li>
-                                                    
-                                        </li>		                               
-                                   </ul>
-                                </li>
-                                <?php } ?>
-                            </ul>
+			</div>
+		</nav>
+		<div class="content" style="background:white;">
+			<p class="info">Welcome to Digiadmin</p>
+			<!-- Ajax loaded content here -->
+		</div>
+	</div>
+	<!-- /view -->
+	<script src="<?php echo base_url(); ?>public/menu/js/classie.js"></script>
+	<script src="<?php echo base_url(); ?>public/menu/js/dummydata.js"></script>
+	<script src="<?php echo base_url(); ?>public/menu/js/main.js"></script>
+	<script>
+	(function() {
+		var menuEl = document.getElementById('ml-menu'),
+			mlmenu = new MLMenu(menuEl, {
+				// breadcrumbsCtrl : true, // show breadcrumbs
+				// initialBreadcrumb : 'all', // initial breadcrumb text
+				backCtrl : false, // show back button
+				// itemsDelayInterval : 60, // delay between each menu item sliding animation
+				onItemClick: loadDummyData // callback: item that doesnÂ´t have a submenu gets clicked - onItemClick([event], [inner HTML of the clicked item])
+			});
 
-                    
-                         
-                             
-                            <!-- /.nav-second-level -->
+		// mobile menu toggle
+		var openMenuCtrl = document.querySelector('.action--open'),
+			closeMenuCtrl = document.querySelector('.action--close');
 
-                        </li>
-                 <!-- End of Questionnaire Menu -->
-                             <li>
-                            <a href="#"><i class="fa fa-sign-out fa-fw"></i> Report <span class="fa arrow"></span></a>
+		openMenuCtrl.addEventListener('click', openMenu);
+		closeMenuCtrl.addEventListener('click', closeMenu);
 
-                            <ul class="nav nav-second-level">
-                               <?php if(in_array('15',$permission)){ ?>
-                                    <li>
-                                    <a   onClick = "userAction('projectdata','');"><i class="fa fa-sign-out fa-fw"></i> Project Survey Data </a>
-                                    </li>
+		function openMenu() {
+			classie.add(menuEl, 'menu--open');
+			closeMenuCtrl.focus();
+		}
 
-                               <?php } if(in_array('17',$permission)){ ?>
-                                <li style='display:none'>
-                                    <a href="#"> <i class="fa fa-edit fa-fw"></i>MD Field <span class="fa arrow"></span></a>
-                                
-                                     <ul class="nav nav-third-level">
-                                                    <li>
-		                                    <a   onClick = "userAction('mdureport','');">Umeed2 </a>
-		                                    </li>
-                                                   <li>
-		                                    <a   onClick = "userAction('mdusreport','');">Umeed2 Daily Summary</a>
-		                                    </li>
-		                                    <li>
-		                                    <a   onClick = "userAction('mdssreport','');">Safal Sammary</a>
-		                                    </li>
-                                                    <li>
-		                                    <a   onClick = "userAction('mdmbreport','');">Umeed2 Booth Atrribute Score</a>
-		                                    </li>
-		                                    <li>
-		                                    <a   onClick = "userAction('mdbsreport','');">Umeed2 Booth Score</a>
-		                                    </li>
-                                                    <li>
-		                                    <a   onClick = "userAction('mdudclean','');">Remove Umeed2 Duplicate</a>
-		                                    </li>
-                                    </ul>
-                                </li>
-                               <!--
-                                <?php } if(in_array('18',$permission)){ ?>
-                               <li>
-          <a href="https://digiadmin.quantumcs.com/vcimsweb/adminpanel/crosstab_tool.php" target="_blank"> CROSSTAB REPORT </a>
-                                </li>
-                                <?php } ?>
-				-->
-                                                    <li>
-                                                    <a onClick = "userAction('viewpcrosstab','');"> <i class="fa fa-sign-out fa-fw"></i> PROJECT CROSSTAB </a>
-                                                    </li>
-                                                <li>
-                                                <a href='https://digiadmin.quantumcs.com/quota' target='_blank'><i class="fa fa-sign-out fa-fw"></i>Project Qouta Details</a>
-                                                </li>
+		function closeMenu() {
+			classie.remove(menuEl, 'menu--open');
+			openMenuCtrl.focus();
+		}
 
+		// simulate grid content loading
+		var gridWrapper = document.querySelector('.content');
 
-                            </ul>
-  
-                            <!-- /.nav-second-level -->
+		function loadDummyData(ev, itemName) {
+			ev.preventDefault();
 
-                        </li>
-   
-			<li>
-                            <a href='<?php base_url(); ?>siteadmin/samylogin'><i class="fa fa-comment fa-fw"></i> KENANTE <span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="siteadmin/samylogin"> <i class="fa fa-comment fa-fw"></i>New User <span class="fa arrow"></span></a>                                
-                                    <ul class="nav nav-third-level">
-                                    <li>
-                                    <a onClick = "userAction('vrusradd','');">Add </a>
-                                    </li>
-                                    <li>
-                                    <a onClick = "userAction('vrusredit','');">Edit </a>
-                                    </li>
-                                    <li>
-                                    <a onClick = "userAction('vrusrview','');">View </a>
-                                    </li>
-				   </ul>
-				</li>
-			    
-                                <li>
-                                    <a href="siteadmin/samylogin"> <i class="fa fa-comment fa-fw"></i>New Room <span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                    <li>
-                                    <a onClick = "userAction('vrradd','');">Add </a>
-                                    </li>
-                                    <li>
-                                    <a onClick = "userAction('vrredit','');">Edit </a>
-                                    </li>
-                                    <li>
-                                    <a onClick = "userAction('vrrview','');">View </a>
-                                    </li>
-                                   </ul>
-                                </li>
-                                <li>
-                                    <a href="https://admin.quickblox.com/signin" target="_blank"> <i class="fa fa-comment fa-fw"></i>Add User To QuickBlox <span class="fa arrow"></span></a>
-				</li>
-                                <li>
-                                    <a href="siteadmin/samylogin"> <i class="fa fa-comment fa-fw"></i>Add User To Room <span class="fa arrow"></span></a>
-                                    <ul class="nav nav-third-level">
-                                    <li>
-                                    <a onClick = "userAction('vrrusradd','');">Add </a>
-                                    </li>
-                                    <li>
-                                    <a onClick = "userAction('vrrusredit','');">Edit </a>
-                                    </li>
-                                    <li>
-                                    <a onClick = "userAction('vrrusrview','');">View </a>
-                                    </li>
-                                   </ul>
-                                </li>
-                            </ul>
-                         </li>
+			closeMenu();
+			gridWrapper.innerHTML = '';
+			classie.add(gridWrapper, 'content--loading');
+			setTimeout(function() {
+				classie.remove(gridWrapper, 'content--loading');
+				gridWrapper.innerHTML = '<ul class="products">' + dummyData[itemName] + '<ul>';
+			}, 700);
+		}
+	})();
+	</script>
+</body>
 
-                         <li>
-                            <a href="#"><i class="fa fa-edit fa-fw"></i> Surveygenics <span class="fa arrow"></span></a>
-
-                            <ul class="nav nav-second-level">
-
-                                <li>
-                                    <a href="#"> <i class="fa fa-edit fa-fw"></i>Action <span class="fa arrow"></span></a>
-                                
-                                     <ul class="nav nav-third-level">
-
-                                    	            <?php if(in_array('13',$permission)){ ?>
-		                                    <li>
-		                                    <a href = "https://digiadmin.quantumcs.com/vcimsweb/adminpanel/mangopinion/resp_home.php" target="_blank">Panel </a>
-		                                    </li>
-                                                    <?php } ?>
-                                   </ul>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                <!-- End or Mangopinion for Edit Menu -->
-                         <li>
-                            <a href="#"><i class="fa fa-edit fa-fw"></i> More Tools <span class="fa arrow"></span></a>
-				<?php if(in_array('4',$permission)){ ?>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="#"> <i class="fa fa-edit fa-fw"></i>Action <span class="fa arrow"></span></a>
-                                     <ul class="nav nav-third-level">
-
-                                                    <li>
-                                                    <a onClick = "userAction('createemptytable','');"> <i class="fa fa-sign-out fa-fw"></i>Create Dummy Table </a>
-                                                    </li>
-                                                    <li>
-                                                    <a onClick = "userAction('transdataupload','');"> <i class="fa fa-sign-out fa-fw"></i> Translated Q Upload </a>
-                                                    </li>
-                                                    <li>
-                                                    <a onClick = "userAction('dummydataupload','');"> <i class="fa fa-sign-out fa-fw"></i> DATA UPLOAD </a>
-                                                    </li>
-
-                                                    <li>
-                                                    <a onClick = "userAction('setpquota','');"> <i class="fa fa-sign-out fa-fw"></i> SET PROJECT QUOTA </a>
-                                                    </li>
-
-                                                  <!--  <li>
-                                                    <a onClick = "userAction('viewpdummycrosstab','');"> <i class="fa fa-sign-out fa-fw"></i> PROJECT CROSSTAB </a>
-                                                    </li>
-						-->
-					</ul>
-				     </ul>
-                            		<ul class="nav nav-second-level">
-					<li>
-                                    	<a href="#"> <i class="fa fa-edit fa-fw"></i>View <span class="fa arrow"></span></a>
-                                     	     <ul class="nav nav-third-level">
-                                                <li>
-                                                <a onClick = "userAction('viewtransdataupload','');"><i class="fa fa-sign-out fa-fw"></i>Translation Template </a>
-                                                </li>
-
-						<li>
-						<a href='https://digiadmin.quantumcs.com/crosstab' target='_blank'><i class="fa fa-sign-out fa-fw"></i>Client CrossTab </a>
-						</li>
-                                                <li>
-                                                <a href='https://digiadmin.quantumcs.com/quota' target='_blank'><i class="fa fa-sign-out fa-fw"></i>Centre Quota </a>
-                                                </li>
-                                                <li>
-                                                <a href='https://digiadmin.quantumcs.com/survey/fp.php?q=243' target='_blank'><i class="fa fa-sign-out fa-fw"></i>VField Web Link </a>
-                                                </li>
-                            		     </ul>
-					</li>
-                            	<!-- /.nav-second-level -->
-                        	</li>
-			    </ul>
-			<?php } ?>
-			</li>
-                <!-- End orCrossTab Menu -->
-
-                  
-                                <?php 
-					//$vuid=$_SESSION['sauserid']; 
-                       
-   
-                        if($role==1 || $role==2 || $role==3 || $role ==4)
-                        {
-                          
-                        ?>
-                         <li>
-                            <a href="#"><i class="fa fa-sign-out fa-fw"></i> Tablet Management <span class="fa arrow"></span></a>
-
-                            <ul class="nav nav-second-level">
-                               <?php if(in_array('11',$permission)){ ?>
-                                <li>
-                                    <a href="#"> <i class="fa fa-comment fa-fw"></i>Tablet Allocation <span class="fa arrow"></span></a>
-                                
-                                     <ul class="nav nav-third-level">
-
-                                    <li>
-                                    <a onClick = "userAction('addtab','');">New Tablet </a>
-                                    </li>
-                                    <li>
-                                    <a onClick = "userAction('issuetab','');">Issue Tablet </a>
-                                    </li>
-                                    <li>
-                                    <a onClick = "userAction('receivetab','');">Receive Tablet </a>
-                                    </li>
-                                    <li>
-                                    <a   onClick = "userAction('addinterv','');">Add Interviewer</a>
-                                    </li>
-                                    <li>
-                                    <a   onClick = "userAction('tabreport','');">Report- Tablet Issue </a>
-                                    </li>
-                                    
-                                    </ul>
-                                </li>
-                               <?php } if(in_array('12',$permission)){ ?>
-                                <li>
-                                    <a href="#"> <i class="fa fa-comment fa-fw"></i>Tablet Permission <span class="fa arrow"></span></a>
-                                
-                                     <ul class="nav nav-third-level">
-
-                                    
-                                    <li>
-                                    <a   onClick = "userAction('tabprm','');">Tablet Permission </a>
-                                    </li>
-                                    <li>
-                                    <a   onClick = "userAction('rgtrresp','');">Register Respondent </a>
-                                    </li>
-                                    
-                                    <li>
-                                    <a   onClick = "userAction('reporttabpermission','');">Report- Tablet Permission </a>
-                                    </li>
-                                    </ul>
-                                </li>
-                               <?php } ?>
-                            
-                                
-                            </ul>
-
-                    
-                         
-                             
-                            <!-- /.nav-second-level -->
-
-                        </li>
-               <?php } ?>  <!-- End or Tablet for View Menu -->
-                        
-
-                        <li>
-                            <a href="<?php echo base_url(); ?>index.php/siteadmin/sachangepass"><i class="fa fa-edit fa-fw"></i> Change Password</a>
-                        </li>
-                 <?php } ?>       
-                       
-                       
-                 </div>
-</div>
-
-   <br><br>
-<!-- Page Content -->
-        <div id="page-wrapper">
-            <div class="container-fluid">
-             <?php  if($rqpost=='')  { ?>
-
-                <div class="row" id="pdtls">
-                    <div class="col-lg-12">
-                        <h5 class="page-header">Hi </h5>
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
-               
-               <div id="p-item" style="min-height:500px;">
-                
-                    <?php 
-                      //$vuid=$_SESSION['sauserid']; 
-                      	$_REQUEST=''; 
-                       $tempu= base_url(uri_string()); 
-                       $ptempuri=$this->session->tempdata('ptemp');
-                     if($tempu!=$ptempuri)
-                    
-                       echo $msg;
-                    ?>
-                      
-               </div>
-                        <?php $vuid=$_SESSION['sauserid']; //echo $msg;	$_REQUEST=''; //print_r($_SESSION);echo "<br><br>";print_r($_REQUEST); 
-                                 //print_r($role); echo "<br><br>"; print_r($permission);
-                        
-               
-                  ?>
-
-                <!-- /.row -->
-            </div>
-         <?php } if($rqpost!='') { ?>
-                  <div class="row" id="pdtls">
-                    <div class="col-lg-12">
-                        <h5 class="page-header">Your Order Request Sent Successfully. </h5>
-                    </div>
-                    <!-- /.col-lg-12 -->
-                </div>
-               <div class="col-12" style="height:400px;">
-           <?php echo "<font color=red size=2> $rqpost </font>"; }  ?>  
-              
-            <!-- /.container-fluid -->
-        </div>
-
-     </div>
-      </div>  
-       
-
-<!-- End of page-wrapper -->
-    
-
-    <footer style="background-color:white; border-top: 1px solid #DCEDC8;">
-        <div class="container">
-               
-                <div style="float:center;">
-                    <div class="col-md-4">
-                    <span class="copyright"> &copy; 2018 QuantumCS Private Limited. All Rights Reserved.</span>
-                </div>
-                    <ul class="list-inline social-buttons">
-                        
-                        <li><a href="https://www.facebook.com/QuantumCS/" target="_blank"><i class="fa fa-facebook"></i></a>
-                        </li>
-                         
-                        <li><a href="https://in.linkedin.com/in/varenia-cims-aab337b6" target="_blank"><i class="fa fa-linkedin"></i></a>
-                        </li>
-                    </ul>
-                    
-                </div>
-            
-        </div>
-    </footer>
-
-     <!-- Header -->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
 <script>
 
@@ -1338,7 +531,8 @@ function userAction(action,product_code) {
 
 	});
 }
-
+</script>
+<script>
 function getpqset()
 {
     var queryString ='';
@@ -1347,7 +541,7 @@ function getpqset()
    queryString = 'pn='+pid;
  
   jQuery.ajax({
-	 url:'<?php echo base_url("index.php/siteadmin/getpqset/pn"); ?>',
+	 url:'<?php echo base_url("siteadmin/getpqset/pn"); ?>',
      
 	data:queryString,
 	type: "POST",
@@ -1543,44 +737,6 @@ function getvrmob()
         },
         error:function (){}
         });
-}
-function copyrulefindrepalcefirst()
-{
-
-        var st = document.getElementById('fwd1').value;
-        var tb = document.getElementById('rwd1').value;
-        var fl = document.getElementById('cqid1').value;
-        var rw = document.getElementById('op1').value;
-        var rq = document.getElementById('rqid1').value;
-
-        var ctr = document.getElementById('cnt').value;
-	for (i = 2; i <= ctr; i++) {
-		var ii = i - 1;	
-		var rwn = parseInt(rw) + ii;
-		var stx = document.getElementById('fwd'+i).value = st;
-        	var tbx = document.getElementById('rwd'+i).value=tb;
-        	var flx = document.getElementById('cqid'+i).value=fl;
-        	var rwx = document.getElementById('op'+i).value=rwn;
-        	var rqx = document.getElementById('rqid'+i).value=rq;
-
-	}
-}
-function copyrulegridfirst()
-{
-        var st = document.getElementById('stb1').value;
-        var tb = document.getElementById('tb1').value;
-        var fl = document.getElementById('flag1').value;
-        var rw = document.getElementById('rw1').value;
-
-        var ctr = document.getElementById('cnt').value;
-	for (i = 2; i <= ctr; i++) {
-		var ii = i - 1;	
-		var stn = parseInt(st) + ii;
-		var stx = document.getElementById('stb'+i).value = stn;
-        	var tbx = document.getElementById('tb'+i).value = tb;
-        	var flx = document.getElementById('flag'+i).value = fl;
-        	var rwx = document.getElementById('rw'+i).value = rw;
-	}
 }
 
 function generaterule() {
@@ -2877,8 +2033,6 @@ function validate()
         return true;
     }
 </script>
-<!-- Apply dropdown check list to the selected items  -->
-
-<?php } ?>
 
 
+</html>
