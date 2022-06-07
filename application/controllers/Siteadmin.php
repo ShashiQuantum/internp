@@ -2588,9 +2588,7 @@ onclick="return confirm('Are you sure to set project quota?');"></td></tr>
    			$el = 0;
 			$edt=$this->input->post('edt');
                        $sm=0;$em=0;
-//if($sdt!='' ) //$isd=1;
-//echo " $isd , sdt: $sdt";
-//else echo "hello sdt: $sdt";
+
                        date_default_timezone_set("Asia/Kolkata");
                        $d=date("d-m-Y H:i:s");
                         
@@ -3902,102 +3900,104 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        }
                        
 	}
-        public function createproject()
-        {      // print_r($_POST); die;
+        
+ public function createproject()
+ {      // print_r($_POST); die;
 
-                        $this->load->view('v_h');
-                        echo "<br><br><br><br><br><br> <div style='margin-left:50px;'>";  
-                        $dt = date('Y-m-d H:i:s');
-                        $crDt = date('Y-m-d');
-                       $login=$this->session->userdata('sauserid'); 
-                       $projectTypes= trim($this->input->post('select_project_types')); 
-                       $projectName= trim($this->input->post('pname')); 
-                       $brandName= $this->input->post('brand'); 
-                       $clientCompanyName= $this->input->post('ccn');
-                                 if($clientCompanyName =='')  $clientCompanyName= null;
-                       $surveySampleSize= $this->input->post('ss'); 
-                                  if($surveySampleSize=='')   $surveySampleSize= 49;
-                       $surveyround= $this->input->post('visit');
-                       if($surveyround=='') $surveyround =1;
-                       $surveyStartDate= $this->input->post('ssdt'); 
-                       $surveyEndDate= $this->input->post('esdt');   
-                       $researchTypes= $this->input->post('reserch_type');
-                       if($researchTypes=='') $researchTypes =4;
-                       $response_type= $this->input->post('response_types');
-                       $surveyTypes= $this->input->post('survey_type');
-                       
-                       $surveyOccurance= $this->input->post('survey_occurrence');
-                       if($surveyOccurance== '') $surveyOccurance= 'None';
-                       $surveyTimes= $this->input->post('survey_times');
-                       if($surveyTimes== '') $surveyTimes= 1;
-                       $occuranceTimes= $this->input->post('occurancetimes');   
-                       if($occuranceTimes== '') $occuranceTimes= 1;   
-                       $restrictHours= $this->input->post('restictHour');
-                       if($restrictHours== '') $restrictHours= 1;
-                       $rewardPoint= $this->input->post('rp'); 
-                       if($rewardPoint== '') $rewardPoint= 0;
-                       
-                       //ENTRY FOR THE SERVEGENICS
-                      
-                       $fps=$this->input->post('fp');
-                        //previous entry for insightfix
-                       //$parr=array('name'=>$pn,'company_name'=>$ccn,'brand'=>$b,'research_type'=>$rt,'tot_visit'=>$v,'background'=>$bd,'sample_size'=>$ss,'survey_start_date'=>$ssid,'survey_end_date'=>$esid,'category'=>$pcat,'reward_point'=>$rp,'created_at'=>$dt, 'updated_at'=>$dt,'uid'=>$login);
-                       $parr=array('name'=>$projectName,'project_type'=>$projectTypes,'company_name'=>$clientCompanyName,'brand'=>$brandName,'research_type'=>$researchTypes, 'survey_types'=>$surveyTypes,'response_type'=>$response_type,'sample_size'=>$surveySampleSize,'survey_start_date'=>$surveyStartDate,'survey_end_date'=>$surveyEndDate,'reward_point'=>$rewardPoint,'created_at'=>$dt, 'uid'=>$login);
+                $this->load->view('v_h');
+                echo "<br><br><br><br><br><br> <div style='margin-left:50px;'>";  
+                $dt = date('Y-m-d H:i:s');
+                $crDt = date('Y-m-d');
+                $login=$this->session->userdata('sauserid'); 
+                $projectTypes= trim($this->input->post('select_project_types')); 
+                $projectName= trim($this->input->post('pname')); 
+                $brandName= $this->input->post('brand'); 
+                $clientCompanyName= $this->input->post('ccn');
+                          if($clientCompanyName =='')  $clientCompanyName= null;
+                $surveySampleSize= $this->input->post('ss'); 
+                           if($surveySampleSize=='')   $surveySampleSize= 49;
+                $surveyround= $this->input->post('visit');
+                if($surveyround=='') $surveyround =1;
+                $surveyStartDate= $this->input->post('ssdt'); 
+                $surveyEndDate= $this->input->post('esdt');   
+                $researchTypes= $this->input->post('reserch_type');
+                if($researchTypes=='') $researchTypes =4;
+                $response_type= $this->input->post('response_types');
+                $surveyTypes= $this->input->post('survey_type');
+                
+                $surveyOccurance= $this->input->post('survey_occurrence');
+                if($surveyOccurance== '') $surveyOccurance= 'None';
+                $surveyTimes= $this->input->post('survey_times');
+                if($surveyTimes== '') $surveyTimes= 1;
+                $occuranceTimes= $this->input->post('occurancetimes');   
+                if($occuranceTimes== '') $occuranceTimes= 1;   
+                $restrictHours= $this->input->post('restictHour');
+                if($restrictHours== '') $restrictHours= 1;
+                $rewardPoint= $this->input->post('rp'); 
+                if($rewardPoint== '') $rewardPoint= 0;
+                
+                //ENTRY FOR THE SERVEGENICS
+               
+                $fps=$this->input->post('fp');
+                 //previous entry for insightfix
+                //$parr=array('name'=>$pn,'company_name'=>$ccn,'brand'=>$b,'research_type'=>$rt,'tot_visit'=>$v,'background'=>$bd,'sample_size'=>$ss,'survey_start_date'=>$ssid,'survey_end_date'=>$esid,'category'=>$pcat,'reward_point'=>$rp,'created_at'=>$dt, 'updated_at'=>$dt,'uid'=>$login);
+                $parr=array('name'=>$projectName,'project_type'=>$projectTypes,'company_name'=>$clientCompanyName,'brand'=>$brandName,'research_type'=>$researchTypes, 'survey_types'=>$surveyTypes,'response_type'=>$response_type,'sample_size'=>$surveySampleSize,'survey_start_date'=>$surveyStartDate,'survey_end_date'=>$surveyEndDate,'reward_point'=>$rewardPoint,'created_at'=>$dt, 'uid'=>$login);
+
+                if($projectName!=''){
+         
+                $this->load->model('MProject');
+                $chkp=$this->MProject->getDataBySql("select * from project where name='$projectName'");
+                if(!$chkp)
+                {
+                  $pid=$this->MProject->insertIntoTable('project',$parr);
+                 
+                  if($pid !='' && $surveyTypes == 1){
+                          
+          $remarray = array('project_id'=>$pid,'survey_occurence'=>$surveyOccurance,'occurance_repitation'=>$surveyTimes,'excution_time'=>$$surveyTimes,'restrict_occurance_between'=>$restrictHours);
+                         $this->MProject->insertIntoTable('reminder',$remarray);
+                  }
+                  $dtn=trim($this->MProject->get_project_name($pid));
+                  $dtn=strtolower($dtn);
+                  $dtn.='_'.$pid;
+                  if($pid)
+                  {
+                          //$rdd2=$this->MProject->doSqlDML("CREATE TABLE IF NOT EXISTS $dtn  (id int(5) primary key AUTO_INCREMENT,resp_id bigint(20) not null, q_id int(5) not null, r_name varchar(30) not null, mobile varchar(11) not null, centre_$pid varchar(2), i_date_$pid datetime, e_date_$pid datetime, latt varchar(30) null, lang varchar(30) null, sec_$pid varchar(1) not null, gender_$pid varchar(1) not null, week_day_$pid char(1) not null, age_$pid varchar(2) not null, st_$pid varchar(2) not null, age_yrs_$pid varchar(2) not null, store_$pid varchar(1) not null, product_$pid varchar(1) not null)ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci ");
+                          $rdd2=$this->MProject->doSqlDML("CREATE TABLE IF NOT EXISTS $dtn (id int(10) primary key AUTO_INCREMENT, resp_id bigint(20) not null, q_id int(5) not null, r_name varchar(30)  null, mobile varchar(11)  null, centre varchar(6) null ,timestamp varchar(20)  null, c_area varchar(4) null, c_sub_area varchar(4)  null,  i_name varchar(30) null, i_mobile varchar(11)  null, i_date datetime  null, e_date datetime  null,address varchar(40) null, o_sec varchar(1) null , n_sec varchar(1) null, gender varchar(1) null, week_day char(1)  null, age varchar(2) null, st varchar(2)  null, age_yrs varchar(2)  null, store varchar(2)  null, product varchar(2)  null, ref_no varchar(15) null, latt varchar(30) null, lang varchar(30) null) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci ");
+                          if($rdd2)
+                          {
+                              $rdd3=$this->MProject->doSqlDML("ALTER TABLE $dtn ADD index rsp$pid (resp_id)");
+                              $rdd4=$this->MProject->doSqlDML("UPDATE `project` SET  `data_table`='$dtn' ,`status`=1 WHERE `project_id`=$pid");
+                             // CREATE Q-SET ID FOR SERVEGENICS 
+                             $qStparr=array('qset_id'=>$pid,'project_id'=>$pid,'visit_no'=>1,'created_at'=>$crDt, 'updated_at'=>$crDt,'uid'=>$login); 
+                             $qSetid=$this->MProject->insertIntoTable('questionset',$qStparr);
+                             
+                             //$sdata="Qset ID ' $pid ' visit $visit created successfully";
+
+
+                             // END THE CREATION OF SERVEGENIC Q-SET ID CREATION 
+                             
+                             
+                              $sdata=" Project ' $projectName ' with Q-set Id '$pid' is created successfully";
+                          }
+                         //for adding project fisrt page details 
+                         if(!empty($fps))
+                         foreach($fps as $ffp){
+                                 $atemp=array('pid'=>$pid,'fpid'=>$ffp);
+                                 $tt=$this->MProject->insertIntoTable('project_fp_map',$atemp);
+                         }
+                  }
+                  else $sdata="Project ' $pn ' Not created , Please try again";
+                }
+                if($chkp) $sdata="Project name ' $pn ' already exist in database";
+                }else  $sdata="Error Occured! $pn";
+                $arrdata['rqpost']='';
+                echo $arrdata['msg']=$sdata;
+                //$this->load->view('samylogin',$arrdata);
+         
+         
+ }       
  
-                       if($projectName!=''){
-		
-	               $this->load->model('MProject');
-                       $chkp=$this->MProject->getDataBySql("select * from project where name='$projectName'");
-                       if(!$chkp)
-                       {
-                         $pid=$this->MProject->insertIntoTable('project',$parr);
-                        
-                         if($pid !='' && $surveyTypes == 1){
-                                 
-                 $remarray = array('project_id'=>$pid,'survey_occurence'=>$surveyOccurance,'occurance_repitation'=>$surveyTimes,'excution_time'=>$$surveyTimes,'restrict_occurance_between'=>$restrictHours);
-                                $this->MProject->insertIntoTable('reminder',$remarray);
-                         }
-                         $dtn=trim($this->MProject->get_project_name($pid));
-                         $dtn=strtolower($dtn);
-			 $dtn.='_'.$pid;
-                         if($pid)
-                         {
-                                 //$rdd2=$this->MProject->doSqlDML("CREATE TABLE IF NOT EXISTS $dtn  (id int(5) primary key AUTO_INCREMENT,resp_id bigint(20) not null, q_id int(5) not null, r_name varchar(30) not null, mobile varchar(11) not null, centre_$pid varchar(2), i_date_$pid datetime, e_date_$pid datetime, latt varchar(30) null, lang varchar(30) null, sec_$pid varchar(1) not null, gender_$pid varchar(1) not null, week_day_$pid char(1) not null, age_$pid varchar(2) not null, st_$pid varchar(2) not null, age_yrs_$pid varchar(2) not null, store_$pid varchar(1) not null, product_$pid varchar(1) not null)ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci ");
-                                 $rdd2=$this->MProject->doSqlDML("CREATE TABLE IF NOT EXISTS $dtn (id int(10) primary key AUTO_INCREMENT, resp_id bigint(20) not null, q_id int(5) not null, r_name varchar(30)  null, mobile varchar(11)  null, centre varchar(6) null ,timestamp varchar(20)  null, c_area varchar(4) null, c_sub_area varchar(4)  null,  i_name varchar(30) null, i_mobile varchar(11)  null, i_date datetime  null, e_date datetime  null,address varchar(40) null, o_sec varchar(1) null , n_sec varchar(1) null, gender varchar(1) null, week_day char(1)  null, age varchar(2) null, st varchar(2)  null, age_yrs varchar(2)  null, store varchar(2)  null, product varchar(2)  null, ref_no varchar(15) null, latt varchar(30) null, lang varchar(30) null) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci ");
-                                 if($rdd2)
-                                 {
-                                     $rdd3=$this->MProject->doSqlDML("ALTER TABLE $dtn ADD index rsp$pid (resp_id)");
-                                     $rdd4=$this->MProject->doSqlDML("UPDATE `project` SET  `data_table`='$dtn' ,`status`=1 WHERE `project_id`=$pid");
-                                    // CREATE Q-SET ID FOR SERVEGENICS 
-                                    $qStparr=array('qset_id'=>$pid,'project_id'=>$pid,'visit_no'=>1,'created_at'=>$crDt, 'updated_at'=>$crDt,'uid'=>$login); 
-                                    $qSetid=$this->MProject->insertIntoTable('questionset',$qStparr);
-                                    
-                                    //$sdata="Qset ID ' $pid ' visit $visit created successfully";
-
-
-                                    // END THE CREATION OF SERVEGENIC Q-SET ID CREATION 
-                                    
-                                    
-                                     $sdata=" Project ' $projectName ' with Q-set Id '$pid' is created successfully";
-                                 }
-                                //for adding project fisrt page details 
-				if(!empty($fps))
-				foreach($fps as $ffp){
-					$atemp=array('pid'=>$pid,'fpid'=>$ffp);
-					$tt=$this->MProject->insertIntoTable('project_fp_map',$atemp);
-				}
-                         }
-                         else $sdata="Project ' $pn ' Not created , Please try again";
-                       }
-                       if($chkp) $sdata="Project name ' $pn ' already exist in database";
-                       }else  $sdata="Error Occured! $pn";
-                       $arrdata['rqpost']='';
-                       echo $arrdata['msg']=$sdata;
-                       //$this->load->view('samylogin',$arrdata);
-		
-		
-	}
-                public function createqset()
+ public function createqset()
         {       
                         $this->load->view('v_h');
                        echo "<br><br><br><br><br><br> <div style='margin-left:50px;'>";
@@ -4041,6 +4041,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 	}  }
         public function createquestion()
         {         
+                
                         $this->load->view('v_h');
                        echo "<br><br><br><br><br><br> <div style='margin-left:50px;'>";
 
