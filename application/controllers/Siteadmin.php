@@ -4054,7 +4054,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 			
 			$_SESSION['pid']=$pn;
 			$_SESSION['qset']=$pid;
-			$sdata.= "<br><br>Click to more <font clolor=red> <a href = 'http://13.232.11.235/digiamin-web/siteadmin/user_action/createquestion'> New Question </a></font> "; 
+			$sdata.= "<br><br>Click to more <font clolor=red> <a href = 'http://localhost/digiamin-web/siteadmin/user_action/createquestion'> New Question </a></font> "; 
                        $arrdata['rqpost']='';
                        echo $arrdata['msg']=$sdata;
                        //$this->load->view('samylogin',$arrdata);
