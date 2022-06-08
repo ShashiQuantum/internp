@@ -40,7 +40,9 @@ $(document).ready(function(){
   
    echo "<table border=0>";
    echo "<form name='projectDeploy' method='post' action='respondent_filter.php'>";
-   echo "<tr><td>Enter Reward Point</td><td><input type='text' name='rewardPoint'></td><td colspan=2 align=right><input type=submit name='pDeploy' value=Deploy></td></tr>";
+  // echo "<tr><td>Enter Reward Point</td><td><input type='text'  name='rewardPoint'></td><td colspan=2 align=right><input type=submit name='pDeploy' value=Deploy></td></tr>";
+   echo "<input type='hidden'  name='rewardPoint' value='0'>"; 
+  echo "<tr ><td colspan=2 align=center ><input type=submit name='pDeploy'  value=Deploy></td></tr>"; 
    echo "<tr><td></td><td colspan=2></td></tr>";
    echo "<tr><td></td><td colspan=2></td></tr>";
 
