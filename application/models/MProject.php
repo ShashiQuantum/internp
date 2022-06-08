@@ -59,6 +59,10 @@
 	        $query=$this->db->query('select * from project order by project_id desc');
 	        return $query->result();
 	    }
+		public function getResearchTypes(){
+			$query = $this->db->query('select * from survey_category');
+            return $query->result();
+		}
         //to get total survey response count of a project
             public function get_project_survey_data_count($tbl=null)
             {
@@ -959,6 +963,8 @@ Rule for PSM in Order </option><option value=2> Rule for Quata </option><option 
 	        public function getcreateproject()
 	        {
 	                $projects=$this->getProjects();
+					$researchtype=$this->getResearchTypes();
+					
 
 					
 
@@ -970,9 +976,18 @@ Rule for PSM in Order </option><option value=2> Rule for Quata </option><option 
 	                $str.="<tr id='tr_brand_name' style='display: none'><td>Brand <span style='color: red'>*</span> </td><td><input type=text class='form-control' name=brand id=brand  placeholder = 'Enter Brand Name'></td></tr>";
 	                $str.="<tr id='tr_client_name' style='display: none'><td>Client Company Name <span style='color: red'>*</span> </td><td><input class='form-control' type=text name=ccn id=ccn placeholder = 'Enter Company Name' ></td></tr>";
 					$str.="<tr id='tr_response_types' style='display: none'><td>Response Type <span style='color: red'>*</span> </td><td><select name='response_types' id='response_types' class='form-control' required>  <option value='0'>Survey</option> <option value='1'>Profiler</option> </select></td></tr>";
-					$str.="<tr id='tr_research_name' style='display: none'><td>Research Type <span style='color: red'>*</span> </td><td><input class='form-control' type=text name=reserch_type id=reserch_type placeholder = 'Enter Research Type' ></td></tr>";
+					
+					
+					
+					$str.="<tr id='tr_research_name' style='display: none'><td>Research Type <span style='color: red'>*</span> </td><td> <select name='reserch_type' id='reserch_type' class='form-control' required > ";
+						foreach($researchtype as $rtv)
+						{ 
+								$str.="<option value=$rtv->id > $rtv->survey_name</option>";
+						}
+	             
+					
 	                $str.="<tr id='tr_questionversion_name' style='display: none'><td>Questionnare Version  </td><td><input type=text class='form-control' name=bd id=bd placeholder='Enter questinnare version' ></td></tr>";
-	                $str.="<tr id='tr_samplesize_name' style='display: none'><td>Survey Sample Size <span style='color: red'>*</span> </td><td><input type=number class='form-control' name=ss id=ss placeholder='Enter survey size' ></td></tr>";
+	                $str.="<tr id='tr_samplesize_name' style='display: none'><td>Survey Sample Size <span style='color: red'>*</span> </td><td><input type=text maxlength ='3' onkeypress='if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;' class='form-control' name=ss id=ss placeholder='Enter survey size' ></td></tr>";
 	                $str.="<tr id='tr_rewardpoint_name' style='display: none'><td>Reward Point </td><td><input type=number name=rp class='form-control' id=rp placeholder='Enter reward point' ></td></tr>";
 	                $str.="<tr id='tr_surveyround_name' style='display: none'><td>Total Survey Round  </td><td><input type=number class='form-control' name=visit id=visit placeholder='Enter survey round' ></td></tr>";
 	                $str.="<tr id='tr_survestartdate' style='display: none'><td>Start Survey Date <span style='color: red'>*</span> </td><td><input type=date class='form-control' name=ssdt id=ssdt required ></td></tr>";
