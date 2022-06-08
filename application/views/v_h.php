@@ -2310,7 +2310,7 @@ function createProjectTypes()
         $('#tr_client_name').show(); 
         $('#tr_samplesize_name').show();  
         $('#tr_survestartdate').show();  
-        $('#tr_rewardpoint_name').show();
+        $('#tr_rewardpoint_name').hide();
         $('#tr_survenddate').show();  
         $('#tr_surveytypes_name').show(); 
         $('#tr_firstpage_info').show();

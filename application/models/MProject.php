@@ -1527,15 +1527,15 @@ bgcolor=lightgray><td>QSET_ID</td><td>CQID</td><td>CODE</td><td>START VALUE</td>
 	        {
 	              $projects=$this->getProject($pid);
 	              
-	              $str="Edit Project Details</h5> <br><br><table border=1>";
+	              $str="Edit Project Detail  </h5> <br><br><table border=1>";
 	              foreach($projects as $p)
 	              { $pid=$p->project_id; $pn=$p->name; $cn=$p->company_name; $b=$p->brand; $bk=$p->background; $ss=$p->sample_size; $rt=$p->research_type; 
 $v=$p->tot_visit;
 	                     $sdt=$p->survey_start_date;$edt=$p->survey_end_date; $rp=$p->reward_point; $dt=$p->data_table;$st=$p->status;
 	                     if($st==1) $stt="Active";if($st==0) $stt="Not Active";
-	                     $str.="<tr><td>Project ID</td><td>$pid <input type=hidden id=pn value=$pid> </td></tr><tr><td>Project Name</td><td><input type=text 
-id=pnn value=$pn > </td></tr><tr><td>Start Date</td><td><input type=date id=sdt value=$sdt></td></tr><tr><td>End Date</td><td><input type=date id=edt 
-value=$edt></td></tr> <tr><td>Company</td><td><input type=text id=cn value=$cn></td></tr><tr><td>Brand</td><td><input type=text id=b 
+	                     $str.="<tr><td>Project ID</td><td>$pid <input type=hidden id=pn value=$pid> </td></tr><tr><td>Project Name</td><td><input type=text onkeypress='return IsAlphaNumber(event);' maxlength ='40'
+id=pnn value=$pn > <span id=error style='color: Red; display: none'> Space or any Special Characters does not allowed </span> </td></tr><tr><td>Start Date</td><td><input type=date id=sdt value=$sdt></td></tr><tr><td>End Date</td><td><input type=date id=edt 
+value=$edt></td></tr> <tr><td>Company</td><td><input type=text required id=cn value=$cn></td></tr><tr><td>Brand</td><td><input type=text id=b 
 value=$b></td></tr><tr><td>Qnr Ver No</td><td><input type=text id=bk value=$bk></td></tr><tr><td>Sample Size</td><td><input type=text id=ss 
 value=$ss></td></tr><tr><td>Research Type</td><td><input type=text id=rt value=$rt></td></tr><tr><td>Visit</td><td><input type=text id=v 
 value=$v></td></tr><tr><td>Reward Points for Surveygenics</td><td><input type=text id=rp 

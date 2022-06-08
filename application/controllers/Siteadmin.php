@@ -3089,11 +3089,19 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 
                        if($action=='actionproject')
                        {
-                         $pid= $this->input->get('pid');$pn= $this->input->get('pn'); $sdt= $this->input->get('sdt');
-                         $edt= $this->input->get('edt'); $cn= $this->input->get('cn');$b= $this->input->get('b');
-                         $v= $this->input->get('v');$rt= $this->input->get('rt');$rp= $this->input->get('rp');
+                         $pid= $this->input->get('pid');
+                         $pn= $this->input->get('pn');
+                         $sdt= $this->input->get('sdt');
+                         $edt= $this->input->get('edt'); 
+                         $cn= $this->input->get('cn');
+                         $b= $this->input->get('b');
+                         $v= $this->input->get('v');
+                         $rt= $this->input->get('rt');
+                         $rp= $this->input->get('rp');
                          $bk= $this->input->get('bk');
-                         $rt= $this->input->get('rt');$ss= $this->input->get('ss');$st= $this->input->get('st');
+                         $rt= $this->input->get('rt');
+                         $ss= $this->input->get('ss');
+                         $st= $this->input->get('st');
                          $arr=array('name'=>$pn,'company_name'=>$cn,'brand'=>$b,'background'=>$bk,'sample_size'=>$ss,'research_type'=>$rt,'tot_visit'=>$v,'survey_start_date'=>$sdt,'survey_end_date'=>$edt,'reward_point'=>$rp,'status'=>$st, 'updated_at'=>$dt,'uid'=>$login);
                          echo("<script>console.log('PHP: updateproject actionproject');</script>");
 
