@@ -35,6 +35,7 @@ $(document).ready(function(){
    {    
 	     $pid=$_POST['pn'];
         $_SESSION['pid']=$pid;
+		$pid=$_SESSION['pid'];
 
     }
   
@@ -53,7 +54,8 @@ $(document).ready(function(){
    
 
 //echo $conditions;
-   $querydata ="select user_id, mobile from app_user where status =1";
+  // $querydata ="select user_id, mobile from app_user where status =1";
+  $querydata ="SELECT user_id,mobile FROM app_user where user_id not in (SELECT appuser_id FROM appuser_project_map where project_id =$pid) and status = 1";
    $data=DB::getInstance()->query($querydata);
    if($data->count()>0)
    {
