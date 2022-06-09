@@ -41,6 +41,23 @@ function get_projects_details()
     else
         return false;
 }
+function get_deploy_details()
+{
+    $q=DB::getInstance()->query("SELECT DISTINCT(appuser_project_map.project_id),project.name from appuser_project_map inner join project on project.project_id = appuser_project_map.project_id;");
+    if($q)
+        return $q->results();
+    else
+        return false;
+}
+function del_deploy_project($pid)
+{
+    $q=DB::getInstance()->query("DELETE from appuser_project_map where project_id = $pid;");
+    if($q)
+        return true;
+    else
+        return false;
+}
+
 
 function get_projects_details_serveygenics()
 {
