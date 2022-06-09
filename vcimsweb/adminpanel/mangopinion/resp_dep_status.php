@@ -68,7 +68,7 @@ if(isset($_POST['view']))
 		 
 		if($tot>0)
 		{
-	       		echo "<br><br><br><center> <table border=1><tr bgcolor=lightgray><td>Total Survey Deployed</td><td>Users not submited Survey</td><td>Users successfully submited  survey</td></tr>";
+	       		echo "<br><br><br><center> <table border=1><tr bgcolor=lightgray><td>Total No of Users whom assign this Projece</td><td>Users not submited Survey</td><td>Users successfully submited  survey</td></tr>";
 	       		echo "<tr><td>$tot</td><td>$notgiveServey</td><td>$giveservey</td></tr></table>";
 		}
 		else echo "<center><font color=red>No record found</font>";

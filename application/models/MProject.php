@@ -987,7 +987,7 @@ Rule for PSM in Order </option><option value=2> Rule for Quata </option><option 
 	             
 					
 	                $str.="<tr id='tr_questionversion_name' style='display: none'><td>Questionnare Version  </td><td><input type=text class='form-control' name=bd id=bd placeholder='Enter questinnare version' ></td></tr>";
-	                $str.="<tr id='tr_samplesize_name' style='display: none'><td>Survey Sample Size <span style='color: red'>*</span> </td><td><input type=text maxlength ='3' onkeypress='if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;' class='form-control' name=ss id=ss placeholder='Enter survey size' ></td></tr>";
+	                $str.="<tr id='tr_samplesize_name' style='display: none'><td>Survey Sample Size <span style='color: red'>*</span> </td><td><input type=text maxlength ='4' onkeypress='if ( isNaN(this.value + String.fromCharCode(event.keyCode) )) return false;' class='form-control' name=ss id=ss placeholder='Enter survey size' ></td></tr>";
 	                $str.="<tr id='tr_rewardpoint_name' style='display: none'><td>Reward Point </td><td><input type=number name=rp class='form-control' id=rp placeholder='Enter reward point' ></td></tr>";
 	                $str.="<tr id='tr_surveyround_name' style='display: none'><td>Total Survey Round  </td><td><input type=number class='form-control' name=visit id=visit placeholder='Enter survey round' ></td></tr>";
 	                $str.="<tr id='tr_survestartdate' style='display: none'><td>Start Survey Date <span style='color: red'>*</span> </td><td><input type=date class='form-control' name=ssdt id=ssdt required ></td></tr>";
