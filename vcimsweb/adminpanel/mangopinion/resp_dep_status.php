@@ -10,9 +10,9 @@ include_once('../../functions.php');
 <h2>Project Running Status</h2>
 <br><br>
 
-<form method=post action="">
+<form method=post action="resp_dep_status.php">
 <table border=1><tr><td>Project Name *</td> </td><td> <select name=pn id=pn><option value=0>--Select--</option>
-       <?php  $pj=get_projects_details();
+       <?php  $pj=get_deploy_details();
              foreach($pj as $p){ 
         	echo "<option value='";
         	 echo $p->project_id; 
@@ -33,31 +33,43 @@ if(isset($_POST['view']))
     
     if($_POST['pn']!=0)
     {
-       	$pid=$_POST['pn']; $tot=0;$tlp=0;$tlc=0;$tld=0;
+       	 $pid=$_POST['pn']; 
+
+		    $tot=0;
+		    $tlp=0;
+		    $tlc=0;
+		    $tld=0;
        	
-       	$ddd1=DB::getInstance()->query(" SELECT distinct `qset_id` FROM `questionset` WHERE  `project_id`=$pid");
-	if($ddd1->count()>0) {$qset=$ddd1->first()->qset_id;}
+    //    	$ddd1=DB::getInstance()->query(" SELECT distinct `qset_id` FROM `questionset` WHERE  `project_id`=$pid");
+	// if($ddd1->count()>0) {$qset=$ddd1->first()->qset_id;}
 	
-		 $qq0="SELECT count(*) as cnt FROM `appuser_project_map` WHERE `project_id`= $qset";
+		 $qq0="SELECT count(*) as cnt FROM `appuser_project_map` WHERE `project_id`= $pid";
 	         $dr0=DB::getInstance()->query($qq0);
-	         if($dr0->count()>0) {$tot=$dr0->first()->cnt;}
+	         if($dr0->count()>0) {
+				 $tot=$dr0->first()->cnt;
+				}
 	         
-	         $qq1="SELECT count(*) as cnt FROM `appuser_project_map` WHERE `project_id`= $qset and `status`=0";
+	         $qq1="SELECT count(*) as cnt FROM `appuser_project_map` WHERE `project_id`= $pid and `status`=0";
 	         $dr1=DB::getInstance()->query($qq1);
-	         if($dr1->count()>0) {$tlp=$dr1->first()->cnt;}
+	         if($dr1->count()>0) {
+				 
+			$notgiveServey=$dr1->first()->cnt;
+		}
 	         
-	         $qq2="SELECT count(*) as cnt FROM `appuser_project_map` WHERE `project_id`= $qset and `status`=1";
+	         $qq2="SELECT count(*) as cnt FROM `appuser_project_map` WHERE `project_id`= $pid and `status`=2";
 	         $dr2=DB::getInstance()->query($qq2);
-	         if($dr2->count()>0) {$tlc=$dr2->first()->cnt;}
+	         if($dr2->count()>0) {
+				 $giveservey=$dr2->first()->cnt;
+				}
 	
-	         $qq3="SELECT count(*) as cnt FROM `appuser_project_map` WHERE `project_id`= $qset and `status`=2";
-	         $dr3=DB::getInstance()->query($qq3);
-		 if($dr3->count()>0) {$tld=$dr3->first()->cnt;}
+	    //      $qq3="SELECT count(*) as cnt FROM `appuser_project_map` WHERE `project_id`= $qset and `status`=2";
+	    //      $dr3=DB::getInstance()->query($qq3);
+		//  if($dr3->count()>0) {$tld=$dr3->first()->cnt;}
 		 
 		if($tot>0)
 		{
-	       		echo "<br><br><br><center> <table border=1><tr bgcolor=lightgray><td>Total Link Send</td><td>Total Link Exported</td><td>Total Link Pending</td><td>Total Link Cancelled</td></tr>";
-	       		echo "<tr><td>$tot</td><td>$tld</td><td>$tlp</td><td>$tlc</td></tr></table>";
+	       		echo "<br><br><br><center> <table border=1><tr bgcolor=lightgray><td>Total Survey Deployed</td><td>Users not submited Survey</td><td>Users successfully submited  survey</td></tr>";
+	       		echo "<tr><td>$tot</td><td>$notgiveServey</td><td>$giveservey</td></tr></table>";
 		}
 		else echo "<center><font color=red>No record found</font>";
       }
