@@ -457,7 +457,8 @@ class QueryManager
                     while ($row = $rs->fetch_assoc()) {
                         $o = array("op_id" => (int)$row["op_id"], "q_id" => (int)$row["q_id"],"flag" => $row["flag"], "opt_text_value" => $row["opt_text_value"],
                             "term" => $row["term"], "value" => (int)$row["value"], "column_value" => (int)$row["column_value"],"scale_start_value" => (int)$row["scale_start_value"],"scale_end_value" => (int)$row["scale_end_value"],"scale_start_label" => $row["scale_start_label"],"scale_end_label" => $row["scale_end_label"]);
-                        if($o['flag'] !='0')
+                       
+                            if($o['flag'] !='0')
                         {
                             $o['term'] = $o['term'].'_'.$o['value'].'_'.'o';
                         }
@@ -1556,11 +1557,13 @@ $row["opt_text_value"],  "scale_start_label" => $row["scale_start_label"],"scale
             die("Connection failed: " . $conn->connect_error);
         } else {
 
-           $sql = "SELECT DISTINCT qid from question_sequence where qset_id=" . $_REQUEST["project_id"] . " ORDER BY  sid ASC ";
+           //$sql = "SELECT DISTINCT(qid) from question_sequence where qset_id=" . $_REQUEST["project_id"] . " ORDER BY  sid ASC ";
+           $sql = "SELECT qid from question_sequence where qset_id=" . $_REQUEST["project_id"] . " ORDER BY  sid ASC ";
             $rs = mysqli_query($conn, $sql);
             if (!$rs) {
                 $this->_returnError($conn, $instance, $tag);
             } else {
+                $msg = 'Data Found';
                 if ($rs->num_rows > 0) {
                     // output data of each row
                     while ($row = $rs->fetch_assoc()) {
@@ -1659,17 +1662,18 @@ $row["opt_text_value"],  "scale_start_label" => $row["scale_start_label"],"scale
             die("Connection failed: " . $conn->connect_error);
         } else {
                     $image = $_REQUEST['image'];
-                      $name = $_POST['name']; $type = $_POST['type']; 
+                      $name = $_POST['name'];
+                       $type = $_POST['type']; 
                        //$name.=".jpg";
 
                     if ($image!='')
                     {     
-                        $path="https://www.digiadmin.quantumcs.com/vcimsweb/uploads/app/image/$name";
+                        $path="http://13.232.11.235/digiamin-web/vcimsweb/uploads/image/$name";
                         if ($type=='image')
-                        { $name.=".jpg";  file_put_contents($_SERVER['DOCUMENT_ROOT']."/vcimsweb/uploads/image/$name",base64_decode($image)); $status = 1;
+                        { $name.=".jpg";  file_put_contents($_SERVER['DOCUMENT_ROOT']."/html/digiamin-web/vcimsweb/uploads/image/$name",base64_decode($image)); $status = 1;
                                         $msg="Image Successfully uploaded";}
                         if ($type=='audio')
-                        {   file_put_contents($_SERVER['DOCUMENT_ROOT']."/vcimsweb/uploads/app/audio/$name".".mp3",base64_decode($image)); $status = 1;$msg="Audio Successfully uploaded"; }
+                        {   file_put_contents($_SERVER['DOCUMENT_ROOT']."/html/digiamin-web/vcimsweb/uploads/audio/$name".".mp3",base64_decode($image)); $status = 1;$msg="Audio Successfully uploaded"; }
                         if ($type=='video')
                         {   //file_put_contents($_SERVER['DOCUMENT_ROOT']."/vcimsweb/uploads/video/$name".".mp4", $image);
                              $target_path  = "./upload/";
@@ -1693,6 +1697,135 @@ $row["opt_text_value"],  "scale_start_label" => $row["scale_start_label"],"scale
 
      /* query for upload video on server  */
 
+
+    function _uploadmediaimageaudio(Controller $instance)
+    {
+        $tag = "**_uploadImage**";
+        $conn = DBConnector::getDBInstance();
+        $msg = null;
+        $status = 0;
+        $response = array();
+        if ($conn->connect_error) {
+            $this->_returnError($conn, $instance, $tag);
+            die("Connection failed: " . $conn->connect_error);
+        } else{  // ELSE CONDITION START FROM HERE
+            
+            //CHEKING THE CORRECT VARIABLE PARAMETER
+            $jsonPost = stripslashes($_POST['file_data']);
+            $result = json_decode($jsonPost,true); 
+            $errorflage1=0; $errorflage2=0;$errorflage3=0;$errorflage4=0;
+     foreach ($result as $key => $val) 
+                {    
+	                 
+                    if($key == 'user_id')
+			                {   
+                                  $user_id=$val;
+                                  $errorflage1 =1;
+                            }       
+			                if($key == 'project_id')
+			                {     
+                                $project_id=$val;
+                                $errorflage2 =1;
+                            } 
+                            if($key == 'question_id')
+			                {     
+                                $question_id=$val;
+                                $errorflage3 =1;
+                            }
+
+                            if($key == 'option_id')
+			                {     
+                                $option_id=$val;
+                                $errorflage4 =1;
+                            }
+   
+                } 
+
+                        //VALIDATING THE VARIABLE 
+                            if(($errorflage1 != 1) || ($errorflage2 != 1) || ($errorflage3 != 1) || ($errorflage4 != 1)) {
+                                    
+                                $status = 0;
+                                $msg = 'Invalid parameter!';
+                                $userid = null;
+                                $data = array();
+                                $this->_returnResponse($conn, $instance, $status, $msg, $data);
+
+                        } else {
+                            
+                             
+                                $mime = mime_content_type($_FILES['file_name']['tmp_name']);
+                                
+                                if(strstr($mime, "image/")){
+                                    $extension  = pathinfo( $_FILES["file_name"]["name"], PATHINFO_EXTENSION );
+                                    $allowedExts = array("gif", "jpeg", "jpg", "png","JPG","PNG","JPEG");
+                                    if(in_array($extension, $allowedExts)){
+                                        $fielName =$user_id.'_'.$project_id.'_'.$question_id.'_'.$option_id.'.'.$extension;
+                                        $source       = $_FILES["file_name"]["tmp_name"];
+                                        $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/image/$fielName";
+                                        $ftype = 'Image';
+                                       $fupload = move_uploaded_file( $source, $destination );
+                                       if($fupload){
+ $mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$destination')";
+		                              mysqli_query($conn, $mqq);
+                                        $status = 1;
+                                        $msg = 'Image File is uploaded successfully!';
+                                        $data = array("File Name"=>"$fielName");
+                                        $this->_returnResponse($conn, $instance, $status, $msg, $data);
+        
+                                       }
+        
+                                    }
+                                   
+                               
+                                }
+                                
+                                else if(strstr($mime, "audio/")){  
+                                    $extension  = pathinfo( $_FILES["file_name"]["name"], PATHINFO_EXTENSION );
+
+                                    $fielName =$user_id.'_'.$project_id.'_'.$question_id.'_'.$option_id.'.'.$extension;
+                                    $source       = $_FILES["file_name"]["tmp_name"];
+                                    $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/audio/$fielName";
+                                    $ftype = 'Audio';
+                                    $fupload = move_uploaded_file( $source, $destination );
+                                    if($fupload){
+$mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$destination')";
+                                   mysqli_query($conn, $mqq);
+                                     $status = 1;
+                                     $msg = 'Audio file is uploaded successfully!';
+                                     $data = array("File Name"=>"$fielName");
+                                     $this->_returnResponse($conn, $instance, $status, $msg, $data);
+     
+                                    }
+
+                                   
+                                }
+                                else if(strstr($mime, "video/")){
+                                    $extension  = pathinfo( $_FILES["file_name"]["name"], PATHINFO_EXTENSION );
+                                    $fielName =$user_id.'_'.$project_id.'_'.$question_id.'_'.$option_id.'.'.$extension;
+                                    $source       = $_FILES["file_name"]["tmp_name"];
+                                    $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/video/$fielName";
+                                    $ftype = 'Video';
+                                    $fupload = move_uploaded_file( $source, $destination );
+                                    if($fupload){
+$mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$destination')";
+                                   mysqli_query($conn, $mqq);
+                                     $status = 1;
+                                     $msg = 'Video file is uploaded successfully!';
+                                     $data = array("File Name"=>"$fielName");
+                                     $this->_returnResponse($conn, $instance, $status, $msg, $data);
+     
+                                    }
+
+                                }
+                               
+                        }
+            
+
+            // END THE CHEKING CORRECT PARAMETER
+        } // ELSE CONDITION END HERE
+
+
+    } 
      
     function _uploadVideo(Controller $instance)
     {
@@ -1721,7 +1854,7 @@ $fn=basename( $_FILES['uploadedfile']['name']);
 $fz=$_FILES['uploadedfile']['size'];
 $msg=$fn; $msg.=" ,size: ".$fz;
 
-if(move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $_SERVER['DOCUMENT_ROOT']."/vcimsweb/uploads/app/video/$fn") )
+if(move_uploaded_file($_FILES['uploadedfile']['tmp_name'], $_SERVER['DOCUMENT_ROOT']."/html/digiamin-web/vcimsweb/uploads/video/$fn") )
 {
     $status=1;
 }

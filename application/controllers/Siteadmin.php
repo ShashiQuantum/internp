@@ -2553,6 +2553,7 @@ onclick="return confirm('Are you sure to set project quota?');"></td></tr>
         { 
 		       $this->load->view('v_h');
                        $pid= $this->input->post('pid');
+                       $this->load->model('MProject');
 		       $pn = $this->MProject->get_project_name($pid); 
                        $sdata='';
 	               $this->load->model('MTablet');

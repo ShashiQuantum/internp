@@ -118,6 +118,9 @@ class Controller implements Responder
                 case "uploadvideo" :
                     $this->uploadVideo();
                     break;
+                case "uploadmediaimageaudio" :
+                    $this->uploadmediaimageaudio();
+                    break;
                 default :
                     $this->returnResponse(DEFAULT_STATUS, "Task Not Found", null);
                     break;
@@ -365,6 +368,57 @@ class Controller implements Responder
         else
             $this->model->_uploadImage($this);
     }
+
+
+
+    // BY  SHASHI 
+    private function uploadmediaimageaudio()
+    {
+        if ($_SERVER["REQUEST_METHOD"] == "GET")
+        {
+            echo "Forbiden !";
+            die;
+        }
+        
+        
+        if (empty($_FILES)){
+            $arr = array();
+            $this->returnResponse(0, "Image is not upload, please upload the image", $arr);
+            die;
+        }
+                                    else {
+                                        if(!isset($_FILES["file_name"]["tmp_name"])){
+                                            $arr = array();
+                                            $this->returnResponse(0, "Invalid file name parameter", $arr);
+                                                die;
+
+                                        }
+
+                                        $fname = $_FILES["file_name"]["tmp_name"];
+                                        if($fname ==''){
+                                            $arr = array();
+                                            $this->returnResponse(0, "Not valid media file please upload valid media files", $arr);
+                                                die;
+                                        }
+
+                                    }
+                                  
+          if($_REQUEST['file_data'] == '') {
+            $arr = array();
+            $this->returnResponse(0, "File variable is empty please enter correct variable values", $arr);
+            
+            die;
+
+
+          }
+
+
+        
+       
+            $this->model->_uploadmediaimageaudio($this);
+    }
+
+
     private function uploadVideo()
     {
         
