@@ -1769,7 +1769,7 @@ $row["opt_text_value"],  "scale_start_label" => $row["scale_start_label"],"scale
 		                              mysqli_query($conn, $mqq);
                                         $status = 1;
                                         $msg = 'Image File is uploaded successfully!';
-                                        $data = array("File Name"=>"$fielName");
+                                        $data = array("file_name"=>"$fielName");
                                         $this->_returnResponse($conn, $instance, $status, $msg, $data);
         
                                        }
@@ -1792,7 +1792,7 @@ $mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,
                                    mysqli_query($conn, $mqq);
                                      $status = 1;
                                      $msg = 'Audio file is uploaded successfully!';
-                                     $data = array("File Name"=>"$fielName");
+                                     $data = array("file_name"=>"$fielName");
                                      $this->_returnResponse($conn, $instance, $status, $msg, $data);
      
                                     }
@@ -1811,7 +1811,7 @@ $mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,
                                    mysqli_query($conn, $mqq);
                                      $status = 1;
                                      $msg = 'Video file is uploaded successfully!';
-                                     $data = array("File Name"=>"$fielName");
+                                     $data = array("file_name"=>"$fielName");
                                      $this->_returnResponse($conn, $instance, $status, $msg, $data);
      
                                     }
