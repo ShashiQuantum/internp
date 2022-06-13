@@ -68,6 +68,15 @@ function get_projects_details_serveygenics()
         return false;
 }
 
+function get_project_endDate($projectId)
+{
+    $q=DB::getInstance()->query("select survey_end_date from project WHERE  project_id  ='$projectId';");
+    if($q)
+        return $q->results();
+    else
+        return false;
+}
+
 
 //to get all project list based on userid
 function get_project_list($uid=null)

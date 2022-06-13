@@ -6,13 +6,21 @@ include_once('../../functions.php');
 if(isset($_POST['pDeploy'])){
    if($_POST['rewardPoint'] != ''){ $rewadp=$_POST['rewardPoint'];} else {$rewadp=0;}
    if($_POST['projectId'] != '') $projectId=$_POST['projectId'];
+
+  $projEndDate=  get_project_endDate($projectId);
+  foreach($projEndDate as $edatad)
+  {
+	 
+	$projEndDate=  $edatad->survey_end_date; 
 	
+  }
+  
    
 	
 $pdata=	$_POST['userIds'];
 	foreach($pdata as $userID) {
 		//echo $userID;
-		$assignPro="INSERT INTO `appuser_project_map`(`appuser_id`,`project_id`,`status`,`cr_point`) VALUES ($userID,$projectId,0,$rewadp)";
+		$assignPro="INSERT INTO `appuser_project_map`(`appuser_id`,`project_id`,`status`,`cr_point`,`exp_date`) VALUES ($userID,$projectId,0,$rewadp,'$projEndDate')";
 					$succ=	DB::getInstance()->query($assignPro);
 		
 	}
