@@ -7,13 +7,12 @@ include_once('../../functions.php');
 <body>
 <br><br>
 <center>
-<h3><font color=red><u>Filter Respondent Notification</u></font></h3>
+<h3><font color=red><u>Filter Respondent for Send Notification</u></font></h3>
 <form name="tFORM" method=post action="resp_notify_list.php" >
- <br><input type=submit name="get_resp" value="View"> 
-
+ 
 <?php
-echo "<br><br>Filter By Project   <select name=pn id=pn ><option value=0>--Select--</option>";
-          $pj=get_projects_details();
+echo "<br><br>Select Project Name   <select name=pn id=pn ><option value=0>--Select Project Name--</option>";
+          $pj=get_deploy_details();
              foreach($pj as $p){ 
         	echo "<option value='";
         	 echo $p->project_id; 
@@ -23,11 +22,27 @@ echo "<br><br>Filter By Project   <select name=pn id=pn ><option value=0>--Selec
         	  }        	  
         	 
 ?>
-</select></center>
-<br>Age Between   <input type=num minsize=5 maxsize=80 name=fr size=1 placeholder="min age"> & <input type=num min=5 max=80 name=to size=1 placeholder="max age"><br><br>
+</select>
+<br> <br>
 
+Survey status <select name="surveyStatus" id="surveyStatus">
+        <option value="">--Select Survey status--</option>
+        <option value="0">Survey Not submited</option>
+        <option value="2">Survey successfully submited</option>
+        
+      </select>
+      <br> <br> <br><input type=submit name="get_resp" value="View User list"> 
+
+
+</center>
+
+
+<!--
+<br>Age Between   <input type=num minsize=5 maxsize=80 name=fr size=1 placeholder="min age"> & <input type=num min=5 max=80 name=to size=1 placeholder="max age"><br><br>
+          -->
 
 <?php
+/*
    $str1=''; $str2='';
    $data=DB::getInstance()->query("SELECT distinct title,term FROM `dictionary` where term in ('nresp_gender','q3_57','q4_57','nresp_educ','nresp_working_st','q16_57','q9_57','q10_57','q1_57') order by id");
      if($data->count()>0) 
@@ -55,24 +70,27 @@ echo "<br><br>Filter By Project   <select name=pn id=pn ><option value=0>--Selec
                 echo "</ul></dd><br>";
             }
      }
-
+*/
 
 ?>
-
+<!--
 </form>
-
+    -->
 
 
 
 <script type="text/javascript">
+  /*
  
-  document.getElementById('x').value = "<?php echo $_POST['xv'];?>";
-  document.getElementById('y').value = "<?php echo $_POST['yv'];?>";
-  document.getElementById('fr').value = "<?php echo $_POST['fr'];?>";
-  document.getElementById('to').value = "<?php echo $_POST['to'];?>";
+  document.getElementById('x').value = "<?php // echo $_POST['xv'];?>";
+  document.getElementById('y').value = "<?php  //echo $_POST['yv'];?>";
+  document.getElementById('fr').value = "<?php  //echo $_POST['fr'];?>";
+  document.getElementById('to').value = "<?php // echo $_POST['to'];?>";
+  */
 </script>
 
 <script>
+  /*
 dl, dt, dd, ul, li {
 margin: 0;
 padding: 0;
@@ -138,10 +156,12 @@ color: #222;
 }
 #mentions a:hover{text-decoration: underline;
 }
+*/
 </script>
 
 <script type="text/javascript">
 <!--
+/*
 window.onload=montre;
 function montre(id) {
 var d = document.getElementById(id);
@@ -151,4 +171,5 @@ if (document.getElementById('smenu'+i)) {document.getElementById('smenu'+i).styl
 if (d) {d.style.display='block';}
 }
 //-->
+*/
 </script>

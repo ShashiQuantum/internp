@@ -4,6 +4,26 @@ include_once('../../gcm/send_message.php');
 include_once('../../gcm/GCM.php');
 include_once('../../gcm/config.php');
 
+if(isset($_POST['sendNotify']))
+   {  
+  
+$notifyMSG = $_POST['nofificationMSG'];
+$pdata=	$_POST['userIds'];
+  foreach($pdata as $fcmToken) {
+	  
+	//   $assignPro="INSERT INTO `appuser_project_map`(`appuser_id`,`project_id`,`status`,`cr_point`,`exp_date`) VALUES ($userID,$projectId,0,$rewadp,'$projEndDate')";
+	// 			  $succ=	DB::getInstance()->query($assignPro);
+
+	$succ  =	sendFCMnotification($fcmToken, $notifyMSG);
+
+ }
+ if($succ)
+ {
+   echo "<br><center><font color=green> Notification Successfully Send</center></font><br>";
+ }
+
+
+   }
 ?>
 <!DOCTYPE html>
 <head><title>Filter List for Notification</title>
@@ -23,10 +43,108 @@ $(document).ready(function(){
 </head><body>
 
 <?php
-  $pid=0;
 
    if(isset($_POST['get_resp']))
-   {    $condition='';
+   {  
+
+	$projId = $_POST['pn'];
+	$survyStatus = $_POST['surveyStatus'];
+
+	
+
+				echo "<table border=0>";
+				echo "<form name=frm method=post action='resp_notify_list.php'>";
+					   //echo "<input type=hidden name=qset value=$qset>";
+							 echo "<tr><td>Enter Message </td>";
+							 echo "<td><textarea rows=4 cols=50 name='nofificationMSG' placeholder='Type your message here' required></textarea></td>";
+							 echo "<td colspan=2 align=right><input type=submit name=sendNotify value=Send Notification></td></tr>";
+						 echo "<tr><td></td><td colspan=2></td></tr>";
+
+						 echo "<tr bgcolor=lightgray><td><input type=checkbox id='checkAll' value='Select All'>Select All</td><td>Mobile</td></tr>";
+						 $ddd1=DB::getInstance()->query("select appuser_project_map.appuser_id, app_user.mobile, app_user.fcm_token from appuser_project_map inner join app_user on appuser_project_map.appuser_id =app_user.user_id where appuser_project_map.project_id =$projId AND appuser_project_map.status=$survyStatus");
+							
+
+                 if($ddd1->count()>0){
+						 foreach($ddd1->results() as $rr)
+						 {
+							 echo "<tr><td><input type=checkbox name=userIds[] value=$rr->fcm_token class='uid'></td><td>$rr->mobile</td></tr>";
+						 }
+						 echo "</form>";
+					 }
+					 else
+							{
+								echo "No record is found matching with this filter condition";
+								
+							}
+				  
+					 }
+
+
+					 function sendFCMnotification($fcmtoken, $nofifyMsg ){
+	
+						$url ='https://fcm.googleapis.com/fcm/send';
+						$apikey ='AAAAu5kGXG0:APA91bG43dL7c2SAU4jZGoZLGI0Sw9d4RK03jo2nIUJaGhYlP274U8Xql7ikj9sg-pwgANz7JAI3lU64hN0uluvVVuIOIHhAApqHHgyv-u3TXSIilyuJWGazA54wHnuWBCCtc0Eoekiw';
+					
+					$header =array(
+						'Authorization:key='.$apikey,
+						'Content-Type:application/json'
+						  );
+						  //Notification content
+						  $notifyData =[
+						  'title'=>'Servegeygenics Message for you',
+						   'body'=>$nofifyMsg,
+						   'click_action'=> 'activity.notifyHandler'
+						  // 'image'=> 'image URL'
+						  ];
+						  //OPTIONAL
+					// $dataPayload =[
+					//  'to' =>'Notification from Surveygenics',
+					//  'date' =>'22-06-14',
+					//  'other_data' =>'any oher information'
+					
+					// ];	  
+						
+					// CREATING API BODY	
+						  $nofifyBody =[
+						   'token'=> $fcmtoken,
+						  'notification'=>$notifyData,
+						  //THIS IS OPTIONAL
+						  //'data' =>$datapayload,
+						  // THIS IS OPTIONAL
+						  'time_to_live' =>86400
+						  
+						  ];
+						  
+					$ch =curl_init();
+					curl_setopt($ch,CURLOPT_URL,$url);	  
+					curl_setopt($ch,CURLOPT_POST,true);	  
+					curl_setopt($ch,CURLOPT_HTTPHEADER,$header);	  
+					curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode($nofifyBody));
+					$result = curl_exec($ch);
+					   
+					if ($result === FALSE) {
+						die('Error in sending notification: ' . curl_error($ch));
+					} else return true;
+					
+					curl_close($ch);
+					
+					}
+				
+
+
+
+
+
+
+
+
+
+
+
+
+/*  OLD CODE COMMENTED
+	
+	$condition='';
        $conditions="SELECT resp_id,r_name,age_yrs, mobile,email,q16_57 FROM `mangopinion_57`  WHERE email!='' AND ";
 	$curr='';$prev='';$orflag=0;$andflag=0;$pstr='';$ctr=0;
 	$pid=$_POST['pn'];
@@ -220,7 +338,7 @@ $(document).ready(function(){
     	echo "<br> Total ($nctr) Notification Message has sent  ";
         else echo "<br> No respondent is selected";
         	
-   }
+   }  */
 ?>
 </body>
 
