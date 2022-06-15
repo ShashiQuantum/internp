@@ -870,94 +870,84 @@ $fcmKeyToken =0;
     }
 
     //get and store gcm user registration
-    public    
-    function _gcmGetUser(NewController $instance)
+       
+    public  function _gcmGetUser(NewController $instance)
     {
         $tag = "**_gcmgetUser**";
         $conn = DBConnector::getDBInstance();
 
         $msg = "Unable To get user reg details";
         $status = 0;
-        $mobile='';
-        $type=0;
-
+        
         if ($conn->connect_error) {
             $this->_returnError($conn, $instance, $tag);
             die("Connection failed: " . $conn->connect_error);
         } else {
             $jsonPost = stripslashes($_REQUEST['userdata']);
-
-            $userid=null;
-            $gcmid=null;
-            $status='';
-            $name='';
-            $email='';
-            $mob='';
-            
             $result = json_decode($jsonPost); 
-            foreach ($result as $json) 
-            {
-                $column = null;
-                $isFirst = false;
-                $value = null;
-                foreach ($json as $key => $val) {
-                    	if($key == "userid")
-                   		$userid=$val;
-                        if($key == "gcmid")
-                   		$gcmid=$val;   
-			if($key == "mobile")
-                                $mobile=$val;
-             		if($key == "type")
-                                $type=$val;
-                     		
-                }   
-                            
+            $useridFlag =0;
+            $gcmidFlag =0;
+           
+            foreach ($result as $key => $val) {
+               
+                if($key == "userid"){
+                   $userid=$val;
+                   $useridFlag =1;
+                }
+                if($key == "gcmid"){
+                   $gcmid=$val; 
+                   $gcmidFlag =1;
+                }
             
-            //print_r($dlist);
-     		$response=array();
-     		$cdate = date('Y-m-d H:i:s'); 
-                   $qchk="SELECT `user_id`, `gcm_regid`, `name`, `email`, `mob`, `created_at` FROM `gcm_users` WHERE `user_id`= $userid";
+            }
+
+      if($useridFlag != 1 || $gcmidFlag !=1)     
+      {
+        $status =0;
+        $msg = 'Parameter Variable  Name is Not Valid !';
+        $data = array();
+        $this->_returnResponse($conn, $instance, $status, $msg, $data);
+        die;
+
+      }
+        $currdate = date('Y-m-d H:i:s'); 
+            
+         // CHECK IF USER IS EXIST ALREADY IN TABLE   
+
+         
+               $qchk="SELECT `user_id`, `gcm_regid` FROM `gcm_users` WHERE `user_id`= '$userid'";
                  $qqchk=mysqli_query($conn, $qchk);
-                 if($qqchk->num_rows>0)
-                 {         
-                       $qq="UPDATE `gcm_users` SET `gcm_regid`='$gcmid' WHERE `user_id`=$userid";
-                       mysqli_query($conn, $qq);
-                      $status=1;
+                 
+                 if($qqchk->num_rows > 0)
+                 {    
+                        $qq="UPDATE `gcm_users` SET `gcm_regid`='$gcmid' WHERE `user_id`=$userid";
+                        $qupdflag = mysqli_query($conn, $qq);
+                        if($qqchk)
+                        {
+                        $status =1;
+                        $msg = "User $userid GCM ID updated successfully !";
+                        $data = array("userId"=>$userid ,"GCMID"=>$gcmid);
+                        $this->_returnResponse($conn, $instance, $status, $msg, $data);
+                        }   
+                 } else {
+                    $qqq="INSERT INTO `gcm_users`(`user_id`, `gcm_regid`,  `created_at`) VALUES ('$userid','$gcmid','$currdate')";
+                 	 	$qryflag =	mysqli_query($conn, $qqq);
+                        if($qryflag){
+                        $status =1;
+                        $msg = "User $userid Registered successfully !";
+                        $data = array("userId"=>$userid ,"GCMID"=>$gcmid);
+                        $this->_returnResponse($conn, $instance, $status, $msg, $data);
+
+                        }
+
                  }
-                 else
-                 {    if($type!=2)
-		      { 
-                 	$qa="SELECT `resp_id`, `r_name`, `mobile`, `email` FROM mangopinion_57 WHERE resp_id=$userid AND email!=''";
-                 	$rsq=mysqli_query($conn, $qa);
-                 	if($rsq->num_rows>0)
-                 	{
-                 		while ($row = $rsq->fetch_assoc()) 
-		                {
-		                        $name = $row["r_name"];
-                                        $email = $row["email"];
-                                        $mob = $row["mobile"];		                 
-                 			$qqq="INSERT INTO `gcm_users`(`user_id`, `gcm_regid`, `name`, `email`, `mob`, `created_at`) VALUES ($userid,'$gcmid','$name','$email','$mob','$cdate')";
-                 	 		mysqli_query($conn, $qqq);
-                 	 	}
-                 	
-			}
-		      }
-			if($type==2)
-			{
-				$qqq="INSERT INTO `gcm_users`(`user_id`, `gcm_regid`, `mob`, `created_at`) VALUES ($userid,'$gcmid','$mobile','$cdate')";
-                                mysqli_query($conn, $qqq);
-
-			}
-                 	$status=1;
-                        $msg = "GCM User Registered/updated sucessfully";
-                 }  }     
-        }
-        $this->_returnResponse($conn, $instance, $status, $msg, null);
+           	
+		
     }
-
+    }
     //do redeem request process
-    public    
-    function _appDoRedeem(NewController $instance)
+        
+    public function _appDoRedeem(NewController $instance)
     {
         $tag = "**_appDoRedeem**";
         $conn = DBConnector::getDBInstance();

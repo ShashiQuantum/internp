@@ -237,9 +237,17 @@ class NewController implements Responder
     }
 
     private function gcmGetUser()
-    {
+    {    
+        if ($_SERVER["REQUEST_METHOD"] == "GET")
+        {
+            echo "Forbiden !";
+            die;
+        }
         if (!isset($_REQUEST['userdata']))
-            $this->returnResponse(0, "userid is not found", null);
+            {
+               $data = array(); 
+            $this->returnResponse(0, "Invalid parameter or Invalid Variable",  $data);
+            }
         else
             $this->model->_gcmGetUser($this);
     }
