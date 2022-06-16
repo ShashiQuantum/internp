@@ -11,7 +11,7 @@ include_once('../../functions.php');
 <form name="tFORM" method=post action="resp_notify_list.php" >
  
 <?php
-echo "<br><br>Select Project Name   <select name=pn id=pn ><option value=0>--Select Project Name--</option>";
+echo "<br><br>Select Project Name   <select name=pn id=pn required ><option value=0>--Select Project Name--</option>";
           $pj=get_deploy_details();
              foreach($pj as $p){ 
         	echo "<option value='";
@@ -25,7 +25,7 @@ echo "<br><br>Select Project Name   <select name=pn id=pn ><option value=0>--Sel
 </select>
 <br> <br>
 
-Survey status <select name="surveyStatus" id="surveyStatus">
+Survey status <select name="surveyStatus" id="surveyStatus" required>
         <option value="">--Select Survey status--</option>
         <option value="0">Survey Not submited</option>
         <option value="2">Survey successfully submited</option>

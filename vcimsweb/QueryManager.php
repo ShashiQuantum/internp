@@ -1807,7 +1807,7 @@ $mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,
                                     $ftype = 'Video';
                                     $fupload = move_uploaded_file( $source, $destination );
                                     if($fupload){
-$mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$destination')";
+$mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$fielName')";
                                    mysqli_query($conn, $mqq);
                                      $status = 1;
                                      $msg = 'Video file is uploaded successfully!';
