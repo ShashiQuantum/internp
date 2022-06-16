@@ -458,7 +458,7 @@ class QueryManager
                         $o = array("op_id" => (int)$row["op_id"], "q_id" => (int)$row["q_id"],"flag" => $row["flag"], "opt_text_value" => $row["opt_text_value"],
                             "term" => $row["term"], "value" => (int)$row["value"], "column_value" => (int)$row["column_value"],"scale_start_value" => (int)$row["scale_start_value"],"scale_end_value" => (int)$row["scale_end_value"],"scale_start_label" => $row["scale_start_label"],"scale_end_label" => $row["scale_end_label"]);
                        
-                            if($o['flag'] !='0')
+                            if($o['flag'] =='1')
                         {
                             $o['term'] = $o['term'].'_'.$o['value'].'_'.'o';
                         }
