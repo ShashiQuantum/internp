@@ -2037,7 +2037,7 @@ bgcolor=lightgray><td>Q_ID</td><td>Q_NO</td><td>Title</td><td>Type</td></tr>";
 					$t3=$trm2.'_t';
 					$trm3 = " , ADD column $t3 varchar(20)";
 				}
-		            $atq="ALTER TABLE $ptable ADD column $trm2 varchar(3) not null $trm3 ;";
+		            $atq="ALTER TABLE $ptable ADD column $trm2 varchar(3)  null $trm3 ;";
 		            $ctb1=$this->doSqlDML($atq);
 		            for($i=1;$i<=$cnt;$i++)
 		            { $a='stb'.$i; $b='tb'.$i;$c = 'flag'.$i;
@@ -2081,11 +2081,11 @@ bgcolor=lightgray><td>Q_ID</td><td>Q_NO</td><td>Title</td><td>Type</td></tr>";
                                 }
 
 		              if($qt=='dropdown'){
-		                  $atq="ALTER TABLE $ptable ADD $trm2 int(8) not null $trm3 ";
+		                  $atq="ALTER TABLE $ptable ADD $trm2 int(8) null $trm3 ";
 		                  $ctb1=$this->doSqlDML($atq);
 		              }
 		              else if($qt == 'text' || $qt == 'textarea' || $qt == 'instruction'  || $qt=='image'  || $qt=='audio'  || $qt=='video' ){
-		                      $atq="ALTER TABLE $ptable ADD $trm2 varchar(960) not null $trm3 ";
+		                      $atq="ALTER TABLE $ptable ADD $trm2 varchar(960)  null $trm3 ";
 			              $ctb1=$this->doSqlDML($atq);
 		              }
 	                      $tdata2=array('q_id'=>$qid,'term'=>$trm2);
@@ -2121,7 +2121,7 @@ bgcolor=lightgray><td>Q_ID</td><td>Q_NO</td><td>Title</td><td>Type</td></tr>";
                                         $trm3 = " , ADD column $t3 varchar(20)";
                                 }
 
-		            $atq="ALTER TABLE $ptable ADD $trm2 int(2) not null $trm3 ";
+		            $atq="ALTER TABLE $ptable ADD $trm2 int(2)  null $trm3 ";
 		            $ctb1=$this->doSqlDML($atq);
 		
 		            $sq2="INSERT INTO `question_option_detail`( `q_id`,`term`,scale_start_value,scale_end_value,scale_start_label,scale_end_label) VALUES ($qid,'$trm2','$ssv','$esv','$lforms','$ltos')";
