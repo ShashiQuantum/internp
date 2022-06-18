@@ -3507,7 +3507,11 @@ resp_id";
 		
 	//print_r($colms); print_r($colmsqno);
 		//to display data heading
-		$strh= "<style>tr:nth-child(even){background-color: #f2f2f2}</style> <center><table border=1 cellpadding='0' cellspacing='0'><tr align=center bgcolor=lightgray><td>S.NO.</td><td>Resp_id</td><td>qset</td>";
+	
+		// $strExlExp = "<a href=''> <br><center> <button type='button' class='btn btn-primary'>Export in Excel </button></center></a></br>";
+		// echo $strExlExp;
+
+			$strh= "<style>tr:nth-child(even){background-color: #f2f2f2}</style> <center><table border=1 cellpadding='0' cellspacing='0'><tr align=center bgcolor=lightgray><td>S.NO.</td><td>Resp_id</td><td>qset</td>";
 		foreach($colms as $cn)
 	        {
 			 //if($cn == 'i_date' || $cn == 'e_date')$strh.="<td width='150px'>$cn</td>";
@@ -3585,6 +3589,8 @@ $qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND date(timestamp) >
                  }
          }// end of qset check
     }
+
+
     public function getPQType($cn=null)
     {
 	        $query=$this->db->query("SELECT q_id,q_type, qno FROM question_detail where q_id in (SELECT distinct `q_id` FROM `question_option_detail` WHERE 
