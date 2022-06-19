@@ -9,14 +9,22 @@ if(isset($_POST['sendNotify']))
   
 $notifyMSG = $_POST['nofificationMSG'];
 $pdata=	$_POST['userIds'];
-  foreach($pdata as $fcmToken) {
+//echo $pdata; die;
+  foreach($pdata as $fcmid) {
 	  
+	$fcmToken = $fcmid;
+	//$fcmToken=	array_push($fcmToken, $fcmid);
 	//   $assignPro="INSERT INTO `appuser_project_map`(`appuser_id`,`project_id`,`status`,`cr_point`,`exp_date`) VALUES ($userID,$projectId,0,$rewadp,'$projEndDate')";
 	// 			  $succ=	DB::getInstance()->query($assignPro);
 
-	$succ  =	sendFCMnotification($fcmToken, $notifyMSG);
+	//$succ  =	sendFCMnotification($fcmToken, $notifyMSG);
 
  }
+//  echo "message is: $notifyMSG";echo "</br>";
+//  print_r($fcmToken);die;
+
+ $succ  =	sendFCMnotification($fcmToken, $notifyMSG);
+ print_r($succ);die;
  if($succ)
  {
    echo "<br><center><font color=green> Notification Successfully Send</center></font><br>";
@@ -82,7 +90,7 @@ $(document).ready(function(){
 					 }
 
 
-					 function sendFCMnotification($fcmtoken, $nofifyMsg ){
+					 function sendFCMnotification($gcmId, $nofifyMsg ){
 	
 						$url ='https://fcm.googleapis.com/fcm/send';
 						$apikey ='AAAAu5kGXG0:APA91bG43dL7c2SAU4jZGoZLGI0Sw9d4RK03jo2nIUJaGhYlP274U8Xql7ikj9sg-pwgANz7JAI3lU64hN0uluvVVuIOIHhAApqHHgyv-u3TXSIilyuJWGazA54wHnuWBCCtc0Eoekiw';
@@ -92,7 +100,7 @@ $(document).ready(function(){
 						'Content-Type:application/json'
 						  );
 						  //Notification content
-						  $notifyData =[
+						  $nofifyData =[
 						  'title'=>'Servegeygenics Message for you',
 						   'body'=>$nofifyMsg,
 						   'click_action'=> 'activity.notifyHandler'
@@ -107,28 +115,56 @@ $(document).ready(function(){
 					// ];	  
 						
 					// CREATING API BODY	
-						  $nofifyBody =[
-						   'token'=> $fcmtoken,
-						  'notification'=>$notifyData,
-						  //THIS IS OPTIONAL
-						  //'data' =>$datapayload,
-						  // THIS IS OPTIONAL
-						  'time_to_live' =>86400
+						//   $nofifyBody =[
+						//    'token'=> $fcmtoken,
+						//   'notification'=>$notifyData,
+						//   //THIS IS OPTIONAL
+						//   //'data' =>$datapayload,
+						//   // THIS IS OPTIONAL
+						//   'time_to_live' =>86400
 						  
-						  ];
+						//   ];
+
+						$data = array
+						(
+						  'message'    => 'This message from Servegenics',
+						   'title'     => 'Servegenics app message',
+						   'vibrate'   => 1,
+						   'sound'     => 1,
+						   
+						);
+
+
+							// CREATING NEW API BODY 
+
+							$nofifyBody = [
+								// if we want to send notification for single user use to 
+								//'to'=>'token or registered id ',
+								// if we want to send notification to the multiple user use registration_ids
+								'registration_ids' => $gcmId,
+								'notification'=> $nofifyData,
+								'data'=> $data,
+								'time_to_live'=> 3600
+								
+								];
+
+
+
 						  
 					$ch =curl_init();
 					curl_setopt($ch,CURLOPT_URL,$url);	  
 					curl_setopt($ch,CURLOPT_POST,true);	  
-					curl_setopt($ch,CURLOPT_HTTPHEADER,$header);	  
+					curl_setopt($ch,CURLOPT_HTTPHEADER,$header);
+					curl_setopt($ch,CURLOPT_RETURNTRANSFER, true );
+                    curl_setopt($ch,CURLOPT_SSL_VERIFYPEER, false );	  
 					curl_setopt($ch,CURLOPT_POSTFIELDS,json_encode($nofifyBody));
 					$result = curl_exec($ch);
 					   
 					if ($result === FALSE) {
 						die('Error in sending notification: ' . curl_error($ch));
-					} else return true;
-					
+					} 
 					curl_close($ch);
+					return $result;
 					
 					}
 				
