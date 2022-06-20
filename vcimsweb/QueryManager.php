@@ -1763,9 +1763,10 @@ $row["opt_text_value"],  "scale_start_label" => $row["scale_start_label"],"scale
                                         $source       = $_FILES["file_name"]["tmp_name"];
                                         $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/image/$fielName";
                                         $ftype = 'Image';
+                                        $qidQset = $question_id.'_'.$project_id;
                                        $fupload = move_uploaded_file( $source, $destination );
                                        if($fupload){
- $mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$destination')";
+ $mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`qid_qset`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$qidQset','$destination')";
 		                              mysqli_query($conn, $mqq);
                                         $status = 1;
                                         $msg = 'Image File is uploaded successfully!';
@@ -1786,9 +1787,10 @@ $row["opt_text_value"],  "scale_start_label" => $row["scale_start_label"],"scale
                                     $source       = $_FILES["file_name"]["tmp_name"];
                                     $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/audio/$fielName";
                                     $ftype = 'Audio';
+                                    $qidQset = $question_id.'_'.$project_id;
                                     $fupload = move_uploaded_file( $source, $destination );
                                     if($fupload){
-$mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$destination')";
+$mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`qid_qset`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$qidQset','$destination')";
                                    mysqli_query($conn, $mqq);
                                      $status = 1;
                                      $msg = 'Audio file is uploaded successfully!';
@@ -1805,9 +1807,10 @@ $mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,
                                     $source       = $_FILES["file_name"]["tmp_name"];
                                     $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/video/$fielName";
                                     $ftype = 'Video';
+                                    $qidQset = $question_id.'_'.$project_id;
                                     $fupload = move_uploaded_file( $source, $destination );
                                     if($fupload){
-$mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$fielName')";
+$mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`qid_qset`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$qidQset','$destination')";
                                    mysqli_query($conn, $mqq);
                                      $status = 1;
                                      $msg = 'Video file is uploaded successfully!';
