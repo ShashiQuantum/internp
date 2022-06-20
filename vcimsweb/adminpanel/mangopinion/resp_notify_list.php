@@ -12,7 +12,7 @@ $pdata=	$_POST['userIds'];
 //echo $pdata; die;
   foreach($pdata as $fcmid) {
 	  
-	$fcmToken = $fcmid;
+	$fcmToken[] = $fcmid;
 	//$fcmToken=	array_push($fcmToken, $fcmid);
 	//   $assignPro="INSERT INTO `appuser_project_map`(`appuser_id`,`project_id`,`status`,`cr_point`,`exp_date`) VALUES ($userID,$projectId,0,$rewadp,'$projEndDate')";
 	// 			  $succ=	DB::getInstance()->query($assignPro);
@@ -24,8 +24,10 @@ $pdata=	$_POST['userIds'];
 //  print_r($fcmToken);die;
 
  $succ  =	sendFCMnotification($fcmToken, $notifyMSG);
- print_r($succ);die;
- if($succ)
+ $resultarray = json_decode($succ); 
+ //echo $resultarray->success; 
+ 
+ if($resultarray->success > 0)
  {
    echo "<br><center><font color=green> Notification Successfully Send</center></font><br>";
  }
@@ -127,8 +129,8 @@ $(document).ready(function(){
 
 						$data = array
 						(
-						  'message'    => 'This message from Servegenics',
-						   'title'     => 'Servegenics app message',
+						  'message'    => 'This message from Servegenics App',
+						   'title'     => 'This is Servegenics Title',
 						   'vibrate'   => 1,
 						   'sound'     => 1,
 						   
@@ -142,6 +144,7 @@ $(document).ready(function(){
 								//'to'=>'token or registered id ',
 								// if we want to send notification to the multiple user use registration_ids
 								'registration_ids' => $gcmId,
+								//'to'=>$gcmId,
 								'notification'=> $nofifyData,
 								'data'=> $data,
 								'time_to_live'=> 3600
