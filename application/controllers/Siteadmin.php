@@ -892,6 +892,11 @@ class Siteadmin extends CI_Controller {
 				$projects=$this->MTablet->getProjects();
 				?>
 
+
+<?php  
+                 $strExlExp = "<a href='projectdataReport'> <br><center> <button type='button' class='btn btn-primary'>Export in Excel </button></center></a></br>";
+                echo $strExlExp;
+         ?>  
 				<?php echo form_open('siteadmin/projectdata', array('target'=>'_blank', 'id'=>'myform'));?>
                                 	<div class="container" style="margin-left: 15%;">
                                         
@@ -899,6 +904,7 @@ class Siteadmin extends CI_Controller {
 					<div class="row">
 						<div class='text-center bg-primary'> VIEW PROJECT DATA DETAILS </div>
 					</div>
+                                       
 					<br>
 					<div class="row">
 					<!-- div class='col-lg-5 col-xl-4 col-sm-3 col-md-3' -->
@@ -931,12 +937,70 @@ class Siteadmin extends CI_Controller {
 					</div><br>
 
                                        <div class="text-center"><input type=submit class="btn btn-primary" name=submit value="View Records"></div>
+  
 
 				<?php echo form_close(); ?>
 					</div></div></div></div>
 		<?php
 				
 			break;
+
+
+                        case "projectdataReport":
+				$this->load->view('v_h');
+				echo "<br><br><br><br> ";
+                                $this->load->model('MTablet');
+				$tabs=$this->MTablet->getTabs();
+				$projects=$this->MTablet->getProjects();
+				?>
+
+				<?php echo form_open('siteadmin/projectdataexl', array('target'=>'_blank', 'id'=>'myform'));?>
+                                	<div class="container" style="margin-left: 15%;">
+                                        
+					<div class='well col-lg-9 col-sm-9 col-md-9'>
+					<div class="row">
+						<div class='text-center bg-primary'> Download Report in Excel Sheet </div>
+					</div>
+					<br>
+					<div class="row">
+					<!-- div class='col-lg-5 col-xl-4 col-sm-3 col-md-3' -->
+				       Project Name: <select name="pn" class="form-control" id="pn"  onchange="getpqset();" required><option value="">--Select Project--</option><?php  foreach($projects as $p){?><option value="<?php echo $p->project_id;?>"><?php echo $p->name;?></option><?php }?></select><br>
+                                       <!-- /div>
+					 <div class='col-lg-4 col-xl-4 col-sm-3 col-md-3' -->
+					QuestionSet ID <select name="qset" class="form-control" id="qset" required> <option value="">--Select QSet--</option> </select>
+					<!-- /div -->
+					</div><br>
+					<div class="row">
+					 <div class='col-lg-4 col-xl-4 col-sm-4 col-md-4'>
+					 Date Filter
+                                         <label class='form-control'> <input type=checkbox name="isd"  id="isd" style='font-size: 20px;'> Apply Date Filter </label>
+					</div>
+					 <div class='col-lg-4 col-xl-4 col-sm-4 col-md-4'>
+                                        From Date <input type=date name="sdt" class="form-control" id="sdt">
+					</div>
+					<div class='col-lg-4 col-xl-4 col-sm-4 col-md-4'> 
+					To Date <input type=date name="edt" class="form-control" id="edt">
+					</div>
+					</div><br>
+
+					<div class="row">
+					 <div class='col-lg-6 col-xl-6 col-sm-6 col-md-6'>
+				        Record From [ Offset ] <input class="form-control" type=number name="sl" id="sl" value=0 required>
+					</div>
+					 <div class='col-lg-6 col-xl-6 col-sm-6 col-md-6'>
+						Record To [ Limit ] <input type=number class="form-control" name="el" id="el" value=100 required>
+					</div>
+					</div><br>
+
+                                       
+<?php $strExlExp = "<a href='projectdataReport'> <br><center> <input type=submit class='btn btn-primary' name=submit value='Download Excel Sheet'></center></a></br>";
+		       echo $strExlExp;
+                                   ?>    
+
+				<?php echo form_close(); ?>
+					</div></div></div></div>
+		<?php
+                                break;
                         case "mdureport":
 				$this->load->model('MTablet');
 				$tabs=$this->MTablet->getTabs();
@@ -1867,6 +1931,10 @@ onclick="return confirm('Are you sure to set project quota?');"></td></tr>
 		}
 	
         }
+
+
+
+
 	public function getvrutype($uid){
 		$ut=0;
                 $this->load->model('MProject');
@@ -2608,72 +2676,16 @@ onclick="return confirm('Are you sure to set project quota?');"></td></tr>
          			$el=$this->input->post('el');
     			}                       
 	               $this->load->model('MProject');
-                       $strExlExp = "<a href='projectdataReport'> <br><center> <button type='button' class='btn btn-primary'>Export in Excel </button></center></a></br>";
-		       echo $strExlExp;
-                      
+                       $_SESSION['reportGen'] = 'False';
+
                        $data=$this->MProject->getProjectData($pid,$qset,$isd,$sdt,$edt, $sl,$el);   
+                      
                         
                 //          header('Content-Type:application/xls');
                 //        header('Content-Disposition:attachment;filename=report.xls');  
                         
         }
 
-
-
-public function projectdataReport(){
-
-        $this->load->view('v_h');
-        echo "<br><br><br><br> ";
-        $this->load->model('MTablet');
-        $tabs=$this->MTablet->getTabs();
-        $projects=$this->MTablet->getProjects();
-        ?>
-
-        <?php echo form_open('siteadmin/projectdataexl', array('target'=>'_blank', 'id'=>'myform'));?>
-                <div class="container" style="margin-left: 15%;">
-                
-                <div class='well col-lg-9 col-sm-9 col-md-9'>
-                <div class="row">
-                        <div class='text-center bg-primary'> VIEW PROJECT DATA IN EXCEL </div>
-                </div>
-                <br>
-                <div class="row">
-                <!-- div class='col-lg-5 col-xl-4 col-sm-3 col-md-3' -->
-               Project Name: <select name="pn" class="form-control" id="pn"  onchange="getpqset();" required><option value="">--Select Project--</option><?php  foreach($projects as $p){?><option value="<?php echo $p->project_id;?>"><?php echo $p->name;?></option><?php }?></select><br>
-               <!-- /div>
-                 <div class='col-lg-4 col-xl-4 col-sm-3 col-md-3' -->
-                QuestionSet ID <select name="qset" class="form-control" id="qset" required> <option value="">--Select QSet--</option> </select>
-                <!-- /div -->
-                </div><br>
-                <div class="row">
-                 <div class='col-lg-4 col-xl-4 col-sm-4 col-md-4'>
-                 Date Filter
-                 <label class='form-control'> <input type=checkbox name="isd"  id="isd" style='font-size: 20px;'> Apply Date Filter </label>
-                </div>
-                 <div class='col-lg-4 col-xl-4 col-sm-4 col-md-4'>
-                From Date <input type=date name="sdt" class="form-control" id="sdt">
-                </div>
-                <div class='col-lg-4 col-xl-4 col-sm-4 col-md-4'> 
-                To Date <input type=date name="edt" class="form-control" id="edt">
-                </div>
-                </div><br>
-
-                <div class="row">
-                 <div class='col-lg-6 col-xl-6 col-sm-6 col-md-6'>
-                Record From [ Offset ] <input class="form-control" type=number name="sl" id="sl" value=0 required>
-                </div>
-                 <div class='col-lg-6 col-xl-6 col-sm-6 col-md-6'>
-                        Record To [ Limit ] <input type=number class="form-control" name="el" id="el" value=100 required>
-                </div>
-                </div><br>
-
-               <div class="text-center"><input type=submit class="btn btn-primary" name=submit value="View EXCEL DATA"></div>
-
-        <?php echo form_close(); ?>
-                </div></div></div></div>
-<?php
-     
-}
 
 
 
@@ -2706,6 +2718,7 @@ public function projectdataexl()
                          $el=$this->input->post('el');
                     }                       
                $this->load->model('MProject');
+               $_SESSION['reportGen'] = 'True';
                $data=$this->MProject->getProjectData($pid,$qset,$isd,$sdt,$edt, $sl,$el);   
                 
                  header('Content-Type:application/xls');

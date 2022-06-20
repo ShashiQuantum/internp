@@ -3366,9 +3366,15 @@ resp_id";
                             $sm=(int)date("m",strtotime($sdt));
                             $yrs=(int)date("Y",strtotime($sdt));
                             $em=(int)date("m",strtotime($edt));
-                      // } ?> <a href="<?php echo base_url(); ?>siteadmin/salogout"><i class="fa fa-user"></i> Sign Out</a> <?php
-         if($qset!=0)
-         {
+                      // } 
+					  ?> 
+					 <?php if($_SESSION['reportGen'] == 'False') { ?> 
+					  <a href="<?php echo base_url(); ?>siteadmin/salogout"><i class="fa fa-user"></i> Sign Out</a>
+					  <?php  } ?>
+					 
+					 <?php
+						if($qset!=0)
+						{
                             echo "<br><center><font color=red>Survey Data of Project ID: $pid </font></center><br><br><br>";
                             $sql1="SELECT `data_table` FROM `project` WHERE `project_id`=$pid";
                             $rs1=$this->getDataBySql($sql1);
