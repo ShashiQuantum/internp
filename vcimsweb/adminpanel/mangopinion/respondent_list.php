@@ -55,7 +55,8 @@ $(document).ready(function(){
 
 //echo $conditions;
   // $querydata ="select user_id, mobile from app_user where status =1";
-  $querydata ="SELECT user_id,mobile FROM app_user where user_id not in (SELECT appuser_id FROM appuser_project_map where project_id =$pid) and status = 1";
+ // $querydata ="SELECT user_id,mobile FROM app_user where user_id not in (SELECT appuser_id FROM appuser_project_map where project_id =$pid) and status = 1";
+ $querydata ="SELECT app_user.user_id,app_user.mobile ,gcm_users.gcm_regid FROM app_user INNER JOIN gcm_users on app_user.user_id = gcm_users.user_id where app_user.user_id not in (SELECT appuser_id FROM appuser_project_map where project_id =25) and app_user.status = 1";
    $data=DB::getInstance()->query($querydata);
    if($data->count()>0)
    {
@@ -65,7 +66,8 @@ $(document).ready(function(){
  echo "<tr bgcolor=lightgray><td><input type=checkbox id='checkAll' value='Select All'>Select All</td><td>Mobile No</td></tr>";
    	foreach($data->results() as $rr)
    	{
-   		echo "<tr> <td><input type=checkbox name=userIds[] value=$rr->user_id class='uid'></td> <td>$rr->mobile</td></tr>";
+		$useIdGCMid=	$rr->user_id.'**'.$rr->gcm_regid;
+		echo "<tr> <td><input type=checkbox name=userIds[] value=$useIdGCMid class='uid'></td> <td>$rr->mobile</td></tr>";
    	}
    	echo "</form>";
    }

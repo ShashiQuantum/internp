@@ -20,7 +20,6 @@ $pdata=	$_POST['userIds'];
  $succ  =	sendFCMnotification($fcmToken, $notifyMSG);
  $resultarray = json_decode($succ); 
  
- 
  if($resultarray->success > 0)
  {
    echo "<br><center><font color=green> Notification Successfully Send</center></font><br>";
@@ -110,16 +109,7 @@ $(document).ready(function(){
 					
 					// ];	  
 						
-					// CREATING API BODY	
-						//   $nofifyBody =[
-						//    'token'=> $fcmtoken,
-						//   'notification'=>$notifyData,
-						//   //THIS IS OPTIONAL
-						//   //'data' =>$datapayload,
-						//   // THIS IS OPTIONAL
-						//   'time_to_live' =>86400
-						  
-						//   ];
+					
 
 						$data = array
 						(
@@ -134,11 +124,8 @@ $(document).ready(function(){
 							// CREATING NEW API BODY 
 
 							$nofifyBody = [
-								// if we want to send notification for single user use to 
-								//'to'=>'token or registered id ',
-								// if we want to send notification to the multiple user use registration_ids
+								
 								'registration_ids' => $gcmId,
-								//'to'=>$gcmId,
 								'notification'=> $nofifyData,
 								'data'=> $data,
 								'time_to_live'=> 3600
