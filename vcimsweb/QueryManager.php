@@ -1714,6 +1714,7 @@ $row["opt_text_value"],  "scale_start_label" => $row["scale_start_label"],"scale
             $jsonPost = stripslashes($_POST['file_data']);
             $result = json_decode($jsonPost,true); 
             $errorflage1=0; $errorflage2=0;$errorflage3=0;$errorflage4=0;
+
      foreach ($result as $key => $val) 
                 {    
 	                 
@@ -1752,25 +1753,32 @@ $row["opt_text_value"],  "scale_start_label" => $row["scale_start_label"],"scale
 
                         } else {
                             
-                             
+                            $dateTime = date('Y-m-d H:i:s');
+                            $time = strtotime($dateTime);
+            
+                            $dateOnly = date('Y-m-d', $time);
+                            $houronly = date('H', $time);
+                            $minuteOnly = date('i', $time);
+                            $fileVarName = $user_id.'_'.$project_id.'_'.$dateOnly.'_'.$houronly.'_'.$minuteOnly;
                                 $mime = mime_content_type($_FILES['file_name']['tmp_name']);
                                 
                                 if(strstr($mime, "image/")){
                                     $extension  = pathinfo( $_FILES["file_name"]["name"], PATHINFO_EXTENSION );
                                     $allowedExts = array("gif", "jpeg", "jpg", "png","JPG","PNG","JPEG");
                                     if(in_array($extension, $allowedExts)){
-                                        $fielName =$user_id.'_'.$project_id.'_'.$question_id.'_'.$option_id.'.'.$extension;
+                                       // $fielName =$user_id.'_'.$project_id.'_'.$question_id.'_'.$option_id.'.'.$extension;
+                                        $newFileName= $fileVarName.'.'.$extension;
                                         $source       = $_FILES["file_name"]["tmp_name"];
-                                        $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/image/$fielName";
+                                        $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/image/$newFileName";
                                         $ftype = 'Image';
                                         $qidQset = $question_id.'_'.$project_id;
                                        $fupload = move_uploaded_file( $source, $destination );
                                        if($fupload){
- $mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`qid_qset`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$qidQset','$destination')";
+ $mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`qid_qset`,`dateTime`,`pathofstorage`) VALUES ('$newFileName','$ftype','$user_id','$project_id','$question_id','$option_id','$qidQset','$dateTime','$destination')";
 		                              mysqli_query($conn, $mqq);
                                         $status = 1;
                                         $msg = 'Image File is uploaded successfully!';
-                                        $data = array("file_name"=>"$fielName");
+                                        $data = array("file_name"=>"$newFileName");
                                         $this->_returnResponse($conn, $instance, $status, $msg, $data);
         
                                        }
@@ -1783,18 +1791,19 @@ $row["opt_text_value"],  "scale_start_label" => $row["scale_start_label"],"scale
                                 else if(strstr($mime, "audio/")){  
                                     $extension  = pathinfo( $_FILES["file_name"]["name"], PATHINFO_EXTENSION );
 
-                                    $fielName =$user_id.'_'.$project_id.'_'.$question_id.'_'.$option_id.'.'.$extension;
+                                    //$fielName =$user_id.'_'.$project_id.'_'.$question_id.'_'.$option_id.'.'.$extension;
+                                    $newFileName= $fileVarName.'.'.$extension;
                                     $source       = $_FILES["file_name"]["tmp_name"];
-                                    $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/audio/$fielName";
+                                    $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/audio/$newFileName";
                                     $ftype = 'Audio';
                                     $qidQset = $question_id.'_'.$project_id;
                                     $fupload = move_uploaded_file( $source, $destination );
                                     if($fupload){
-$mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`qid_qset`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$qidQset','$destination')";
+$mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`qid_qset`,`dateTime`,`pathofstorage`) VALUES ('$newFileName','$ftype','$user_id','$project_id','$question_id','$option_id','$qidQset','$dateTime','$destination')";
                                    mysqli_query($conn, $mqq);
                                      $status = 1;
                                      $msg = 'Audio file is uploaded successfully!';
-                                     $data = array("file_name"=>"$fielName");
+                                     $data = array("file_name"=>"$newFileName");
                                      $this->_returnResponse($conn, $instance, $status, $msg, $data);
      
                                     }
@@ -1803,18 +1812,19 @@ $mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,
                                 }
                                 else if(strstr($mime, "video/")){
                                     $extension  = pathinfo( $_FILES["file_name"]["name"], PATHINFO_EXTENSION );
-                                    $fielName =$user_id.'_'.$project_id.'_'.$question_id.'_'.$option_id.'.'.$extension;
+                                   // $fielName =$user_id.'_'.$project_id.'_'.$question_id.'_'.$option_id.'.'.$extension;
+                                    $newFileName= $fileVarName.'.'.$extension;
                                     $source       = $_FILES["file_name"]["tmp_name"];
-                                    $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/video/$fielName";
+                                    $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/video/$newFileName";
                                     $ftype = 'Video';
                                     $qidQset = $question_id.'_'.$project_id;
                                     $fupload = move_uploaded_file( $source, $destination );
                                     if($fupload){
-$mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`qid_qset`,`pathofstorage`) VALUES ('$fielName','$ftype','$user_id','$project_id','$question_id','$option_id','$qidQset','$destination')";
+$mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,`question_id`,`option_id`,`qid_qset`,`dateTime`,`pathofstorage`) VALUES ('$newFileName','$ftype','$user_id','$project_id','$question_id','$option_id','$qidQset','$dateTime','$destination')";
                                    mysqli_query($conn, $mqq);
                                      $status = 1;
                                      $msg = 'Video file is uploaded successfully!';
-                                     $data = array("file_name"=>"$fielName");
+                                     $data = array("file_name"=>"$newFileName");
                                      $this->_returnResponse($conn, $instance, $status, $msg, $data);
      
                                     }

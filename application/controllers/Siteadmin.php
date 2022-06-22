@@ -1001,6 +1001,68 @@ class Siteadmin extends CI_Controller {
 					</div></div></div></div>
 		<?php
                                 break;
+
+
+                                case "viewmediareport":
+                                        $this->load->view('v_h');
+                                        echo "<br><br><br><br> ";
+                                        $this->load->model('MTablet');
+                                        $tabs=$this->MTablet->getTabs();
+                                        $projects=$this->MTablet->getProjects();
+                                        ?>
+        
+        
+                        <?php echo form_open('siteadmin/viewmediareport', array('target'=>'_blank', 'id'=>'myform'));?>
+                                                <div class="container" style="margin-left: 15%;">
+                                                
+                                                <div class='well col-lg-9 col-sm-9 col-md-9'>
+                                                <div class="row">
+                                                        <div class='text-center bg-primary'> VIEW MEDIA PROJECT DATA DETAILS </div>
+                                                </div>
+                                               
+                                                <br>
+                                                <div class="row">
+                                                <!-- div class='col-lg-5 col-xl-4 col-sm-3 col-md-3' -->
+                                               Project Name: <select name="pn" class="form-control" id="pn"  onchange="getpqset();" required><option value="">--Select Project--</option><?php  foreach($projects as $p){?><option value="<?php echo $p->project_id;?>"><?php echo $p->name;?></option><?php }?></select><br>
+                                               <!-- /div>
+                                                 <div class='col-lg-4 col-xl-4 col-sm-3 col-md-3' -->
+                                                QuestionSet ID <select name="qset" class="form-control" id="qset" required> <option value="">--Select QSet--</option> </select>
+                                                <!-- /div -->
+                                                </div><br>
+                                                <div class="row">
+                                                 <div class='col-lg-4 col-xl-4 col-sm-4 col-md-4'>
+                                                 Date Filter
+                                                 <label class='form-control'> <input type=checkbox name="isd"  id="isd" style='font-size: 20px;'> Apply Date Filter </label>
+                                                </div>
+                                                 <div class='col-lg-4 col-xl-4 col-sm-4 col-md-4'>
+                                                From Date <input type=date name="sdt" class="form-control" id="sdt">
+                                                </div>
+                                                <div class='col-lg-4 col-xl-4 col-sm-4 col-md-4'> 
+                                                To Date <input type=date name="edt" class="form-control" id="edt">
+                                                </div>
+                                                </div><br>
+        
+                                                <div class="row">
+                                                 <div class='col-lg-6 col-xl-6 col-sm-6 col-md-6'>
+                                                Record From [ Offset ] <input class="form-control" type=number name="sl" id="sl" value=0 required>
+                                                </div>
+                                                 <div class='col-lg-6 col-xl-6 col-sm-6 col-md-6'>
+                                                        Record To [ Limit ] <input type=number class="form-control" name="el" id="el" value=100 required>
+                                                </div>
+                                                </div><br>
+        
+                                               <div class="text-center"><input type=submit class="btn btn-primary" name=submit value="View Media Report"></div>
+          
+        
+                                        <?php echo form_close(); ?>
+                                                </div></div></div></div>
+                        <?php
+                                        
+                                break;
+        
+
+
+
                         case "mdureport":
 				$this->load->model('MTablet');
 				$tabs=$this->MTablet->getTabs();
@@ -2727,11 +2789,22 @@ public function projectdataexl()
 }
 
 
+public function viewmediareport()
+{
+        
+               $pid= $this->input->post('pn'); 
+               $qset= $this->input->post('qset');
+              
+                        
+               $this->load->model('MProject');
+               echo "<br><center><font color=red>Survey Data of Project ID: $pid </font></center><br><br><br>";
+              
+               $this->MProject->getMediaReport($pid,$qset); 
+               
+             
+}
 
-
-
-
-	public function customdata()
+public function customdata()
 	{
 				$this->load->view('v_h');
 				echo "<br><br><br><br><br><br> <div style='margin-left:50px;'>";

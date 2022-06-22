@@ -3597,7 +3597,57 @@ $qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND date(timestamp) >
     }
 
 
-    public function getPQType($cn=null)
+
+	public function getMediaReport($pid,$qset){
+		?>
+		<table style=" border:1px solid black; width:100%;">
+        <thead>
+            <tr>
+                <th style=" border:1px solid black;">S.No.</th>
+                <th style=" border:1px solid black;">Respondent Id</th>
+                <th style=" border:1px solid black;">File Type </th>
+                <th style=" border:1px solid black;">Media Files path</th>
+            </tr>
+        </thead>
+        <tbody>
+		
+		
+		<?php
+		
+		
+		//$mquery=  "SELECT media_tbl.*,app_user.mobile as usrmobile, app_user.user_name as usrname FROM media_tbl INNER join app_user on media_tbl.user_id = app_user.user_id  where WHERE media_tbl.project_id = $pid";
+		$mquery=  "select * from media_tbl  where project_id = $pid";
+		$result= $this->getDataBySql($mquery);
+		$ii =1;
+
+		
+		foreach($result as $data){
+			$data->user_id;
+			$data->file_type;
+			//$data->qid_qset;
+			$data->pathofstorage;
+			
+			?>
+		<tr>
+                    <td style=" border:1px solid black;text-align: center; "><?php echo "$ii";?></td>
+                    <td style=" border:1px solid black;text-align: center; "><?php echo "$data->user_id";?></td>
+                    <td style=" border:1px solid black;text-align: center; "><?php echo "$data->file_type";?></td>
+                    <td style=" border:1px solid black;text-align: center; "><a href="<?php echo $data->pathofstorage;?>"><?php echo $data->file_name;?></a></td>
+                </tr>
+            
+			<?php 
+			 
+		$ii++;
+		}
+?>
+</tbody>
+</table>		
+<?php          
+    }
+
+	
+/////////////////////////////////////
+public function getPQType($cn=null)
     {
 	        $query=$this->db->query("SELECT q_id,q_type, qno FROM question_detail where q_id in (SELECT distinct `q_id` FROM `question_option_detail` WHERE 
 `term` = '$cn')");
