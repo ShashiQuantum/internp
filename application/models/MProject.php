@@ -3632,7 +3632,7 @@ $qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND date(timestamp) >
                     <td style=" border:1px solid black;text-align: center; "><?php echo "$ii";?></td>
                     <td style=" border:1px solid black;text-align: center; "><?php echo "$data->user_id";?></td>
                     <td style=" border:1px solid black;text-align: center; "><?php echo "$data->file_type";?></td>
-                    <td style=" border:1px solid black;text-align: center; "><a href="<?php echo $data->pathofstorage;?>"><?php echo $data->file_name;?></a></td>
+                    <td style=" border:1px solid black;text-align: center; "><a href="<?php echo $data->pathofstorage;?>" target="_blank"><?php echo $data->file_name;?></a></td>
                 </tr>
             
 			<?php 

@@ -9,23 +9,17 @@ if(isset($_POST['sendNotify']))
   
 $notifyMSG = $_POST['nofificationMSG'];
 $pdata=	$_POST['userIds'];
-//echo $pdata; die;
+
   foreach($pdata as $fcmid) {
 	  
 	$fcmToken[] = $fcmid;
-	//$fcmToken=	array_push($fcmToken, $fcmid);
-	//   $assignPro="INSERT INTO `appuser_project_map`(`appuser_id`,`project_id`,`status`,`cr_point`,`exp_date`) VALUES ($userID,$projectId,0,$rewadp,'$projEndDate')";
-	// 			  $succ=	DB::getInstance()->query($assignPro);
-
-	//$succ  =	sendFCMnotification($fcmToken, $notifyMSG);
+	
 
  }
-//  echo "message is: $notifyMSG";echo "</br>";
-//  print_r($fcmToken);die;
 
  $succ  =	sendFCMnotification($fcmToken, $notifyMSG);
  $resultarray = json_decode($succ); 
- //echo $resultarray->success; 
+ 
  
  if($resultarray->success > 0)
  {
