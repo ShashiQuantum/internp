@@ -1244,174 +1244,363 @@ $row["opt_text_value"],  "scale_start_label" => $row["scale_start_label"],"scale
         $this->_returnResponse($conn, $instance, $status, $msg, null);
     }
 
-      /* query for exporting result  details of multiple projects*/
-    public
-    function _exportMPResult(Controller $instance)
-    {
-	$tag = "**_exportResult**";
-        $conn = DBConnector::getDBInstance();
-        $msg = "Unable To Export";
-        $status = 0;
-        $table = "";
-        $rsp = 0; $qset_status = 0; $idt = null; $flag_tr=null;
-	$qset=$_REQUEST["qset_id"];
-       
-          
-        if ($conn->connect_error) {
-            $this->_returnError($conn, $instance, $tag);
-            die("Connection failed: " . $conn->connect_error);
-        } else {
+/////////////////////////////////////////////////////   NEW API //////////////////////////////////
 
-		//to find project table
-            $sql = "SELECT `data_table` FROM `project` WHERE `project_id` = (SELECT distinct `project_id` FROM `questionset` WHERE `qset_id` IN(" . $_REQUEST["qset_id"] . "))";
-            $rs = mysqli_query($conn, $sql);
-            if (!$rs) {
-                $this->_returnError($conn, $instance, $tag);
-            } else {
-                if ($rs->num_rows > 0) {
-                    // output data of each row
-                    while ($row = $rs->fetch_assoc()) {
-                        $table = $row["data_table"];
-                    }
-                }
-            }
-	
-//        $first_id=0;
-	
-            $jsonPost = stripslashes($_REQUEST['result']); $str='Attempting..';
-            $result = json_decode($jsonPost);   
-               //file_put_contents($_SERVER['DOCUMENT_ROOT']."/uploads/pdf/test.txt", $jsonPost,FILE_APPEND | LOCK_EX, null);
-            foreach ($result as $json) {
-                $column = null;
-                $isFirst = false;
-                $value = null; $idtt="i_date";
-                foreach ($json as $key => $val) {
-                    if (!$isFirst) {
-                        if($key == 'resp_id')
-                           {$rsp = $val;}
-			//if($key == 'i_date_111')
-			//   { $idt = $val; }
-			//else
-                          // {$column = $key;}
-                        $column = $key;
-                        //$value = "'" . $val . "'";
-                        $value = "'" . mysqli_real_escape_string($conn,$val) . "'";
-                        $isFirst = true;
-                    } else {
-                       if($key =='resp_id')
-                          { $rsp =$val;$column = $column . ", " . $key;}
-                       else
-                           {$column = $column . ", " . $key;}
-                        //$value = $value . ", '" . $val . "'";
-                       	$value = $value . ", '" . mysqli_real_escape_string($conn,$val) . "'";
-			//if($key == 'i_date_111') { $idt = $val; }
-                    }
-                }
-                if ($column != null && $value != null) {
-                     $sql = "INSERT INTO $table (" . $column . ") VALUES (" . $value . ");\n";
-                                //file_put_contents($_SERVER['DOCUMENT_ROOT']."/uploads/pdf/query.txt", $sql,FILE_APPEND | LOCK_EX, null); 
-                    if (!mysqli_query($conn, $sql)){
-                        $this->_returnError($conn, $instance, $sql);
-                     }
-                }
-               $msg= $result;
-            }
-            if ($isFirst) {
-                $status = 1;$dt = date('Y-m-d H:i:s');
-        //to check the export status except for qset=111 if not exported
+
+public
+function _exportMPResult(Controller $instance)
+{   
+$tag = "**_exportResult**";
+    $conn = DBConnector::getDBInstance();
+    $msg = "Unable To Export";
+    $status = 0;
+    $table = "";
+    $rsp = 0; $qset_status = 0; $idt = null; $flag_tr=null;
+    $checkFlag = 0;
+    
+    $arrData =  json_decode($_REQUEST['result']);
+    $respId  =   $arrData['0']->resp_id; 
+    $qset=$_REQUEST["qset_id"];
    
-                $psqry="select  status from appuser_project_map WHERE appuser_id=$rsp AND project_id=$qset";
-                $psr=mysqli_query($conn, $psqry);
-                if($psr->num_rows > 0)
-                {
-                            while ($ps = $psr->fetch_assoc())
-                            {
-                                $qset_status=$ps["status"];
-                            }
-                }
-        if($qset_status < 2 || $qset == 111)
-        { 
-  		$flag_tr = null;
-;
-/*
-            if(is_numeric($rsp))
-            {
-                         $irr="select sum(cr_point) as cr_point from credit_store where user_id=$rsp AND qset_id=$qset";
-                         $irk=mysqli_query($conn, $irr);
-                         if($irk->num_rows > 0)
-                         {        $iruid='';$irmk='';
-                            while ($ire = $irk->fetch_assoc())
-                            {
-                                $crpnt=$ire["cr_point"];
-                            }
-                         }
-            }
-*/
-            if($qset == 111)
-            {
-                         //$irq="select travel_status from app_log where resp_id=$rsp AND travel_status=1 AND start_time = '$idt'";
-                         //$irj=mysqli_query($conn, $irq);
-                         //if($irj->num_rows > 0)
-                         //{
-                         //       $flag_tr = 1;
-                         //}
-            }
+      
+    if ($conn->connect_error) {
+        $this->_returnError($conn, $instance, $tag);
+        die("Connection failed: " . $conn->connect_error);
+    } else {
 
-                //to allow user to add credit point only if below condition is true i.e. max point in a project
-              //if($crpnt < 70)
-              //{
-
-                //$response=array();$userid='';$login_status=0;$rpnt=0;
-                $dt = date('Y-m-d H:i:s');
-                $qchk="UPDATE `appuser_project_map` SET `status`=2, exp_date='$dt'  WHERE `appuser_id`= $rsp and `project_id`=$qset";
-               	$ss=mysqli_query($conn, $qchk);
-                        $qa="SELECT cr_point FROM `appuser_project_map` where `project_id`= ( select project_id from questionset where qset_id=$qset) and appuser_id=$rsp";
-                        $rsq=mysqli_query($conn, $qa);
-                                   $rsq->num_rows;
-                        if($rsq->num_rows>0)
-                        {
-                                while ($row = $rsq->fetch_assoc())
-                                {
-                                        $rpnt = $row["cr_point"];
-                                }
-
-                                if($rpnt>0)
-                                {
-					//echo "qset: $qset , $flag_tr .";
-					$remark="for contest : $qset ";
-					if($qset != 111){
-                                        	echo $qq="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`,remarks) VALUES ($rsp,$qset,'$dt',$rpnt,'$remark')";
-                                        	mysqli_query($conn, $qq);
-					} 
-                                        if($qset == 111 && $flag_tr ==1){
-                                        	$qq="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`,remarks) VALUES ($rsp,$qset,'$dt',$rpnt,'$remark')";
-                                        	mysqli_query($conn, $qq);
-  					}
-                               }
-                        }
-                
-             // } // end of crpnt
-                $msg = "Result Exported  Successfully";
-            } //end of isFirst check
-	 } //end for export status
-        } //end of else
-        if($rsp!='')
-        {
-        	$api=$_SERVER['QUERY_STRING'];
-        	$dt= date('Y/m/d H:i:s');
-        	$rip=$_SERVER['REMOTE_ADDR'];
-        	$uagent=$_SERVER['HTTP_USER_AGENT'];
-        	//$token= '' ;
-
-        	//$qrry="INSERT INTO api_log (user_id, api, timestamp, remote_ip, user_agent, token, status) VALUES ('$rsp','$api','$dt','$rip','$uagent','$token','$status')";
-                //$rsq=mysqli_query($conn, $qrry);
+////////////////////////////////////////// VALIDATION SECTION USERID AND NOT DUPLICATE /////////////////////////////////////////
+$jsonPost = stripslashes($_REQUEST['result']);
+      
+        $result = json_decode($jsonPost); 
+        foreach ($result as $json) { 
+         $respid = $json->resp_id;
         }
-        $this->_returnResponse($conn, $instance, $status, $msg, null);
+
+    $flagsql = "SELECT `status`,`appuser_id` FROM `appuser_project_map` WHERE `project_id` ='$qset' AND `appuser_id`= '$respId' ";
+  
+    $resQ=  mysqli_query($conn, $flagsql);
+
+    if ($resQ->num_rows > 0) {
+        
+        while ($row = $resQ->fetch_assoc()) {
+            $flagstatus = $row["status"];
+            $usrExist = $row["appuser_id"];
+           
+            if($flagstatus == 2){
+                $status= 'false';
+                $msg = 'Data is already inserted so please avoid redundancy';
+                $data = array();
+                $checkFlag = 1;
+             $this->_returnResponse($conn, $instance, $status, $msg, $data);
+                    die;
+
+            }
+
+        }
+    } else{
+        $status= 'false';
+                $msg = 'Invalid User Data!';
+                $data = array();
+                $checkFlag = 1;
+             $this->_returnResponse($conn, $instance, $status, $msg, $data);
+                    die;
+
+
     }
 
+////////////////////////////////////////    END OF THE VALIDATION SECTION /////////////////////////////
+   
+        //to find project table
+   
+
+        $sql = "SELECT `data_table` FROM `project` WHERE `project_id` = (SELECT distinct `project_id` FROM `questionset` WHERE `qset_id` IN(" . $_REQUEST["qset_id"] . "))";
+        $rs = mysqli_query($conn, $sql);
+        if (!$rs) {
+            $this->_returnError($conn, $instance, $tag);
+        } else {
+            if ($rs->num_rows > 0) {
+                
+                while ($row = $rs->fetch_assoc()) {
+                    $table = $row["data_table"];
+                }
+            }
+        }
+
+        $jsonPost = stripslashes($_REQUEST['result']);
+        $str='Attempting..';
+        $result = json_decode($jsonPost); 
+        foreach ($result as $json) {
+      $column = null; $isFirst = false;  $value = null; $idtt="i_date";
+        
+           
+ foreach ($json as $key => $val) {
+                if (!$isFirst) {
+                    if($key == 'resp_id')
+                       {$rsp = $val;}
+                       $column = $key;
+                    $value = "'" . mysqli_real_escape_string($conn,$val) . "'";
+                    $isFirst = true;
+                } else {
+                   if($key =='resp_id')
+                      { $rsp =$val;$column = $column . ", " . $key;}
+                   else
+                       {$column = $column . ", " . $key;}
+                       $value = $value . ", '" . mysqli_real_escape_string($conn,$val) . "'";
+      
+                }
+            }
+            if ($column != null && $value != null) {
+                 $sql = "INSERT INTO $table (" . $column . ") VALUES (" . $value . ");\n";
+                           
+                if (!mysqli_query($conn, $sql)){
+                    $this->_returnError($conn, $instance, $sql);
+                 }
+            }
+           $msg= $result;
+        }
+        if ($isFirst) {
+            $status = 1;$dt = date('Y-m-d H:i:s');
+    //to check the export status except for qset=111 if not exported
+
+            $psqry="select  status from appuser_project_map WHERE appuser_id=$rsp AND project_id=$qset";
+            $psr=mysqli_query($conn, $psqry);
+            if($psr->num_rows > 0)
+            {
+                        while ($ps = $psr->fetch_assoc())
+                        {
+                            $qset_status=$ps["status"];
+                        }
+            }
+    if($qset_status < 2 || $qset == 111)
+    { 
+      $flag_tr = null;
+;
+
+        if($qset == 111)
+        {
+                     
+        }
+
+            
+            $dt = date('Y-m-d H:i:s');
+            $qchk="UPDATE `appuser_project_map` SET `status`=2, exp_date='$dt'  WHERE `appuser_id`= $rsp and `project_id`=$qset";
+               $ss=mysqli_query($conn, $qchk);
+                    $qa="SELECT cr_point FROM `appuser_project_map` where `project_id`= ( select project_id from questionset where qset_id=$qset) and appuser_id=$rsp";
+                    $rsq=mysqli_query($conn, $qa);
+                               $rsq->num_rows;
+                    if($rsq->num_rows>0)
+                    {
+                            while ($row = $rsq->fetch_assoc())
+                            {
+                                    $rpnt = $row["cr_point"];
+                            }
+
+                            if($rpnt>0)
+                            {
+                
+                $remark="for contest : $qset ";
+                if($qset != 111){
+                                        echo $qq="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`,remarks) VALUES ($rsp,$qset,'$dt',$rpnt,'$remark')";
+                                        mysqli_query($conn, $qq);
+                } 
+                                    if($qset == 111 && $flag_tr ==1){
+                                        $qq="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`,remarks) VALUES ($rsp,$qset,'$dt',$rpnt,'$remark')";
+                                        mysqli_query($conn, $qq);
+                  }
+                           }
+                    }
+            
+        
+            $msg = "Result Exported  Successfully";
+        } //end of isFirst check
+ } //end for export status
+    } //end of else
+    if($rsp!='')
+    {
+        $api=$_SERVER['QUERY_STRING'];
+        $dt= date('Y/m/d H:i:s');
+        $rip=$_SERVER['REMOTE_ADDR'];
+        $uagent=$_SERVER['HTTP_USER_AGENT'];
+        //$token= '' ;
+
+        //$qrry="INSERT INTO api_log (user_id, api, timestamp, remote_ip, user_agent, token, status) VALUES ('$rsp','$api','$dt','$rip','$uagent','$token','$status')";
+            //$rsq=mysqli_query($conn, $qrry);
+    } $daata = array();
+    $this->_returnResponse($conn, $instance, $status, $msg, $daata);
+}
+
+
+
+///////////////////////////////////////////////////// END NEW API FOR EXPORT RESULT //////////////////////////////
+
+      /* query for exporting result  details of multiple projects*/
+//     public
+//     function _exportMPResult(Controller $instance)
+//     {
+// 	$tag = "**_exportResult**";
+//         $conn = DBConnector::getDBInstance();
+//         $msg = "Unable To Export";
+//         $status = 0;
+//         $table = "";
+//         $rsp = 0; $qset_status = 0; $idt = null; $flag_tr=null;
+// 	$qset=$_REQUEST["qset_id"];
+       
+          
+//         if ($conn->connect_error) {
+//             $this->_returnError($conn, $instance, $tag);
+//             die("Connection failed: " . $conn->connect_error);
+//         } else {
+
+// 		//to find project table
+//             $sql = "SELECT `data_table` FROM `project` WHERE `project_id` = (SELECT distinct `project_id` FROM `questionset` WHERE `qset_id` IN(" . $_REQUEST["qset_id"] . "))";
+//             $rs = mysqli_query($conn, $sql);
+//             if (!$rs) {
+//                 $this->_returnError($conn, $instance, $tag);
+//             } else {
+//                 if ($rs->num_rows > 0) {
+//                     // output data of each row
+//                     while ($row = $rs->fetch_assoc()) {
+//                         $table = $row["data_table"];
+//                     }
+//                 }
+//             }
+	
+// //        $first_id=0;
+	
+//             $jsonPost = stripslashes($_REQUEST['result']); $str='Attempting..';
+//             $result = json_decode($jsonPost);   
+//                //file_put_contents($_SERVER['DOCUMENT_ROOT']."/uploads/pdf/test.txt", $jsonPost,FILE_APPEND | LOCK_EX, null);
+//             foreach ($result as $json) {
+//                 $column = null;
+//                 $isFirst = false;
+//                 $value = null; $idtt="i_date";
+//                 foreach ($json as $key => $val) {
+//                     if (!$isFirst) {
+//                         if($key == 'resp_id')
+//                            {$rsp = $val;}
+// 			//if($key == 'i_date_111')
+// 			//   { $idt = $val; }
+// 			//else
+//                           // {$column = $key;}
+//                         $column = $key;
+//                         //$value = "'" . $val . "'";
+//                         $value = "'" . mysqli_real_escape_string($conn,$val) . "'";
+//                         $isFirst = true;
+//                     } else {
+//                        if($key =='resp_id')
+//                           { $rsp =$val;$column = $column . ", " . $key;}
+//                        else
+//                            {$column = $column . ", " . $key;}
+//                         //$value = $value . ", '" . $val . "'";
+//                        	$value = $value . ", '" . mysqli_real_escape_string($conn,$val) . "'";
+// 			//if($key == 'i_date_111') { $idt = $val; }
+//                     }
+//                 }
+//                 if ($column != null && $value != null) {
+//                      $sql = "INSERT INTO $table (" . $column . ") VALUES (" . $value . ");\n";
+//                                 //file_put_contents($_SERVER['DOCUMENT_ROOT']."/uploads/pdf/query.txt", $sql,FILE_APPEND | LOCK_EX, null); 
+//                     if (!mysqli_query($conn, $sql)){
+//                         $this->_returnError($conn, $instance, $sql);
+//                      }
+//                 }
+//                $msg= $result;
+//             }
+//             if ($isFirst) {
+//                 $status = 1;$dt = date('Y-m-d H:i:s');
+//         //to check the export status except for qset=111 if not exported
+   
+//                 $psqry="select  status from appuser_project_map WHERE appuser_id=$rsp AND project_id=$qset";
+//                 $psr=mysqli_query($conn, $psqry);
+//                 if($psr->num_rows > 0)
+//                 {
+//                             while ($ps = $psr->fetch_assoc())
+//                             {
+//                                 $qset_status=$ps["status"];
+//                             }
+//                 }
+//         if($qset_status < 2 || $qset == 111)
+//         { 
+//   		$flag_tr = null;
+// ;
+// /*
+//             if(is_numeric($rsp))
+//             {
+//                          $irr="select sum(cr_point) as cr_point from credit_store where user_id=$rsp AND qset_id=$qset";
+//                          $irk=mysqli_query($conn, $irr);
+//                          if($irk->num_rows > 0)
+//                          {        $iruid='';$irmk='';
+//                             while ($ire = $irk->fetch_assoc())
+//                             {
+//                                 $crpnt=$ire["cr_point"];
+//                             }
+//                          }
+//             }
+// */
+//             if($qset == 111)
+//             {
+//                          //$irq="select travel_status from app_log where resp_id=$rsp AND travel_status=1 AND start_time = '$idt'";
+//                          //$irj=mysqli_query($conn, $irq);
+//                          //if($irj->num_rows > 0)
+//                          //{
+//                          //       $flag_tr = 1;
+//                          //}
+//             }
+
+//                 //to allow user to add credit point only if below condition is true i.e. max point in a project
+//               //if($crpnt < 70)
+//               //{
+
+//                 //$response=array();$userid='';$login_status=0;$rpnt=0;
+//                 $dt = date('Y-m-d H:i:s');
+//                 $qchk="UPDATE `appuser_project_map` SET `status`=2, exp_date='$dt'  WHERE `appuser_id`= $rsp and `project_id`=$qset";
+//                	$ss=mysqli_query($conn, $qchk);
+//                         $qa="SELECT cr_point FROM `appuser_project_map` where `project_id`= ( select project_id from questionset where qset_id=$qset) and appuser_id=$rsp";
+//                         $rsq=mysqli_query($conn, $qa);
+//                                    $rsq->num_rows;
+//                         if($rsq->num_rows>0)
+//                         {
+//                                 while ($row = $rsq->fetch_assoc())
+//                                 {
+//                                         $rpnt = $row["cr_point"];
+//                                 }
+
+//                                 if($rpnt>0)
+//                                 {
+// 					//echo "qset: $qset , $flag_tr .";
+// 					$remark="for contest : $qset ";
+// 					if($qset != 111){
+//                                         	echo $qq="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`,remarks) VALUES ($rsp,$qset,'$dt',$rpnt,'$remark')";
+//                                         	mysqli_query($conn, $qq);
+// 					} 
+//                                         if($qset == 111 && $flag_tr ==1){
+//                                         	$qq="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`,remarks) VALUES ($rsp,$qset,'$dt',$rpnt,'$remark')";
+//                                         	mysqli_query($conn, $qq);
+//   					}
+//                                }
+//                         }
+                
+//              // } // end of crpnt
+//                 $msg = "Result Exported  Successfully";
+//             } //end of isFirst check
+// 	 } //end for export status
+//         } //end of else
+//         if($rsp!='')
+//         {
+//         	$api=$_SERVER['QUERY_STRING'];
+//         	$dt= date('Y/m/d H:i:s');
+//         	$rip=$_SERVER['REMOTE_ADDR'];
+//         	$uagent=$_SERVER['HTTP_USER_AGENT'];
+//         	//$token= '' ;
+
+//         	//$qrry="INSERT INTO api_log (user_id, api, timestamp, remote_ip, user_agent, token, status) VALUES ('$rsp','$api','$dt','$rip','$uagent','$token','$status')";
+//                 //$rsq=mysqli_query($conn, $qrry);
+//         }
+//         $this->_returnResponse($conn, $instance, $status, $msg, null);
+//     }
+
      /* query for exporting result  details of multiple projects one respondent at a time */
-    public
-    function _exportMPResultOneResp(Controller $instance)
+   
+     public function _exportMPResultOneResp(Controller $instance)
     {
         $tag = "**_exportResult**";
         $conn = DBConnector::getDBInstance();
