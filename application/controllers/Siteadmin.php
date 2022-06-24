@@ -4115,15 +4115,14 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                 $projectName= trim($this->input->post('pname')); 
                 $brandName= $this->input->post('brand'); 
                 $clientCompanyName= $this->input->post('ccn');
-                          if($clientCompanyName =='')  $clientCompanyName= null;
+                        if($clientCompanyName =='')  $clientCompanyName= null;
                 $surveySampleSize= $this->input->post('ss'); 
-                           if($surveySampleSize=='')   $surveySampleSize= 49;
+                        if($surveySampleSize=='')   $surveySampleSize= 49;
                 $surveyround= $this->input->post('visit');
                 if($surveyround=='') $surveyround =1;
                 $surveyStartDate= $this->input->post('ssdt'); 
                 $surveyEndDate= $this->input->post('esdt');   
                 $researchTypes= $this->input->post('reserch_type');
-                if($researchTypes=='') $researchTypes =4;
                 $response_type= $this->input->post('response_types');
                 $surveyTypes= $this->input->post('survey_type');
                 
@@ -4137,13 +4136,14 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                 if($restrictHours== '') $restrictHours= 1;
                 $rewardPoint= $this->input->post('rp'); 
                 if($rewardPoint== '') $rewardPoint= 0;
-                
+                 
+                  
                 //ENTRY FOR THE SERVEGENICS
                
                 $fps=$this->input->post('fp');
                  //previous entry for insightfix
                 //$parr=array('name'=>$pn,'company_name'=>$ccn,'brand'=>$b,'research_type'=>$rt,'tot_visit'=>$v,'background'=>$bd,'sample_size'=>$ss,'survey_start_date'=>$ssid,'survey_end_date'=>$esid,'category'=>$pcat,'reward_point'=>$rp,'created_at'=>$dt, 'updated_at'=>$dt,'uid'=>$login);
-                $parr=array('name'=>$projectName,'project_type'=>$projectTypes,'company_name'=>$clientCompanyName,'brand'=>$brandName,'research_type'=>$researchTypes, 'survey_types'=>$surveyTypes,'response_type'=>$response_type,'sample_size'=>$surveySampleSize,'survey_start_date'=>$surveyStartDate,'survey_end_date'=>$surveyEndDate,'reward_point'=>$rewardPoint,'created_at'=>$dt, 'uid'=>$login);
+                $parr=array('name'=>$projectName,'project_type'=>$projectTypes,'company_name'=>$clientCompanyName,'brand'=>$brandName,'research_type'=>$researchTypes, 'survey_types'=>$surveyTypes,'response_type'=>$response_type,'sample_size'=>$surveySampleSize,'survey_start_date'=>$surveyStartDate,'survey_end_date'=>$surveyEndDate,'survey_occurance'=>$surveyOccurance, 'survey_frequency'=>$surveyTimes,'reward_point'=>$rewardPoint,'created_at'=>$dt, 'uid'=>$login);
 
                 if($projectName!=''){
          
@@ -4153,11 +4153,11 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                 {
                   $pid=$this->MProject->insertIntoTable('project',$parr);
                  
-                  if($pid !='' && $surveyTypes == 1){
-                          
-          $remarray = array('project_id'=>$pid,'survey_occurence'=>$surveyOccurance,'occurance_repitation'=>$surveyTimes,'excution_time'=>$$surveyTimes,'restrict_occurance_between'=>$restrictHours);
-                         $this->MProject->insertIntoTable('reminder',$remarray);
+         if($pid !='' && $surveyTypes == 1){
+         $remarray = array('project_id'=>$pid,'survey_type'=>$surveyTypes,'research_type'=>$researchTypes,'response_type'=>$response_type,'survey_occurance'=>$surveyOccurance,'survey_frequency'=>$surveyTimes);
+         $this->MProject->insertIntoTable('reminder',$remarray); 
                   }
+
                   $dtn=trim($this->MProject->get_project_name($pid));
                   $dtn=strtolower($dtn);
                   $dtn.='_'.$pid;

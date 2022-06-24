@@ -33,11 +33,12 @@ if(isset($_POST['pDeploy'])){
 		  $succ=	DB::getInstance()->query($assignPro);
 
  }
- $depMsg ="New Survegeynics Project Has been assign Please fill Survey";
- $succNoti  =	sendFCMnotification( $gcmIdInArray , $depMsg);  
- $resultarray = json_decode($succNoti);  
+ //$depMsg ="New Survegeynics Project Has been assign Please fill Survey";
+ //$succNoti  =	sendFCMnotification( $gcmIdInArray , $depMsg);  
+ //$resultarray = json_decode($succNoti);  
  
- if($succ->count()>0  &&  $resultarray->success > 0)
+ //if($succ->count()>0  &&  $resultarray->success > 0)
+ if($succ->count() > 0 )
  {
    echo "<br><center><font color=green> <b> PROJECT IS DEPLOYED AND NOTIFICATION HAS BEEN SEND TO USERS SUCCESSFULLY </b></center></font><br>";
  }
@@ -88,7 +89,7 @@ $header =array(
     $nofifyData =[
     'title'=>'Servegeygenics Message for New Survey',
      'body'=>$nofifyMsg,
-     'click_action'=> 'activity.notifyHandler'
+     'click_action'=> 'WRITE HERE CLICK ACTION WHERE IT GO AFTER CLICKING'
     // 'image'=> 'image URL'
     ];
     //OPTIONAL
