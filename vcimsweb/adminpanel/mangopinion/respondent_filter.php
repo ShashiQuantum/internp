@@ -6,18 +6,34 @@ include_once('../../functions.php');
 
 if(isset($_POST['pDeploy'])){
   
-  
-  if($_POST['rewardPoint'] != ''){ $rewadp=$_POST['rewardPoint'];} else {$rewadp=0;}
+  //if($_POST['rewardPoint'] != ''){ $rewadp=$_POST['rewardPoint'];} else {$rewadp=0;}
   if($_POST['projectId'] != '') $projectId=$_POST['projectId'];
   
-  $projEndDate=  get_project_endDate($projectId);
+  $projEndDate=  get_project_infoforDepy($projectId);
   foreach($projEndDate as $edatad)
   {
-	 
-	$projEndDate=  $edatad->survey_end_date; 
-	
-  }
+
+   $surveyTypes      =     $edatad->survey_types;
+   $surveyOccurance  =     $edatad->survey_occurance;
+   $surveyFrequency  =     $edatad->survey_frequency;
+   $projStartDate    =     $edatad->survey_start_date; 
+	 $projEndDate      =     $edatad->survey_end_date; 
   
+  }
+  if($surveyTypes==0){
+    $statusVal = 1;
+    $surveyTypes =0;
+    $surveyOcc =0;
+    $surveyFreq =0;
+
+  }
+
+  if($surveyTypes==1){
+    $statusVal = $surveyFrequency;
+    $surveyOcc =$surveyOccurance;
+    $surveyFreq =$surveyFrequency;
+
+  }
  
   
  
@@ -29,7 +45,7 @@ if(isset($_POST['pDeploy'])){
     $usersId =$arrayData['0'];
     $gcmIdInArray[] =$arrayData['1'];
  
-	  $assignPro="INSERT INTO `appuser_project_map`(`appuser_id`,`project_id`,`status`,`cr_point`,`exp_date`) VALUES ($usersId,$projectId,0,$rewadp,'$projEndDate')";
+	  $assignPro="INSERT INTO `appuser_project_map`(`appuser_id`,`project_id`,`survey_type`,`survey_occurance`,`survey_frequency`,`status`,`start_date`,`exp_date`) VALUES ('$usersId','$projectId','$surveyTypes','$surveyOcc','$surveyFreq','$statusVal','$projStartDate','$projEndDate')";
 		  $succ=	DB::getInstance()->query($assignPro);
 
  }
