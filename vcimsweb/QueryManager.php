@@ -1247,6 +1247,7 @@ $row["opt_text_value"],  "scale_start_label" => $row["scale_start_label"],"scale
 /////////////////////////////////////////////////////   NEW API //////////////////////////////////
 
 
+
 public
 function _exportMPResult(Controller $instance)
 {   
@@ -1276,17 +1277,34 @@ $jsonPost = stripslashes($_REQUEST['result']);
          $respid = $json->resp_id;
         }
 
-    $flagsql = "SELECT `status`,`appuser_id` FROM `appuser_project_map` WHERE `project_id` ='$qset' AND `appuser_id`= '$respId' ";
+    $flagsql = "SELECT `status`,`appuser_id`,`exp_date` FROM `appuser_project_map` WHERE `project_id` ='$qset' AND `appuser_id`= '$respId' ";
   
     $resQ=  mysqli_query($conn, $flagsql);
-
+    $expFlagOn =0;
     if ($resQ->num_rows > 0) {
         
         while ($row = $resQ->fetch_assoc()) {
             $flagstatus = $row["status"];
             $usrExist = $row["appuser_id"];
            
-            if($flagstatus == 2){
+            $expDate = $row["exp_date"];
+            $expDate =  strtotime($expDate);
+            $toDate = date('Y-m-d');
+            $toDate =  strtotime($toDate);
+            if($toDate >  $expDate){
+
+                $expFlagOn = 1;
+                $status= 'false';
+                $msg = 'Survey Date is Ended! Survey Ended!';
+                $data = array();
+                $checkFlag = 1;
+             $this->_returnResponse($conn, $instance, $status, $msg, $data);
+                    die;
+
+            }
+                        
+            $setNewStatus = $flagstatus -1;
+            if($flagstatus == 0){
                 $status= 'false';
                 $msg = 'Data is already inserted so please avoid redundancy';
                 $data = array();
@@ -1371,19 +1389,16 @@ $jsonPost = stripslashes($_REQUEST['result']);
                             $qset_status=$ps["status"];
                         }
             }
-    if($qset_status < 2 || $qset == 111)
+    if($qset_status != 0 )
     { 
       $flag_tr = null;
 ;
 
-        if($qset == 111)
-        {
-                     
-        }
+        
 
             
             $dt = date('Y-m-d H:i:s');
-            $qchk="UPDATE `appuser_project_map` SET `status`=2, exp_date='$dt'  WHERE `appuser_id`= $rsp and `project_id`=$qset";
+            $qchk="UPDATE `appuser_project_map` SET `status`=$setNewStatus  WHERE `appuser_id`= $rsp and `project_id`=$qset";
                $ss=mysqli_query($conn, $qchk);
                     $qa="SELECT cr_point FROM `appuser_project_map` where `project_id`= ( select project_id from questionset where qset_id=$qset) and appuser_id=$rsp";
                     $rsq=mysqli_query($conn, $qa);
@@ -1428,7 +1443,6 @@ $jsonPost = stripslashes($_REQUEST['result']);
     } $daata = array();
     $this->_returnResponse($conn, $instance, $status, $msg, $daata);
 }
-
 
 
 ///////////////////////////////////////////////////// END NEW API FOR EXPORT RESULT //////////////////////////////

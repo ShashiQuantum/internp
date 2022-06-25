@@ -29,9 +29,16 @@ if(isset($_POST['pDeploy'])){
   }
 
   if($surveyTypes==1){
-    $statusVal = $surveyFrequency;
     $surveyOcc =$surveyOccurance;
     $surveyFreq =$surveyFrequency;
+
+    $strtDate =strtotime($projStartDate);
+    $endDate = strtotime($projEndDate);
+    $dadiff = $endDate - $strtDate;
+    $noOfDay= round($dadiff / (60 * 60 * 24));
+    $statusVal = $noOfDay * $surveyFrequency;
+   
+
 
   }
  
