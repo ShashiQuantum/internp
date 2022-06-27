@@ -27,8 +27,8 @@ echo "<br><br>Select Project Name   <select name=pn id=pn ><option value=0>--Sel
 
 Survey status <select name="surveyStatus" id="surveyStatus">
         <option value="">--Select Survey status--</option>
-        <option value="0">Survey Not submited</option>
-        <option value="2">Survey successfully submited</option>
+        <option value="1">Survey Not submited</option>
+        <option value="0">Survey successfully submited</option>
         
       </select>
       <br> <br> <br><input type=submit name="get_resp" value="View User list"> 

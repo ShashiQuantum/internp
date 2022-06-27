@@ -447,7 +447,7 @@ $fcmKeyToken =0;
        } 
 
        
-   $sqlTAB = "SELECT appuser_project_map.project_id , appuser_project_map.status as surveyStatus ,  appuser_project_map.response_type , appuser_project_map.survey_type , appuser_project_map.cr_point, project.name , project.company_name , project.brand, project.sample_size, project.data_table, project.research_type, project.survey_start_date ,  project.survey_end_date, project.category,project.tot_visit, project.status as projectStatus FROM appuser_project_map INNER join project ON appuser_project_map.project_id= project.project_id WHERE appuser_project_map.status=0 AND appuser_project_map.exp_date >= DATE( NOW( ) ) AND appuser_project_map.appuser_id = $userid";
+   $sqlTAB = "SELECT appuser_project_map.project_id , appuser_project_map.status as surveyStatus ,  appuser_project_map.response_type , appuser_project_map.survey_type , appuser_project_map.cr_point, project.name , project.company_name , project.brand, project.sample_size, project.data_table, project.research_type, project.survey_start_date ,  project.survey_end_date, project.category,project.tot_visit, project.status as projectStatus FROM appuser_project_map INNER join project ON appuser_project_map.project_id= project.project_id WHERE appuser_project_map.status !=0 AND appuser_project_map.exp_date >= DATE( NOW( ) ) AND appuser_project_map.appuser_id = $userid";
    $rsTAB = mysqli_query($conn, $sqlTAB);
 
            if ($rsTAB->num_rows < 1) 
@@ -476,7 +476,8 @@ $fcmKeyToken =0;
            if($data1['survey_type'] == 1)
                   {
        $projectid= $data1['project_id'];
-       $remidsql = "SELECT interval_hours, occurence, restrict_occurance_between ,excution_time FROM reminder  WHERE project_id = $projectid";
+       //$remidsql = "SELECT interval_hours, occurence, restrict_occurance_between ,excution_time FROM reminder  WHERE project_id = $projectid";
+       $remidsql = "SELECT survey_type, research_type, response_type ,survey_occurance,survey_frequency FROM reminder  WHERE project_id = $projectid";
        $resRem = mysqli_query($conn, $remidsql);
        $dataArray2 = mysqli_fetch_all ($resRem, MYSQLI_ASSOC);
                  

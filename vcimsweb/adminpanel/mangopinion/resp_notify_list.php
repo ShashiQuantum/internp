@@ -65,8 +65,15 @@ $(document).ready(function(){
 
 						 echo "<tr bgcolor=lightgray><td><input type=checkbox id='checkAll' value='Select All'>Select All</td><td>Mobile</td></tr>";
 						// $ddd1=DB::getInstance()->query("select appuser_project_map.appuser_id, app_user.mobile, app_user.fcm_token from appuser_project_map inner join app_user on appuser_project_map.appuser_id =app_user.user_id where appuser_project_map.project_id =$projId AND appuser_project_map.status=$survyStatus");
-						 $ddd1=DB::getInstance()->query("SELECT appuser_project_map.appuser_id,gcm_users.gcm_regid,app_user.mobile from appuser_project_map INNER JOIN gcm_users on appuser_project_map.appuser_id = gcm_users.user_id INNER JOIN app_user on appuser_project_map.appuser_id = app_user.user_id WHERE appuser_project_map.project_id =$projId and appuser_project_map.status =$survyStatus");
-							
+			// $ddd1=DB::getInstance()->query("SELECT appuser_project_map.appuser_id,gcm_users.gcm_regid,app_user.mobile from appuser_project_map INNER JOIN gcm_users on appuser_project_map.appuser_id = gcm_users.user_id INNER JOIN app_user on appuser_project_map.appuser_id = app_user.user_id WHERE appuser_project_map.project_id =$projId and appuser_project_map.status =$survyStatus");
+			
+					if($survyStatus==0){
+						$ddd1=DB::getInstance()->query("SELECT appuser_project_map.appuser_id,gcm_users.gcm_regid,app_user.mobile from appuser_project_map INNER JOIN gcm_users on appuser_project_map.appuser_id = gcm_users.user_id INNER JOIN app_user on appuser_project_map.appuser_id = app_user.user_id WHERE appuser_project_map.project_id =$projId and appuser_project_map.status =$survyStatus");
+						}
+						if($survyStatus==1){
+					$ddd1=DB::getInstance()->query("SELECT appuser_project_map.appuser_id,gcm_users.gcm_regid,app_user.mobile from appuser_project_map INNER JOIN gcm_users on appuser_project_map.appuser_id = gcm_users.user_id INNER JOIN app_user on appuser_project_map.appuser_id = app_user.user_id WHERE appuser_project_map.project_id =$projId and appuser_project_map.status >= $survyStatus");
+
+						}
         
                  if($ddd1->count()>0){
 						 foreach($ddd1->results() as $rr)
