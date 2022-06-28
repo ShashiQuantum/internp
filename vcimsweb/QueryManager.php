@@ -1270,6 +1270,48 @@ $tag = "**_exportResult**";
     } else {
 
 ////////////////////////////////////////// VALIDATION SECTION USERID AND NOT DUPLICATE /////////////////////////////////////////
+
+$restdailyq = "SELECT `data_table`,`survey_frequency` FROM `project` WHERE `project_id` =$qset";
+
+$restDalyR =  mysqli_query($conn, $restdailyq); 
+if($restDalyR->num_rows > 0) {
+    
+$toDate = date('Y-m-d');
+while ($rowResult = $restDalyR->fetch_assoc()) {  
+
+$dta_table= $rowResult['data_table'];
+$dta_freq= $rowResult['survey_frequency'];
+
+
+//$resFreq = "SELECT count(*) as dalFreq  from '$dta_table' WHERE resp_id = '$respId' and q_id = '$qset' AND DATE_FORMAT(e_date,'%Y-%m-%d') ='$toDate' GROUP by DATE_FORMAT(e_date,'%Y-%m-%d')";
+$resFreq = "SELECT count(*) as dalFreq from $dta_table WHERE resp_id =$respId and q_id=$qset and DATE_FORMAT(e_date,'%Y-%m-%d') = '$toDate' GROUP by DATE_FORMAT(e_date,'%Y-%m-%d');";
+
+$freqR =  mysqli_query($conn, $resFreq); 
+
+if($freqR->num_rows > 0){
+  
+    while ($freqRow = $freqR->fetch_assoc()) {  
+
+        $frqcount= $freqRow['dalFreq'];
+        if($frqcount >= $dta_freq ){
+            $status= 'false';
+            $msg = 'Your Daily Servey Limit Completed, You Can Not Exceed Servey Limit';
+            $data = array();
+         $this->_returnResponse($conn, $instance, $status, $msg, $data);
+                die;
+
+
+        }
+
+    }
+
+}
+
+}
+}
+
+
+
 $jsonPost = stripslashes($_REQUEST['result']);
       
         $result = json_decode($jsonPost); 
