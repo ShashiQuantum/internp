@@ -1441,33 +1441,9 @@ $jsonPost = stripslashes($_REQUEST['result']);
             
             $dt = date('Y-m-d H:i:s');
             $qchk="UPDATE `appuser_project_map` SET `status`=$setNewStatus  WHERE `appuser_id`= $rsp and `project_id`=$qset";
-               $ss=mysqli_query($conn, $qchk);
-                    $qa="SELECT cr_point FROM `appuser_project_map` where `project_id`= ( select project_id from questionset where qset_id=$qset) and appuser_id=$rsp";
-                    $rsq=mysqli_query($conn, $qa);
-                               $rsq->num_rows;
-                    if($rsq->num_rows>0)
-                    {
-                            while ($row = $rsq->fetch_assoc())
-                            {
-                                    $rpnt = $row["cr_point"];
-                            }
+            $ss=mysqli_query($conn, $qchk);
 
-                            if($rpnt>0)
-                            {
-                
-                $remark="for contest : $qset ";
-                if($qset != 111){
-                                        echo $qq="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`,remarks) VALUES ($rsp,$qset,'$dt',$rpnt,'$remark')";
-                                        mysqli_query($conn, $qq);
-                } 
-                                    if($qset == 111 && $flag_tr ==1){
-                                        $qq="INSERT INTO `credit_store`(`user_id`, `qset_id`, `i_date`, `cr_point`,remarks) VALUES ($rsp,$qset,'$dt',$rpnt,'$remark')";
-                                        mysqli_query($conn, $qq);
-                  }
-                           }
-                    }
-            
-        
+                    
             $msg = "Result Exported  Successfully";
         } //end of isFirst check
  } //end for export status
