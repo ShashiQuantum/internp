@@ -3358,6 +3358,251 @@ resp_id";
     //to display project all data row wise per respondent--first call function
   
 	
+    //to display project all data row wise per respondent--first call function
+    public function getProjectData($pid,$qset=null,$isd=null,$sdt=null,$edt=null, $sl, $el)
+    {
+                       date_default_timezone_set("Asia/Kolkata");
+                       $d=date("d-m-Y H:i:s");
+ 
+                      
+                            $sm=(int)date("m",strtotime($sdt));
+                            $yrs=(int)date("Y",strtotime($sdt));
+                            $em=(int)date("m",strtotime($edt));
+                       ?> 
+					  <?php   if($_SESSION['reportGen'] == 'False') { ?> 
+					  <a href="<?php  echo base_url(); ?>siteadmin/salogout"><i class="fa fa-user"></i> Sign Out</a>  
+					  <?php   } ?>
+					  		
+							
+						<?php
+							if($qset!=0)
+							{
+                            echo "<br><center><font color=red>Survey Data of Project ID: $pid </font></center><br><br><br>";
+                            $sql1="SELECT `data_table` FROM `project` WHERE `project_id`=$pid";
+                            $rs1=$this->getDataBySql($sql1);
+                            if($rs1)
+                            {
+                                    foreach($rs1 as $r1)
+                                    {
+                                       $dtable=$r1->data_table;
+                                    }  
+                                    
+                            }
+        $colmsqno=array();$colms=array();$rdata=array();$mcolms=array();$mcolms2=array();
+                 
+	$sql2="SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = 'vcims' AND TABLE_NAME = '$dtable' AND COLUMN_NAME NOT IN (SELECT distinct(term) FROM vcims.question_option_detail WHERE q_id IN (SELECT qid FROM vcims.question_sequence where qset_id= $qset order by sid  asc) )";
+
+                 $rs2=$this->getDataBySql($sql2);
+				
+                 if($rs2)
+                 {
+                     foreach($rs2 as $r2)
+                     {
+                         $cn=$r2->COLUMN_NAME;
+			
+                         $qt=$this->getPQType($cn);
+
+                         $qtype=$qt['q_type']; 
+						 $qt_id=$qt['q_id'];
+						 $qno=$qt['qno'];
+			$arrc=array('id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_sub_area','i_name','i_mobile','i_date','e_date','address','o_sec','n_sec','gender','week_day','age','st','age_yrs','store','product','ref_no','latt','lang');
+
+         //OK HERE
+                         if($qtype=='checkbox') // CREATE QUESTION AND OPTION  FOR CHECKBOX
+                         {
+                               array_push($mcolms,$cn);
+				
+                               $opc=$this->get_qop_count($qt_id);
+                                    for($i=1;$i<=$opc;$i++)
+                                    {
+                                        $cn1=$cn.'_'.$i;
+									    $dd=substr($cn1, strrpos($cn1, '_') + 1); //echo "<br> $dd=".strlen($dd);
+                                        array_push($colms,$cn1);
+
+					$qqnn=$qno.'-'.$i;
+					array_push($colmsqno,$qqnn);
+                                    }
+                         }    // CHECKBOX BOX ENDED HERE
+                         else
+			 {	
+				array_push($colms,$cn); 
+                                	//array_push($colms,$cnt);
+				//if($qno!=''){
+                 
+					if($qno=='' || $qno==null){ 
+						$qno='-';
+						$str2 = substr( $cn, 0, -2 );
+						$str3=substr($cn,-2);
+						if($str3=='_t'){
+                        
+							$qt2=$this->getPQType($str2);
+                         			if($qt2){
+							$qt2=$qt2['q_type']; 
+							
+						  }
+						}
+					}
+				if(!in_array($cn,$arrc)){ //echo " cnn : $qno";
+
+					 array_push($colmsqno,$qno);
+					 //array_push($colmsqno,$qno);
+				}
+				//}
+			 }
+		      // } //end of if qtype
+                     }
+                 }
+      
+		
+		//bigin of tern for project based on sid
+		 $sql3="SELECT distinct term FROM vcims.question_option_detail WHERE q_id IN (SELECT qid FROM vcims.question_sequence where qset_id=$qset order by sid ) AND q_id NOT IN(select q_id FROM vcims.question_detail where qset_id=342 AND q_type='imaged')";
+                 $rs2=$this->getDataBySql($sql3);
+                 if($rs2)
+                 {
+                     foreach($rs2 as $r2)
+                     {
+                         //$cn=$r2->COLUMN_NAME;
+			 $cn=$r2->term;
+			 //$cnt=$cn.'_t';
+                         $qt=$this->getPQType($cn);
+                         $qtype=$qt['q_type']; $qt_id=$qt['q_id']; $qno=$qt['qno'];
+			$arrc=array('id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_sub_area','i_name','i_mobile','i_date','e_date','address','o_sec','n_sec','gender','week_day','age','st','age_yrs','store','product','ref_no','latt','lang');
+
+                       //if($qtype || in_array($cn,$arrc)){
+                         if($qtype=='checkbox')
+                         {
+                               array_push($mcolms,$cn);
+				//array_push($mcolms,$cnt);
+                               $opc=$this->get_qop_count($qt_id);
+                                    for($i=1;$i<=$opc;$i++)
+                                    {
+                                        $cn1=$cn.'_'.$i;
+										 $dd=substr($cn1, strrpos($cn1, '_') + 1); //echo "<br> $dd=".strlen($dd);
+                                        array_push($colms,$cn1);
+
+					$qqnn=$qno.'-'.$i;
+					array_push($colmsqno,$qqnn);
+                                    }
+                         }
+                         else
+			 {	
+				array_push($colms,$cn); 
+                                	
+                 
+					if($qno=='' || $qno==null){ 
+						$qno='-';
+						$str2 = substr( $cn, 0, -2 );
+						$str3=substr($cn,-2);
+						if($str3=='_t'){
+                         			  $qt2=$this->getPQType($str2);
+                         			  if($qt2){
+							$qt2=$qt2['q_type']; 
+							//$qno2=$qt2['qno'];
+							//if($qt2) $qno=$qno2;
+						  }
+						}
+					}
+				if(!in_array($cn,$arrc)){ //echo " cnn : $qno";
+
+					 array_push($colmsqno,$qno);
+					 //array_push($colmsqno,$qno);
+				}
+				//}
+			 }
+		      // } //end of if qtype
+                     }
+                 }
+
+		
+
+                 $colm=array_shift($colms);
+				 array_shift($colms);
+				 array_shift($colms);
+		
+		
+	//print_r($colms); print_r($colmsqno);
+		//to display data heading
+		$strh= "<style>tr:nth-child(even){background-color: #f2f2f2}</style> <center><table border=1 cellpadding='0' cellspacing='0'><tr align=center bgcolor=lightgray><td>S.NO.</td><td>Resp_id</td><td>qset</td>";
+		foreach($colms as $cn)
+	        {
+			 //if($cn == 'i_date' || $cn == 'e_date')$strh.="<td width='150px'>$cn</td>";
+	                $strh.="<td>$cn</td>";
+	        }
+		$strh.="</tr>";
+		echo $strh;
+
+                $strhqno= "<tr align=center bgcolor=lightgray><td colspan=26></td>";
+                foreach($colmsqno as $cqno)
+                {
+                       $strhqno.="<td>$cqno</td>";
+                       //$strhqno.="<td>$cqno</td>";
+                }
+                $strhqno.="</tr>";
+                echo $strhqno;
+	        if($sl >= 0 && $el > 0) $qr="SELECT distinct(resp_id) FROM $dtable WHERE q_id=$qset order by resp_id asc limit $sl,$el;";
+		 else $qr="SELECT distinct(resp_id) FROM $dtable WHERE q_id=$qset  AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by resp_id asc ;";
+		if($isd=='on')
+		{
+			/*
+                    if($yrs==2016)
+                    {
+			if($qset==20)
+				
+                                $qr="SELECT distinct resp_id FROM $dtable WHERE month(visit_month_$qset)=$sm AND year(visit_month_$qset)=$yrs and resp_id > 727 
+order by resp_id";
+                        if($qset==40)
+				$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset and month(visit_month_$qset)=$sm AND year(visit_month_$qset)=$yrs 
+order by resp_id";
+                                
+			else
+				$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset and month(i_date_$qset)=$sm AND year(visit_month_$qset)=$yrs order by 
+resp_id";
+                    }
+			
+                    if($yrs>2016)
+                    { */
+                          //$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND month(i_date_$qset)=$sm AND year(i_date_$qset)=$yrs order by resp_id";
+//// OLD CODE  $qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by timestamp,resp_id;";
+$qr="SELECT distinct(resp_id) FROM $dtable WHERE q_id=$qset AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by resp_id desc;";
+                          if($sl >= 0 && $el > 0) 
+				//$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND month(i_date)=$sm AND year(i_date)=$yrs order 
+				//by resp_id limit $sl,$el";
+			$qr="SELECT distinct(resp_id) FROM $dtable WHERE q_id=$qset AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by resp_id desc limit $sl,$el";
+                          // if($qset==40)
+                                //$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND month(visit_month_$qset)=$sm AND year(visit_month_$qset)=$yrs order by resp_id";
+                    //}
+			
+		}
+	
+	//echo $qr;
+                 $rs3=$this->getDataBySql($qr);
+                 if($rs3)
+                 { 
+		     $cnt=0; 
+		//print_r($rs3);
+                     foreach($rs3 as $rp)
+                     {
+                          $cnt++;
+                          $rsp=$rp->resp_id;
+                          //to display one respondent's data details
+				$rdata=array();$strr='';
+				
+				$rdata= $this->get_r_detailm($rsp,$qset,$dtable,$colms,$isd,$sm,$em,$yrs,$mcolms);
+				//print_r($rdata);
+				$strr= "<tr align=center><td>$cnt</td><td>$rsp</td><td>$qset</td>";
+				foreach($rdata as $rd)
+			        {
+			               $strr.="<td>$rd</td>";
+			        }
+				$strr.="</tr>";
+				echo $strr;
+                     }
+                 }
+         }// end of qset check
+    }
+
+
+	
 
 
 
