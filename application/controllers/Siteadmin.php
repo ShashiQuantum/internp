@@ -1001,7 +1001,69 @@ class Siteadmin extends CI_Controller {
 					</div></div></div></div>
 		<?php
                                 break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                        
+                                case "viewmultiplereport": 
+				$this->load->view('v_h');
+				echo "<br><br><br><br> ";
+                                $this->load->model('MTablet');
+				$tabs=$this->MTablet->getTabs();
+				$projects=$this->MTablet->getProjects();
+				?>
 
+
+<?php  
+                 $strExlExp = "<a href='projectdataReport'> <br><center> <button type='button' class='btn btn-primary'>Export in Excel </button></center></a></br>";
+                echo $strExlExp;
+         ?>  
+				<?php echo form_open('siteadmin/viewmultiplereport', array('target'=>'_blank', 'id'=>'myform'));?>
+                                	<div class="container" style="margin-left: 15%;">
+                                        
+					<div class='well col-lg-9 col-sm-9 col-md-9'>
+					<div class="row">
+						<div class='text-center bg-primary'> VIEW MULTIPLE PROJECT DATA DETAILS </div>
+					</div>
+                                       
+					<br>
+					<div class="row">
+					
+				       Project Name: <select name="pn" class="form-control" id="pn"  onchange="getpqset();" required><option value="">--Select Project--</option><?php  foreach($projects as $p){?><option value="<?php echo $p->project_id;?>"><?php echo $p->name;?></option><?php }?></select><br>
+                                       
+					QuestionSet ID <select name="qset" class="form-control" id="qset" required> <option value="">--Select QSet--</option> </select>
+					
+					</div><br>
+					<div class="row">
+					 <div class='col-lg-4 col-xl-4 col-sm-4 col-md-4'>
+					 Date Filter
+                                         <label class='form-control'> <input type=checkbox name="isd"  id="isd" style='font-size: 20px;'> Apply Date Filter </label>
+					</div>
+					 <div class='col-lg-4 col-xl-4 col-sm-4 col-md-4'>
+                                        From Date <input type=date name="sdt" class="form-control" id="sdt">
+					</div>
+					<div class='col-lg-4 col-xl-4 col-sm-4 col-md-4'> 
+					To Date <input type=date name="edt" class="form-control" id="edt">
+					</div>
+					</div><br>
+
+					<div class="row">
+					 <div class='col-lg-6 col-xl-6 col-sm-6 col-md-6'>
+				        Record From [ Offset ] <input class="form-control" type=number name="sl" id="sl" value=0 required>
+					</div>
+					 <div class='col-lg-6 col-xl-6 col-sm-6 col-md-6'>
+						Record To [ Limit ] <input type=number class="form-control" name="el" id="el" value=100 required>
+					</div>
+					</div><br>
+
+                                       <div class="text-center"><input type=submit class="btn btn-primary" name=submit value="View Records"></div>
+  
+
+				<?php echo form_close(); ?>
+					</div></div></div></div>
+		<?php
+				
+			break;
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
                                 case "viewmediareport":
                                         $this->load->view('v_h');
@@ -2787,6 +2849,45 @@ public function projectdataexl()
                header('Content-Disposition:attachment;filename=report.xls');  
                 
 }
+
+
+public function viewmultiplereport()
+        {
+
+                       $pid= $this->input->post('pn'); 
+                       $qset= $this->input->post('qset');
+                       $isd= $this->input->post('isd');
+                       $sdt=$this->input->post('sdt');
+                       $sl = 0;
+   			$el = 0;
+		        $edt=$this->input->post('edt');
+                       $sm=0;$em=0;
+                       date_default_timezone_set("Asia/Kolkata");
+                       $d=date("d-m-Y H:i:s");
+                       if($isd)
+                       {
+                            $sm=(int)date("m",strtotime($sdt)); 
+                            $yrs=(int)date("Y",strtotime($sdt));
+                       }
+                       if(isset($_POST['edt']))
+                       {
+                             $em=(int)date("m",strtotime($edt)); 
+                       }
+    			if(isset($_POST['sl']) && isset($_POST['el']))
+    			{
+         			$sl=$this->input->post('sl'); 
+         			$el=$this->input->post('el');
+    			}                       
+	               $this->load->model('MProject');
+                       $_SESSION['reportGen'] = 'False';
+
+                       $data=$this->MProject->getMultipleReport($pid,$qset,$isd,$sdt,$edt, $sl,$el);   
+                      
+               
+                        
+        }
+
+
 
 
 public function viewmediareport()

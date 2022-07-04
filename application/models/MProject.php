@@ -3535,51 +3535,20 @@ resp_id";
                 foreach($colmsqno as $cqno)
                 {
                        $strhqno.="<td>$cqno</td>";
-                       //$strhqno.="<td>$cqno</td>";
+                       
                 }
                 $strhqno.="</tr>";
                 echo $strhqno;
 	        if($sl >= 0 && $el > 0) $qr="SELECT distinct(resp_id) FROM $dtable WHERE q_id=$qset order by resp_id asc limit $sl,$el;";
-		 else $qr="SELECT distinct(resp_id) FROM $dtable WHERE q_id=$qset  AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by resp_id asc ;";
-		if($isd=='on')
-		{
-			/*
-                    if($yrs==2016)
-                    {
-			if($qset==20)
-				
-                                $qr="SELECT distinct resp_id FROM $dtable WHERE month(visit_month_$qset)=$sm AND year(visit_month_$qset)=$yrs and resp_id > 727 
-order by resp_id";
-                        if($qset==40)
-				$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset and month(visit_month_$qset)=$sm AND year(visit_month_$qset)=$yrs 
-order by resp_id";
-                                
-			else
-				$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset and month(i_date_$qset)=$sm AND year(visit_month_$qset)=$yrs order by 
-resp_id";
-                    }
-			
-                    if($yrs>2016)
-                    { */
-                          //$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND month(i_date_$qset)=$sm AND year(i_date_$qset)=$yrs order by resp_id";
-//// OLD CODE  $qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by timestamp,resp_id;";
-$qr="SELECT distinct(resp_id) FROM $dtable WHERE q_id=$qset AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by resp_id desc;";
-                          if($sl >= 0 && $el > 0) 
-				//$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND month(i_date)=$sm AND year(i_date)=$yrs order 
-				//by resp_id limit $sl,$el";
-			$qr="SELECT distinct(resp_id) FROM $dtable WHERE q_id=$qset AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by resp_id desc limit $sl,$el";
-                          // if($qset==40)
-                                //$qr="SELECT distinct resp_id FROM $dtable WHERE q_id=$qset AND month(visit_month_$qset)=$sm AND year(visit_month_$qset)=$yrs order by resp_id";
-                    //}
-			
-		}
+		////// else $qr="SELECT distinct(resp_id) FROM $dtable WHERE q_id=$qset  AND date(timestamp) >= '$sdt' AND date(timestamp) <= '$edt' order by resp_id asc ;";
+		
 	
-	//echo $qr;
+
                  $rs3=$this->getDataBySql($qr);
                  if($rs3)
                  { 
 		     $cnt=0; 
-		//print_r($rs3);
+		
                      foreach($rs3 as $rp)
                      {
                           $cnt++;
@@ -3588,7 +3557,8 @@ $qr="SELECT distinct(resp_id) FROM $dtable WHERE q_id=$qset AND date(timestamp) 
 				$rdata=array();$strr='';
 				
 				$rdata= $this->get_r_detailm($rsp,$qset,$dtable,$colms,$isd,$sm,$em,$yrs,$mcolms);
-				//print_r($rdata);
+				
+				
 				$strr= "<tr align=center><td>$cnt</td><td>$rsp</td><td>$qset</td>";
 				foreach($rdata as $rd)
 			        {
@@ -3598,7 +3568,7 @@ $qr="SELECT distinct(resp_id) FROM $dtable WHERE q_id=$qset AND date(timestamp) 
 				echo $strr;
                      }
                  }
-         }// end of qset check
+         }
     }
 
 
@@ -3684,18 +3654,110 @@ public function getPQType($cn=null)
 	        	return false;
              } else return false;
     }
+////////////////////////////////////////////////////////////////
+public function getMultipleReport($pid,$qset=null,$isd=null,$sdt=null,$edt=null, $sl, $el){
 
+	date_default_timezone_set("Asia/Kolkata");
+	$d=date("d-m-Y H:i:s");
+
+   
+		 $sm=(int)date("m",strtotime($sdt));
+		 $yrs=(int)date("Y",strtotime($sdt));
+		 $em=(int)date("m",strtotime($edt));
+	?> 
+   <?php   if($_SESSION['reportGen'] == 'False') { ?> 
+   <a href="<?php  echo base_url(); ?>siteadmin/salogout"><i class="fa fa-user"></i> Sign Out</a>  
+   <?php   } ?>
+		   
+		 
+	 <?php
+		 if($qset!=0)
+		 { // FIRST IF
+		 echo "<br><center><font color=red>Survey Data of Project ID: $pid </font></center><br><br><br>";
+		 $sql1="SELECT `data_table` FROM `project` WHERE `project_id`=$pid";
+		 $rs1=$this->getDataBySql($sql1);
+		 if($rs1)
+		 {   foreach($rs1 as $r1) {  $dtable=$r1->data_table;   } }
+
+		
+		 $colmname=array();$timegroupby=array();$residDate=array();$comArray=array();
+		 $clmsql="SHOW COLUMNS FROM $dtable";
+		 $clmsrs=$this->getDataBySql($clmsql);
+		 $strh= "<style>tr:nth-child(even){background-color: #f2f2f2}</style> <center><table border=1 cellpadding='0' cellspacing='0'><tr align=center bgcolor=lightgray><td>S.NO.</td>";
+		
+		 if($clmsrs)
+		 {   foreach($clmsrs as $clmsR)
+			 {  
+				$clmsName=$clmsR->Field;
+				$strh.="<td>$clmsName</td>";
+				array_push($colmname,$clmsName);
+			} 
+			
+		}
+		$strh.="</tr>";
+		echo $strh;
+		$dtidsql=	"SELECT DATE_FORMAT(i_date, '%Y-%m-%d %H:%i:%s') as gdate ,resp_id FROM $dtable GROUP BY DATE_FORMAT(i_date, '%Y-%m-%d %H:%i:%s'),resp_id";
+		$dtidrs=$this->getDataBySql($dtidsql);
+		
+
+		if($dtidrs)
+		 {   foreach($dtidrs as $dtidR)
+			 {  
+				
+				$grpdatetime=  $dtidR->gdate;
+				$grpresid= $dtidR->resp_id;
+				 if($grpdatetime){
+					$comArray = array("grpDate"=>$grpdatetime,"resId"=>$grpresid);
+					array_push($residDate,$comArray);
+
+				 				}
+			} 
+		}
+		//SELECT GROUP_CONCAT(150_41) as cvalues FROM `mtest3_41` where resp_id = 43 and i_date = '2022-07-01 11:31:14'
+
+		
+		$cnt=1;
+		
+			foreach($residDate as $res)
+			{
+				$gpdate  = $res['grpDate'];
+				$resID = $res['resId'];
+				$strr= "<tr align=center><td>$cnt</td>";
+				foreach($colmname as $clName){
+
+					
+					
+	   $fnlqry = "SELECT GROUP_CONCAT($clName) as cvalues FROM $dtable where resp_id = $resID and i_date = '$gpdate'";
+	   $fnlrslt=$this->getDataBySql($fnlqry);
+ 
+	if($fnlrslt)
+	{	 
+     $columnReslt=	$fnlrslt['0']->cvalues; 
+	 $strr.="<td>$columnReslt</td>";
+    }
 	
+		 }
+		$cnt++;
+		
+		 $strr.="</tr>";
+		echo $strr;					  
+			
+
+
+		}
+
+		}// END FIRST END    
+}//FUNCTION ENDED
+	
+///////////////////////////////////////////////////////////////
     public function get_r_detailm($resp=null,$qset=null,$dtable=null,$colmn,$isd=null,$sm=null,$em=null,$yrs=null,$mcolmn)
     {
 	        $rrdata=array(); $tmpdata=array();
-		//print_r($colmn);
-		//print_r($mcolmn);
-
+		
 	                foreach($colmn as $cn)
 	                {
 			     	$dd='';
-                             	$dnm = substr($cn, strrpos($cn, '_') + 1);
+                    $dnm = substr($cn, strrpos($cn, '_') + 1);
 				$dlen = strlen($dnm);
 				$dlen = $dlen+1;
 				$dtlen = strlen($cn);
