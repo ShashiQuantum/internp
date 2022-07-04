@@ -3689,13 +3689,18 @@ public function getMultipleReport($pid,$qset=null,$isd=null,$sdt=null,$edt=null,
 		 {   foreach($clmsrs as $clmsR)
 			 {  
 				$clmsName=$clmsR->Field;
+				if($clmsName =='id' || $clmsName == 'e_date'){ }
+				else{
 				$strh.="<td>$clmsName</td>";
 				array_push($colmname,$clmsName);
+				}
 			} 
 			
 		}
 		$strh.="</tr>";
 		echo $strh;
+
+
 		$dtidsql=	"SELECT DATE_FORMAT(i_date, '%Y-%m-%d %H:%i:%s') as gdate ,resp_id FROM $dtable GROUP BY DATE_FORMAT(i_date, '%Y-%m-%d %H:%i:%s'),resp_id";
 		$dtidrs=$this->getDataBySql($dtidsql);
 		
@@ -3726,8 +3731,13 @@ public function getMultipleReport($pid,$qset=null,$isd=null,$sdt=null,$edt=null,
 				foreach($colmname as $clName){
 
 					
-					
+		if($clName =='resp_id' || $clName == 'q_id' || $clName == 'i_date' )
+					{
+			$fnlqry = "SELECT $clName as cvalues FROM $dtable where resp_id = $resID and i_date = '$gpdate'";	
+					}
+					else{
 	   $fnlqry = "SELECT GROUP_CONCAT($clName) as cvalues FROM $dtable where resp_id = $resID and i_date = '$gpdate'";
+					}
 	   $fnlrslt=$this->getDataBySql($fnlqry);
  
 	if($fnlrslt)
