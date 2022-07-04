@@ -3691,7 +3691,16 @@ public function getMultipleReport($pid,$qset=null,$isd=null,$sdt=null,$edt=null,
 				$clmsName=$clmsR->Field;
 				if($clmsName =='id' || $clmsName == 'e_date'){ }
 				else{
+					if($clmsName == 'q_id')
+					{
+						$clmsName = 'QsetID';
+						$strh.="<td>$clmsName</td>";
+						$clmsName = 'q_id';
+
+					 }
+					 else{
 				$strh.="<td>$clmsName</td>";
+					 }
 				array_push($colmname,$clmsName);
 				}
 			} 
