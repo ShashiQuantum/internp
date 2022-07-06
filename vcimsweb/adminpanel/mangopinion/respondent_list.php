@@ -5,6 +5,11 @@ include_once('../../gcm/send_message.php');
 include_once('../../gcm/GCM.php');
 include_once('../../gcm/config.php');
 
+if(isset($_POST['respondendFilter'])){
+
+		
+	print_r($_POST); die;
+   }
 
 ?>
 
