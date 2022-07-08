@@ -1980,7 +1980,7 @@ $jsonPost = stripslashes($_REQUEST['result']);
                             $dateOnly = date('Y-m-d', $time);
                             $houronly = date('H', $time);
                             $minuteOnly = date('i', $time);
-                            $fileVarName = $user_id.'_'.$project_id.'_'.$dateOnly.'_'.$houronly.'_'.$minuteOnly;
+                            $fileVarName = $user_id.'_'.$project_id.'_'.$question_id.'_'.$dateOnly.'_'.$houronly.'_'.$minuteOnly;
                                 $mime = mime_content_type($_FILES['file_name']['tmp_name']);
                                 
                                 if(strstr($mime, "image/")){
