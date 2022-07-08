@@ -5,12 +5,6 @@ include_once('../../gcm/send_message.php');
 include_once('../../gcm/GCM.php');
 include_once('../../gcm/config.php');
 
-if(isset($_POST['respondendFilter'])){
-
-		
-	print_r($_POST); die;
-   }
-
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +32,57 @@ $(document).ready(function(){
 
    if(isset($_POST['get_project']))
    {    
-	     $pid=$_POST['pn'];
+	
+	$searchFlag =0;
+	$datafilter = $_POST; 
+	$arraySize = count($datafilter);
+	if($arraySize > 2)
+	{   // FILTER IF IS START
+		 $searchFlag =1;
+		array_pop($datafilter);
+		array_pop($datafilter);
+		////////// select data table ///////////////
+		$data=DB::getInstance()->query("SELECT data_table , project_id from project where response_type = 1");
+
+     if($data->count()>0) 
+     {    
+          foreach($data->results() as $d)
+          { 
+            $profilerTable = $d->data_table;
+          
+		  }
+	}	  
+		////////////end data table selection ////////////////
+
+
+		$userqry ="select DISTINCT(resp_id) from $profilerTable where ";
+			$QFlag =0;
+		foreach($datafilter as $key => $value)
+		      {
+				if($QFlag ==0){
+					$userqry .=" $key = $value ";
+					$QFlag =1;
+				}else{
+	       $userqry .=" or  $key = $value ";
+				     }
+                 }
+				 
+				/////////////// FINDING FILTER USER ID //////////////////////
+									$dataRes=DB::getInstance()->query($userqry);
+											if($dataRes->count()>0)
+										{
+													foreach($dataRes->results() as $rr)
+													{
+										$userIdArray[]=	 $rr->resp_id;	
+													}
+										}
+				/////////////////END FINDINIG FILTER USER ID ////////////
+
+				$List = implode(', ', $userIdArray);
+				
+	} // FILTER IF IS ENDED
+
+		$pid=$_POST['pn'];
         $_SESSION['pid']=$pid;
 		$pid=$_SESSION['pid'];
 
@@ -53,16 +97,21 @@ $(document).ready(function(){
    echo "<tr><td></td><td colspan=2></td></tr>";
 
  echo  "<input type='hidden' name='projectId' value='$pid'>";
-        	 
     
-  
-   
-
-//echo $conditions;
-  // $querydata ="select user_id, mobile from app_user where status =1";
+ if($searchFlag == 0){
  // $querydata ="SELECT user_id,mobile FROM app_user where user_id not in (SELECT appuser_id FROM appuser_project_map where project_id =$pid) and status = 1";
  $querydata ="SELECT app_user.user_id,app_user.mobile ,gcm_users.gcm_regid FROM app_user INNER JOIN gcm_users on app_user.user_id = gcm_users.user_id where app_user.user_id not in (SELECT appuser_id FROM appuser_project_map where project_id =$pid) and app_user.status = 1";
-   $data=DB::getInstance()->query($querydata);
+                }
+
+ if($searchFlag ==1) 
+ {
+	$querydata ="SELECT app_user.user_id,app_user.mobile ,gcm_users.gcm_regid FROM app_user INNER JOIN gcm_users on app_user.user_id = gcm_users.user_id where app_user.user_id not in (SELECT appuser_id FROM appuser_project_map where project_id =$pid) and app_user.user_id in ($List) and app_user.status = 1";
+  
+
+
+ }
+   
+ $data=DB::getInstance()->query($querydata);
    if($data->count()>0)
    {
           
