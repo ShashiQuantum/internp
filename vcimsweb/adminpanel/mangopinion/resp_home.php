@@ -18,7 +18,8 @@ include_once('../../functions.php');
   <dt onclick="javascript:montre('smenu1');">Respondent Filter</dt>
    <dd id="smenu1" onclick="javascript:montre('smenu1');" onclick="javascript:montre();">
    <ul>
-    <li><a href="resp_count.php" target="_blank">View Respondents List</a></li>
+    <li><a href="registeredResp_count.php" target="_blank">View Registerd Respondents List</a></li>
+	<li><a href="resp_count.php" target="_blank">View Survey Respondents List</a></li>
     <li><a href="respondent_filter.php" target="_blank">Survey Deploy Request</a></li>
     <li><a href="resp_project_undo.php" target="_blank">Cancel Survey Deployed Request</a></li>
     <li><a href="resp_dep_status.php" target="_blank">View Project Survey Status</a></li>
