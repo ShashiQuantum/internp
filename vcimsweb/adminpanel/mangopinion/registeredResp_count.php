@@ -16,13 +16,13 @@ if(isset($_POST['RegUsers']))
 
  
    echo "<table border=0>";
-   echo "<tr bgcolor=lightgray><td>SL. No.</td><td>User Id</td><td>Mobile No</td><td>Reg. Date</td><td>Status</td></tr>";
+   echo "<tr bgcolor=lightgray><td>SL. No.</td><td>User Id</td><td>Mobile No</td><td>Reg. Date</td><td>Status</td><td>Total Assign Survey</td><td>Total Survey Completed</td></tr>";
    $reQry = "SELECT `user_id`,`mobile`,DATE_FORMAT(create_date,'%Y-%m-%d') as RegDate,`status` from app_user";
  if($searchDay != ''){
     $reQry = "SELECT `user_id`,`mobile`,DATE_FORMAT(create_date,'%Y-%m-%d') as RegDate,`status` from app_user where DATE_FORMAT(create_date,'%Y-%m-%d') = '$searchDay'";
 }
    
-  // $reQry = "";    
+    
    $reDataQ=DB::getInstance()->query($reQry);
      $jj=1;
     // print_r($reDataQ);die;
@@ -30,8 +30,9 @@ if(isset($_POST['RegUsers']))
 
      foreach($reDataQ->results() as $fDa)
      {
-       // print_r($reDataQ->results());die; 
-        // print_r($fDa->appuser_id);die;
+      
+     
+
            echo "<tr bgcolor=lightgray><td>$jj </td><td> $fDa->user_id </td> <td> $fDa->mobile </td>";
            
             echo  "<td> $fDa->RegDate </td><td>";
@@ -39,10 +40,37 @@ if(isset($_POST['RegUsers']))
             if($fDa->status == 1){echo 'Active';}
             else{echo 'Not Active';}
              
-            echo  "</td></tr>";
+            echo  "</td>";
+
+            // //////// FIND TOTAL ASSIGN SURVEY
+            $reQry2 = "SELECT count(appuser_id) as totalPj FROM `appuser_project_map`WHERE appuser_id = $fDa->user_id GROUP by appuser_id";
+            $reDataQ2=DB::getInstance()->query($reQry2);
+            if($reDataQ2->count()>0){ $totalProj=  $reDataQ2->results()['0']->totalPj; }
+            else{$totalProj=0;}
+            ////////END TOTAL ASSING SURVEY 
+           
+
+          echo   "<td> $totalProj </td>";
+
+
+           // //////// FIND TOTAL ASSIGN SURVEY
+           if($totalProj > 0){
+           $reQry3 = "SELECT count(appuser_id) as SuveyDone FROM `appuser_project_map`WHERE appuser_id = $fDa->user_id and status =0 GROUP by appuser_id";
+           $reDataQ3=DB::getInstance()->query($reQry3);
+           if($reDataQ3->count()>0){ $compProj=  $reDataQ3->results()['0']->SuveyDone; }
+           }
+           else{$compProj=0;}
+           ////////END TOTAL ASSING SURVEY 
+      
+           
+
+           echo   "<td> $compProj </td>";
+
+            
+           echo " </tr>";
    
             $jj++;
-
+          
      }
                          }  //FIRST DATA IF END
                          else{
