@@ -121,6 +121,9 @@ class Controller implements Responder
                 case "uploadmediaimageaudio" :
                     $this->uploadmediaimageaudio();
                     break;
+                    case "uploadmediafile" :
+                        $this->uploadmediafile();
+                        break;
                 default :
                     $this->returnResponse(DEFAULT_STATUS, "Task Not Found", null);
                     break;
@@ -417,6 +420,20 @@ class Controller implements Responder
        
             $this->model->_uploadmediaimageaudio($this);
     }
+
+
+
+ // BY  SHASHI  FOR S3 BUCKET 
+ private function uploadmediafile()
+ {
+    
+    if ($_SERVER["REQUEST_METHOD"] == "GET")
+     {
+         echo "Forbiden !";
+         die;
+     }
+     $this->model->_uploadmediafile($this);
+ }
 
 
     private function uploadVideo()

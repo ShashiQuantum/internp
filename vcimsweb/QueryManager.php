@@ -2061,6 +2061,97 @@ $mqq="INSERT INTO `media_tbl`(`file_name`, `file_type`, `user_id`, `project_id`,
 
     } 
      
+
+    function _uploadmediafile(Controller $instance)
+    {
+        
+        $tag = "**_uploadImage**";
+        $conn = DBConnector::getDBInstance();
+        $msg = null;
+        $status = 0;
+        $response = array();
+        if ($conn->connect_error) {
+            $this->_returnError($conn, $instance, $tag);
+            die("Connection failed: " . $conn->connect_error);
+        } else{  // ELSE CONDITION START FROM HERE
+            
+            //CHEKING THE CORRECT VARIABLE PARAMETER
+            $jsonPost = stripslashes($_POST['file_data']);
+            $result = json_decode($jsonPost,true); 
+            $errorflage1=0; $errorflage2=0;$errorflage3=0;$errorflage4=0;$errorflage5=0;
+
+     foreach ($result as $key => $val) 
+                {    
+	                 
+                    if($key == 'user_id')
+			                {   
+                                  $user_id=$val;
+                                  $errorflage1 =1;
+                            }       
+			                if($key == 'project_id')
+			                {     
+                                $project_id=$val;
+                                $errorflage2 =1;
+                            } 
+                            if($key == 'question_id')
+			                {     
+                                $question_id=$val;
+                                $errorflage3 =1;
+                            }
+                            if($key == 'media_name')
+			                {     
+                                $media_name=$val;
+                                $errorflage4 =1;
+                            }
+
+                            if($key == 'option_id')
+			                {     
+                                $option_id=$val;
+                                $errorflage5 =1;
+                            }
+                                        
+   
+                } 
+
+                        //VALIDATING THE VARIABLE 
+                            if(($errorflage1 != 1) || ($errorflage2 != 1) || ($errorflage5 != 1) || ($errorflage3 != 1) || ($errorflage4 != 1)) {
+                                    
+                                $status = 0;
+                                $msg = 'Invalid parameter!';
+                                $userid = null;
+                                $data = array();
+                                $this->_returnResponse($conn, $instance, $status, $msg, $data);
+
+                        } else {
+                        $dateTime = date('Y-m-d H:i:s');
+                    $destination  = $_SERVER['DOCUMENT_ROOT']."/digiamin-web/vcimsweb/uploads/image/$media_name";            
+$mqq="INSERT INTO `media_tbl`(`file_name`,  `user_id`, `project_id`,`question_id`,`option_id`,`dateTime`,`pathofstorage`) VALUES ('$media_name','$user_id','$project_id','$question_id','$option_id','$dateTime','$destination')";
+                           if(mysqli_query($conn, $mqq)){
+                            $msg = "inserted successfully";
+                            $status = 'True';
+
+                           }else{
+                            $msg ='Not inserted in database something wrong';
+                            $status = 'False';
+                           }
+                             
+                                $data = array("file Name"=>$media_name);
+                                $this->_returnResponse($conn, $instance, $status, $msg, $data);
+                            
+
+                                } 
+   
+                                    
+            
+
+            
+        } // ELSE CONDITION END HERE
+
+
+    } //CLOSE THE API METHOD
+    
+
+
     function _uploadVideo(Controller $instance)
     {
         $tag = "**_uploadVideo**";
