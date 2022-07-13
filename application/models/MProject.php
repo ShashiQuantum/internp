@@ -1059,7 +1059,7 @@ value=5>Electronic Product Consumer</option><option value=6>Ola</option><option 
 	              $str.="<tr><td>Question Type * </td><td> <select class='form-control' name='qt' id='qt' onchange='getpqt();' required><option value=''>Select</option> <option 
 value='text'>Open Ended [Text]</option><option value='textarea'>Open Ended MultipleLine [TextArea]</option><option value='radio'>Single Choice 
 [Radio]</option><option value='checkbox'>Multiple Choice [CheckBox]</option><option value='instruction'>Instruction</option><option value='dropdown'>Num 
-Dropdown List(0-30)</option><option value='rating'>Rating </option><option value='image'>Image Capture</option><option value='audio'>Audio 
+Dropdown List(0-30)</option><option value='rating'>Rating </option><option value='gimage'>Galary Image</option><option value='gvideo'>Galary Video</option><option value='image'>Image Capture</option><option value='audio'>Audio 
 Capture</option><option value='video'>Video Capture</option><option value='imaged'>Display Instruction with Image</option><option value='audiod'>Play Audio with 
 Instruction</option> <option value='videod'>Play Video with Instruction</option><option value='old_sec'>Old SEC</option><option value='new_sec'>New SEC</option></select>
 <div id=oplist style='display:none;'> Total Options<input type=number class='form-control' name=cnt id=cnt style='width:70px;' onchange='generate();'> </div> <a href='http://localhost/digiamin-web/siteadmin/user_action/createquestion'> RESET ALL</a> </td></tr>";
@@ -2010,27 +2010,29 @@ bgcolor=lightgray><td>Q_ID</td><td>Q_NO</td><td>Title</td><td>Type</td></tr>";
 		    $qt=$arr['qt'];
 		    $sc = $arr['sc'];
 		    $ts = $arr['ts'];
-		//echo "qset= $qset , qtitle= $q, qt= $qt, sc= $sc, ts= $ts";
+		
                         $dt = date('Y-m-d H:i:s');
                         $login=$this->session->userdata('sauserid');
 
-		    $qn = strtolower($qno);
+		            $qn = strtolower($qno);
                     $sc=0;
-                       if(isset($arr['sc'])) $sc=1;
-		    //$trm2=$qn.'_'.$pid;
-		    //$trm3=$trm2.'_t';
-	            $qno = strtoupper($qn);
-		    $ptable=$this->getProjectTable($pid);
+                       if(isset($arr['sc'])) $sc=1; //THIS IS SHOW CARD
+		    
+	               $qno = strtoupper($qn);
+		           $ptable=$this->getProjectTable($pid);
+
 	            if($q!='' && $pid!=0 && $qset!=0 && $qn!='' && $qt!='')
-		    { $rr='';
-		        $str=$pid.' title: '.$q.' qtype: '.$qt;
+		              {
+						 $rr='';
+		              $str=$pid.' title: '.$q.' qtype: '.$qt;
 	                if($qt=='radio' || $qt=='checkbox')
 		        {
-		            $cnt=$arr['cnt']; $flag=0;
-		            //echo '<br>'.$sq1="INSERT INTO `question_detail`(qset_id, `q_title`, `q_type`,qno) VALUES ($qset,'$q','$qt','$qno')";
+		            $cnt=$arr['cnt'];  // TOTAL NO OF OPTION
+					$flag=0;
+		            
 		            $tdata=array('qset_id'=>$qset,'q_title'=>$q,'q_type'=>$qt,'qno'=>$qno,'timestamp_flag'=>$ts,'created_at'=>$dt, 'updated_at'=>$dt,'uid'=>$login);
 		            $qid=$this->insertIntoTable('question_detail',$tdata);
-					$trm2=$qid.'_'.$qset;
+					$trm2=$qid.'_'.$qset; // CREATE TERM
 					$trm3='';
 					//$trm3=$trm2.'_t';
 				if($ts == '1'){
@@ -2039,15 +2041,21 @@ bgcolor=lightgray><td>Q_ID</td><td>Q_NO</td><td>Title</td><td>Type</td></tr>";
 				}
 		            $atq="ALTER TABLE $ptable ADD column $trm2 varchar(3)  null $trm3 ;";
 		            $ctb1=$this->doSqlDML($atq);
-		            for($i=1;$i<=$cnt;$i++)
-		            { $a='stb'.$i; $b='tb'.$i;$c = 'flag'.$i;
-	                         $a1=$arr[$a]; $b1=$arr[$b]; $c1=$arr[$c]; $flag=1;
-		                 //echo '<br>'.$sq2="INSERT INTO `question_option_detail`( `q_id`, `opt_text_value`, `value`, `term`) VALUES ($qid,'$a1','$b1','$trm2')";
-		                 $tdata2=array('q_id'=>$qid,'term'=>$trm2,'opt_text_value'=>$b1,'value'=>$a1,'flag' => $c1 ,'created_at'=>$dt, 'updated_at'=>$dt,'uid'=>$login);
-		                 $insd=$this->insertIntoTable('question_option_detail',$tdata2);
+		            for($i=1;$i<=$cnt;$i++)      // LOOP FOR CREATE ALL OPTIONS
+		            { 
+						 $a='stb'.$i;
+						 $b='tb'.$i;
+						 $c = 'flag'.$i;
 
-				//to add columns for flag others
-				// cl ==1 for string types of others 
+	                 $a1=$arr[$a];
+					 $b1=$arr[$b];
+					 $c1=$arr[$c]; 
+					 $flag=1;
+
+			$tdata2=array('q_id'=>$qid,'term'=>$trm2,'opt_text_value'=>$b1,'value'=>$a1,'flag' => $c1 ,'created_at'=>$dt, 'updated_at'=>$dt,'uid'=>$login);
+			$insd=$this->insertIntoTable('question_option_detail',$tdata2); //INSERT INTO QUESTION OPTION DETAILS
+
+				
 				if( $c1 == 1 || $c1 == 3 || $c1 == 4){
 				 $optrm2 = $trm2.'_'.$a1.'_o';
 				 $atq2="ALTER TABLE $ptable ADD column $optrm2 varchar(380) null;";
@@ -2066,8 +2074,8 @@ bgcolor=lightgray><td>Q_ID</td><td>Q_NO</td><td>Title</td><td>Type</td></tr>";
 			    $this->doSqlDML($ssql);
 			    }
 		            if($flag==1) return '<br>Successfully created with Question Id:<font color=red> '.$qid .'--'. $qn;
-		        }
-	                if($qt=='text' || $qt=='textarea' || $qt == 'dropdown' || $qt=='instruction' || $qt=='image' || $qt=='imaged' || $qt=='audio' || $qt=='audiod' || $qt=='video' || $qt=='videod')
+		        }//CHECKBOX AND RADIO
+	                if($qt=='text' || $qt=='textarea' || $qt == 'dropdown' || $qt=='instruction' || $qt=='gimage' || $qt=='gvideo' || $qt=='image' || $qt=='imaged' || $qt=='audio' || $qt=='audiod' || $qt=='video' || $qt=='videod')
 		        {
 		               
 	                      $tdata=array('qset_id'=>$qset,'q_title'=>$q,'q_type'=>$qt,'qno'=>$qno,'timestamp_flag'=>$ts,'created_at' => $dt, 'updated_at' => $dt,'uid'=>$login);
@@ -2084,7 +2092,7 @@ bgcolor=lightgray><td>Q_ID</td><td>Q_NO</td><td>Title</td><td>Type</td></tr>";
 		                  $atq="ALTER TABLE $ptable ADD $trm2 int(8) null $trm3 ";
 		                  $ctb1=$this->doSqlDML($atq);
 		              }
-		              else if($qt == 'text' || $qt == 'textarea' || $qt == 'instruction'  || $qt=='image'  || $qt=='audio'  || $qt=='video' ){
+		              else if($qt == 'text' || $qt == 'textarea' || $qt == 'instruction' || $qt=='image' || $qt=='gimage' || $qt=='gvideo'  || $qt=='audio'  || $qt=='video' ){
 		                      $atq="ALTER TABLE $ptable ADD $trm2 varchar(960)  null $trm3 ";
 			              $ctb1=$this->doSqlDML($atq);
 		              }
@@ -2104,6 +2112,11 @@ bgcolor=lightgray><td>Q_ID</td><td>Q_NO</td><td>Title</td><td>Type</td></tr>";
 		              if($insd) return '<br>Successfully created with Question Id:<font color=red> '.$qid .'--'. $qn;
 		            
 		        } 
+
+
+
+
+
 	                if($qt=='rating' )
 		        {
 		            $ssv=$arr['froms'];
