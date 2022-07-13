@@ -2093,8 +2093,18 @@ bgcolor=lightgray><td>Q_ID</td><td>Q_NO</td><td>Title</td><td>Type</td></tr>";
 		                  $ctb1=$this->doSqlDML($atq);
 		              }
 		              else if($qt == 'text' || $qt == 'textarea' || $qt == 'instruction' || $qt=='image' || $qt=='gimage' || $qt=='gvideo'  || $qt=='audio'  || $qt=='video' ){
-		                      $atq="ALTER TABLE $ptable ADD $trm2 varchar(960)  null $trm3 ";
+		                  
+						
+						 if($qt=='gimage' || $qt=='gvideo' ){
+							$t4=$trm2.'_ml';
+                            $trm4 = " , ADD column $t4 varchar(300) null";
+				$atq="ALTER TABLE $ptable ADD $trm2 varchar(960)  null $trm4 ";
+				$ctb1=$this->doSqlDML($atq);
+						 } else{
+						  
+						  $atq="ALTER TABLE $ptable ADD $trm2 varchar(960)  null $trm3 ";
 			              $ctb1=$this->doSqlDML($atq);
+						 }
 		              }
 	                      $tdata2=array('q_id'=>$qid,'term'=>$trm2);
 				if($qt == 'instruction' || $qt=='imaged' || $qt=='audiod' || $qt=='videod'){
