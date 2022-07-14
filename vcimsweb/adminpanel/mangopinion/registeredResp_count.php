@@ -55,7 +55,8 @@ if(isset($_POST['RegUsers']))
 
            // //////// FIND TOTAL ASSIGN SURVEY
            if($totalProj > 0){
-           $reQry3 = "SELECT count(appuser_id) as SuveyDone FROM `appuser_project_map`WHERE appuser_id = $fDa->user_id and status =0 GROUP by appuser_id";
+           //$reQry3 = "SELECT count(appuser_id) as SuveyDone FROM `appuser_project_map`WHERE appuser_id = $fDa->user_id and status = '0' GROUP by appuser_id";
+           $reQry3 = "SELECT count(*) as SuveyDone FROM `appuser_project_map` WHERE appuser_id = $fDa->user_id and `status` = 0";
            $reDataQ3=DB::getInstance()->query($reQry3);
            if($reDataQ3->count()>0){ $compProj=  $reDataQ3->results()['0']->SuveyDone; }
            }
