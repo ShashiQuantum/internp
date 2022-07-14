@@ -1557,7 +1557,7 @@ value=Save onClick =update('project');> <font color=red><span id=$pid> </span></
 	                    $qid=$q->q_id; $title=$q->q_title; $qt=$q->q_type; $qn=$q->qno;
 				$qstr1 = '';$qstr2 = '';$qstr3 = '';$qstr4 = ''; $qstr5='';
                                 $qstr6 = '';$qstr7 = '';$qstr8 = '';$qstr9 = ''; $qstr10='';
-                                $qstr11 = '';$qstr12 = '';$qstr13 = '';$qstr14 = ''; $qstr15='';
+                                $qstr11 = '';$qstr12 = '';$qstr13 = '';$qstr14 = ''; $qstr15='';$qstr16='';
 				if($qt == 'text')$qstr1=' selected';
                                 if($qt == 'textarea')$qstr2=' selected';
                                 if($qt == 'checkbox')$qstr3=' selected';
@@ -1573,9 +1573,10 @@ value=Save onClick =update('project');> <font color=red><span id=$pid> </span></
                                 if($qt == 'dropdown')$qstr13=' selected';
                                 if($qt == 'old_sec')$qstr14=' selected';
                                 if($qt == 'new_sec')$qstr15=' selected';
+								if($qt == 'gimage')$qstr16=' selected';
 
 	                    $str.="<tr><td style='width:5%;'>$qid <input type=hidden id=qid$qid value=$qid></td><td style='width:5%;'><input class='form-control' type=text id=qno$qid value=$qn></td><td 
-style='width:80%;'><input class='form-control' type=text id=title$qid value='$title'></td><td><select class='form-control' id=qt$qid> <option value='radio' $qstr4>Single Choice</option> <option value='checkbox' $qstr3>Multiple Choice</option><option value='text' $qstr1>Open Ended-- Single Line</option><option value='textarea'  $qstr2>Open Ended-- Multiple Line</option> <option value='rating' $qstr5 disabled> Rating</option><option value='instruction' $qstr6 disabled> Instruction Only</option><option value='image' $qstr10>Capture Image</option><option value='audio' $qstr12>Capture Audio</option><option value='video' $qstr11>Capture Video</option><option value='imaged' $qstr7>Display Instruction with Image</option><option value='audiod' $qstr9>Play Audio with Instruction</option> <option value='videod' $qstr8>Play Video with Instruction</option><option value='old_sec' $qstr14>Old SEC</option><option value='new_sec' $qstr15>New SEC</option> </select> </td><td style='width:5%;'><input class='btn btn-primary' type=submit value=Save onClick 
+style='width:80%;'><input class='form-control' type=text id=title$qid value='$title'></td><td><select class='form-control' id=qt$qid> <option value='radio' $qstr4>Single Choice</option> <option value='checkbox' $qstr3>Multiple Choice</option><option value='text' $qstr1>Open Ended-- Single Line</option><option value='textarea'  $qstr2>Open Ended-- Multiple Line</option> <option value='rating' $qstr5 disabled> Rating</option><option value='instruction' $qstr6 disabled> Instruction Only</option>  <option value='gimage' $qstr16>Media Galary</option>  <option value='image' $qstr10>Capture Image</option><option value='audio' $qstr12>Capture Audio</option><option value='video' $qstr11>Capture Video</option><option value='imaged' $qstr7>Display Instruction with Image</option><option value='audiod' $qstr9>Play Audio with Instruction</option> <option value='videod' $qstr8>Play Video with Instruction</option><option value='old_sec' $qstr14>Old SEC</option><option value='new_sec' $qstr15>New SEC</option> </select> </td><td style='width:5%;'><input class='btn btn-primary' type=submit value=Save onClick 
 =update('question',$qid);> <span id=$qid> </span> </td></tr>";
 	              }
 	              $str.="</table></div>";
