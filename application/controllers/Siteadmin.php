@@ -2891,18 +2891,12 @@ public function viewmultiplereport()
 
 
 public function viewmediareport()
-{
-        
+{    
                $pid= $this->input->post('pn'); 
                $qset= $this->input->post('qset');
-              
-                        
                $this->load->model('MProject');
                echo "<br><center><font color=red>Survey Data of Project ID: $pid </font></center><br><br><br>";
-              
-               $this->MProject->getMediaReport($pid,$qset); 
-               
-             
+               $this->MProject->getMediaReport($pid); 
 }
 
 public function customdata()
@@ -2911,7 +2905,6 @@ public function customdata()
 				echo "<br><br><br><br><br><br> <div style='margin-left:50px;'>";
                                 $this->load->model('MTablet');
 				$tabs=$this->MTablet->getTabs();
-				 
 				$projects=$this->MTablet->getProjects();
 				?>
 				

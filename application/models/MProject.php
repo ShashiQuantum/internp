@@ -3595,54 +3595,68 @@ resp_id";
          }
     }
 
+	public function getMediaReport($pid){
+		
+		?>
+		
+        
+		<table style=" border:1px solid black; width:100%;">   
+		<thead>	<tr> 
+			    <th style=" border:1px solid black;">S.No.</th>
+                <th style=" border:1px solid black;">Respondent Id</th>
+				<th style=" border:1px solid black;">Question Details</th>
+                <th style=" border:1px solid black;">Media Files path</th> 
+		</tr>  </thead>
+		<tbody>   
+       
+		<?php
+		//FIND THE DATATABLE NAME RESPECT OF THE PROJECT ID
+		$qdatatable = "select data_table from project where project_id =$pid"; 
+		$dtresult= $this->getDataBySql($qdatatable);
+		foreach($dtresult as $data1){
+		$tableName=	$data1->data_table;
+		}
+		
+		
+		//FIND THE TERM NAME FORM QUESTION DETAILS 
+		$mquery= "select q_id,qset_id, CONCAT(q_id, '_',qset_id) as term from question_detail where q_type ='gimage' and qset_id = $pid order by qset_id desc"; 
+		$result= $this->getDataBySql($mquery);
+		foreach($result as $data){ //FIRST FOR EACH START
+
+		 	$data->q_id;
+			$data->qset_id;
+			$data->term;
+	//FIND QUESTION DEATIL TITLE 
+	$qdquery= "select q_title from question_detail where q_id= $data->q_id  and qset_id= $data->qset_id"; 
+	$qdresult= $this->getDataBySql($qdquery);
+	foreach($qdresult as $qddata){ // SECOUND FOREACH
+		$questionTitle=  $qddata->q_title;
+	} // END SECOUND FOREACH		
+
+	//$finlquery= "SELECT resp_id, GROUP_CONCAT($data->term) as cvalues FROM $tableName where  q_id = $data->q_id and $data->term is not null "; 
+	$finlquery ="SELECT resp_id, GROUP_CONCAT($data->term) as cvalues FROM $tableName where  q_id = $data->q_id and $data->term is not null group by i_date ,resp_id;";
+	$finlresult= $this->getDataBySql($finlquery);
+	foreach($finlresult as $findata){ // FINAL FOREACH
+		$respID=  $findata->resp_id;
+		$colVaL=  $findata->cvalues;
 
 	
 
 
-
-
-
-	public function getMediaReport($pid,$qset){
-		?>
-		<table style=" border:1px solid black; width:100%;">
-        <thead>
-            <tr>
-                <th style=" border:1px solid black;">S.No.</th>
-                <th style=" border:1px solid black;">Respondent Id</th>
-                <th style=" border:1px solid black;">File Type </th>
-                <th style=" border:1px solid black;">Media Files path</th>
-            </tr>
-        </thead>
-        <tbody>
-		
-		
-		<?php
-		
-		
-		//$mquery=  "SELECT media_tbl.*,app_user.mobile as usrmobile, app_user.user_name as usrname FROM media_tbl INNER join app_user on media_tbl.user_id = app_user.user_id  where WHERE media_tbl.project_id = $pid";
-		$mquery=  "select * from media_tbl  where project_id = $pid";
-		$result= $this->getDataBySql($mquery);
-		$ii =1;
-
-		
-		foreach($result as $data){
-			$data->user_id;
-			$data->file_type;
-			//$data->qid_qset;
-			$data->pathofstorage;
-			
 			?>
 		<tr>
-                    <td style=" border:1px solid black;text-align: center; "><?php echo "$ii";?></td>
-                    <td style=" border:1px solid black;text-align: center; "><?php echo "$data->user_id";?></td>
-                    <td style=" border:1px solid black;text-align: center; "><?php echo "$data->file_type";?></td>
-                    <td style=" border:1px solid black;text-align: center; "><a href="<?php echo $data->pathofstorage;?>" target="_blank"><?php echo $data->file_name;?></a></td>
+		            <td style=" border:1px solid black;text-align: center; "><?php echo $ii ;?></td>
+                    <td style=" border:1px solid black;text-align: center; "><?php echo $respID;?></td>
+                    <td style=" border:1px solid black;text-align: center; "><?php echo $questionTitle;?></td>
+                    <td style=" border:1px solid black;text-align: center; "><?php echo $colVaL;?></td>
                 </tr>
             
 			<?php 
 			 
 		$ii++;
-		}
+
+	} //END FINAL FOREACH
+		}// END FIRST FOREACH
 ?>
 </tbody>
 </table>		
