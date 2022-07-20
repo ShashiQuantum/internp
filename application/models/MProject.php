@@ -3604,6 +3604,8 @@ resp_id";
 		<thead>	<tr> 
 			    <th style=" border:1px solid black;">S.No.</th>
                 <th style=" border:1px solid black;">Respondent Id</th>
+				<th style=" border:1px solid black;">Day</th>
+				<th style=" border:1px solid black;">Report Date</th>
 				<th style=" border:1px solid black;">Question Details</th>
                 <th style=" border:1px solid black;">Media Files path</th> 
 		</tr>  </thead>
@@ -3617,7 +3619,7 @@ resp_id";
 		$tableName=	$data1->data_table;
 		}
 		
-		
+		$ii=1;
 		//FIND THE TERM NAME FORM QUESTION DETAILS 
 		$mquery= "select q_id,qset_id, CONCAT(q_id, '_',qset_id) as term from question_detail where q_type ='gimage' and qset_id = $pid order by qset_id desc"; 
 		$result= $this->getDataBySql($mquery);
@@ -3634,19 +3636,22 @@ resp_id";
 	} // END SECOUND FOREACH		
 
 	//$finlquery= "SELECT resp_id, GROUP_CONCAT($data->term) as cvalues FROM $tableName where  q_id = $data->q_id and $data->term is not null "; 
-	$finlquery ="SELECT resp_id, GROUP_CONCAT($data->term) as cvalues FROM $tableName where  q_id = $data->q_id and $data->term is not null group by i_date ,resp_id;";
+	$finlquery ="SELECT resp_id, GROUP_CONCAT($data->term) as cvalues , DATE_FORMAT(i_date, '%Y-%m-%d %H:%i') as rDates  FROM $tableName where  q_id = $data->q_id and $data->term is not null group by i_date ,resp_id  order by id asc";
 	$finlresult= $this->getDataBySql($finlquery);
 	foreach($finlresult as $findata){ // FINAL FOREACH
 		$respID=  $findata->resp_id;
-		$colVaL=  $findata->cvalues;
+		$colVaL=  $findata->cvalues; 
+		//$rDates =  $findata->rDates;
 
 	
 
 
 			?>
 		<tr>
-		            <td style=" border:1px solid black;text-align: center; "><?php echo $ii ;?></td>
+		            <td style=" border:1px solid black;text-align: center; "><?php echo $ii ;?></td> 
                     <td style=" border:1px solid black;text-align: center; "><?php echo $respID;?></td>
+					<td style=" border:1px solid black;text-align: center; "><?php echo "";?></td>
+					<td style=" border:1px solid black;text-align: center; "><?php echo $findata->rDates;?></td>
                     <td style=" border:1px solid black;text-align: center; "><?php echo $questionTitle;?></td>
                     <td style=" border:1px solid black;text-align: center; "><?php echo $colVaL;?></td>
                 </tr>
