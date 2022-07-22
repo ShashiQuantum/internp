@@ -36,6 +36,7 @@ include_once('../../functions.php');
   <dd id="smenu3" onclick="javascript:montre('smenu3');" onclick="javascript:montre();">
    <ul>
    <!-- <li><a href="app_approve.php" target="_blank">User Approval</a></li> -->
+    <li><a href="cron.php" target="_blank">Set Reminder </a></li>
     <li><a href="notify_filter.php" target="_blank">Send User Notification</a></li>
     <li><a href="referral_centre_report.php" target="_blank">Centre wise Referral code List</a></li>
     <li><a href="referral_user.php" target="_blank">Registered Respondent List using Referral code</a></li>

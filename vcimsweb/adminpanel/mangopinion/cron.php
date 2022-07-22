@@ -10,7 +10,9 @@
 
 
 /////////////////////INSERT DATA INTO CRON JOB TABLE///////////////////////
+
 if(isset($_POST['createCronJob'])){ 
+
 $bankFlag0 =0;$bankFlag1 =0;$bankFlag5 =0;$bankFlag6 =0;$bankFlag7 =0;$bankFlag4 =0;
    if(isset($_POST['projectId'])){ $projId= $_POST['projectId'];} else{$bankFlag0 =1;}
    if(isset($_POST['projectStatus'])){ $projStatus= $_POST['projectStatus'];}else{$bankFlag1 =1;}
@@ -27,20 +29,19 @@ if($bankFlag0 ==1 || $bankFlag1 ==1 ||  $bankFlag5 ==1 || $bankFlag6 ==1  || $ba
     ($projId, $projStatus, $cronHour, $cronminute,  '$cronMessge','$timeZone')";
     $result = $mysqli->query($qrr);
     if($result){
-        echo "<center><font color=green><h4>CRON Job is Successfully Created !</h4></font>";
+        echo "<center><font color=green><h4>Reminder Message Successfully Save!</h4></font>";
     }else{
         echo "<center><font color=red><h4>Some Technical problem CRON job not created!</h4></font>"; 
     }
 }
 }
-
-
+else{
 
 ////////////////////END THE INSERT SECTION IN THE TABLE////////////////////
 
 
 
-echo "<center><font color=red><h2>CRON JOB SEDULING FOR NOTIFICATION</h2></font>"; 
+echo "<center><font color=red><h2>Reminder</h2></font>"; 
 $qrr="SELECT appuser_project_map.project_id,project.name FROM appuser_project_map INNER JOIN project on appuser_project_map.project_id = project.project_id GROUP by appuser_project_map.project_id";
 $result = $mysqli->query($qrr);
 $prows = $result->fetch_all(MYSQLI_ASSOC);
@@ -50,11 +51,15 @@ $prows = $result->fetch_all(MYSQLI_ASSOC);
 <form method=post action="cron.php"">
 <table border=1; bgcolor="#e8eef3"; style="width:60%">
 
-<tr> <td>Write Message *</td>
-<td><textarea rows=3 cols=40 name="cronMessage" id="cronMessage" placeholder='Type your message here' required></textarea></td>
-        </tr>
+<tr> <td>Reminder Message *</td>
+<td><textarea rows=3 cols=40 name="cronMessage" id="cronMessage" placeholder='Message not more than 50 word' required></textarea>
+      <p>
+      Word Count:
+      <span id="show">0</span>
+    </p>
+</td></tr>
 
-<tr> <td>Select Project *</td>   <td> <select name=projectId id=projectId required><option value=''>-Select Project-</option>
+<tr> <td>Select Survey *</td>   <td> <select name=projectId id=projectId required><option value=''>-Select Project-</option>
     
 <?php   foreach($prows as $rdata){
          echo "<option value='";
@@ -67,7 +72,7 @@ $prows = $result->fetch_all(MYSQLI_ASSOC);
             
 
 
-            <tr> <td>Whom Send Message *</td>   <td> <select name=projectStatus id=projectStatus required><option value=''>-Select Users types-</option>
+            <tr> <td>Survey Status *</td>   <td> <select name=projectStatus id=projectStatus required><option value=''>-Select Users types-</option>
             <option value="0">Who Submit The SUrvey</option>
             <option value="1">Who Not Submited Survey</option>
             </td> </tr>
@@ -130,7 +135,7 @@ $prows = $result->fetch_all(MYSQLI_ASSOC);
 
 
 
-            <tr align="center"><td colspan ="2"><input type=submit name=createCronJob value="Create Cron"  onclick="return confirm('Are you sure want to create this CRON?')"></td></tr>
+            <tr align="center"><td colspan ="2"><input type=submit name=createCronJob value="Create Cron"  onclick="return confirm('Are you sure want to create Reminder ?')"></td></tr>
 </form>
 </center>
   
@@ -178,11 +183,26 @@ $newDateTime->setTimezone(new DateTimeZone("UTC"));
 $dateTimeUTC = $newDateTime->format("Y-m-d H:i");
 //433echo "in UTC Time format :  $dateTimeUTC ";
 
-
-
-
-
-
+}
 
 ?>
 
+
+<script language = "javascript" type = "text/javascript">
+
+document
+        .querySelector("#cronMessage")
+        .addEventListener("input", function countWord() {
+          let res = [];
+          let str = this.value.replace(/[\t\n\r\.\?\!]/gm, " ").split(" ");
+          str.map((s) => {
+            let trimStr = s.trim();
+            if (trimStr.length > 0) {
+              res.push(trimStr);
+            }
+          });
+          document.querySelector("#show").innerText = res.length;
+        });
+
+
+</script> 
