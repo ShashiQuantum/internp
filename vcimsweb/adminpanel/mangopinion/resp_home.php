@@ -37,6 +37,7 @@ include_once('../../functions.php');
    <ul>
    <!-- <li><a href="app_approve.php" target="_blank">User Approval</a></li> -->
     <li><a href="cron.php" target="_blank">Set Reminder </a></li>
+    <li><a href="deletecron.php" target="_blank">Delete Reminder </a></li>
     <li><a href="notify_filter.php" target="_blank">Send User Notification</a></li>
     <li><a href="referral_centre_report.php" target="_blank">Centre wise Referral code List</a></li>
     <li><a href="referral_user.php" target="_blank">Registered Respondent List using Referral code</a></li>
