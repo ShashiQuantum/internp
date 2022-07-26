@@ -10,11 +10,7 @@
  
 
 
-if(!isset($CronRUN))
-{
-
-
-$gcmID = array();
+$z= 1; 
 $qrr="SELECT * from cron_job";
 $result = $mysqli->query($qrr);
 
@@ -29,45 +25,70 @@ $today = date('Y-m-d');
     $projhour    =    $result['hour'];
     $projmessage =    $result['message'];
     $projtzlist  =    $result['tzlist'];
-if($projStatus == 0){
-    $qrr2="SELECT appuser_project_map.appuser_id,gcm_users.gcm_regid,appuser_project_map.start_date,appuser_project_map.exp_date FROM appuser_project_map inner join gcm_users on appuser_project_map.appuser_id= gcm_users.user_id WHERE appuser_project_map.project_id = $projID and appuser_project_map.status = 0 and appuser_project_map.exp_date >= '$today'";
-}else{
-    $qrr2="SELECT appuser_project_map.appuser_id,gcm_users.gcm_regid,appuser_project_map.start_date,appuser_project_map.exp_date FROM appuser_project_map inner join gcm_users on appuser_project_map.appuser_id= gcm_users.user_id WHERE appuser_project_map.project_id = $projID and appuser_project_map.status > 0 and appuser_project_map.exp_date >= '$today'";   
-}
+
+    $loDate = $today.' '.$projhour.':'.$projminutes;
+
+     $dateTime =$loDate; 
+     $newDateTime = new DateTime($dateTime, new DateTimeZone($projtzlist)); 
+     $newDateTime->setTimezone(new DateTimeZone("UTC")); 
+     $dateTimeUTC = $newDateTime->format("Y-m-d H:i");
+     
+            $serverDate = date('Y-m-d H:i');
+            $serveTime=  strtotime($serverDate); 
+            $givenTime=  strtotime($dateTimeUTC); 
+
+            
+            if($serveTime == $givenTime){///////START SEARCH THE GCM ID 
+   
+    if($projStatus == 0){
+        $qrr2="SELECT appuser_project_map.appuser_id,gcm_users.gcm_regid FROM appuser_project_map inner join gcm_users on appuser_project_map.appuser_id= gcm_users.user_id WHERE appuser_project_map.project_id = $projID and appuser_project_map.status = 0 and appuser_project_map.exp_date >= '$today' and appuser_project_map.start_date <= '$today' ";
+    }else{
+        $qrr2="SELECT appuser_project_map.appuser_id,gcm_users.gcm_regid FROM appuser_project_map inner join gcm_users on appuser_project_map.appuser_id= gcm_users.user_id WHERE appuser_project_map.project_id = $projID and appuser_project_map.status > 0 and appuser_project_map.exp_date >= '$today' and appuser_project_map.start_date <= '$today' ";   
+    }               
+     
+    $resultQR = $mysqli->query($qrr2);
+    if($resultQR->num_rows > 0){   /// START  $resultQR STATEMENT 
+        $gcmIDarray = $gcmID.'_'.$z;
+        $Resrows = $resultQR->fetch_all(MYSQLI_ASSOC);
+
+        foreach($Resrows as $GCMresult){ 
+
+           
+            $gcmID[]= $GCMresult['gcm_regid']; 
+
+        }
+
+
+
+
+
+
+
+    }///// END $resultQR STATEMENT 
+            
+      }/////////////////END THE SERCHING THE GCM ID
+
+        } //////END THE FIRST FOREACH STATEMENT
+    } /////////////////////////END QUERY FROM THE CRON JOB TABLE
+
+
+
+
+  ////////////////////////////////////////////////////////////////////////////////  
+
 $resultQR = $mysqli->query($qrr2);
 if($resultQR->num_rows > 0){   ////3rd result querty start
     $Resrows = $resultQR->fetch_all(MYSQLI_ASSOC);
 
     foreach($Resrows as $GCMresult){ ////SECOUND FOR EACH START
 
-   $startDate = $GCMresult['start_date'];
-   $endDate = $GCMresult['exp_date'];
    $gcmID[]= $GCMresult['gcm_regid']; /////TAKING GCM ID FROM THE TABLE
-   if(strtotime($today) >= strtotime($startDate)  &&  strtotime($today) <= strtotime($endDate)  ){
-
-    $loDate = $today.' '.$projhour.':'.$projminutes;
-
-    //  echo  $loDate; echo "<br/>";
-
-
-   }
-
-    
+   
+   
     } ////// END SECOUND FOREACH
-    $messageTime=  strtotime($loDate); 
+    // $messageTime=  strtotime($loDate); 
        
-    
-    $dateTime =$loDate; 
-   // $tz_from = date_default_timezone_get();
-    $newDateTime = new DateTime($dateTime, new DateTimeZone($projtzlist)); 
-    $newDateTime->setTimezone(new DateTimeZone("UTC")); 
-    $dateTimeUTC = $newDateTime->format("Y-m-d H:i");
-
-    
-$serverDate = date('Y-m-d H:i');
-$serveTime=  strtotime($serverDate); 
-$givenTime=  strtotime($dateTimeUTC); 
-
+   
 if($serveTime == $givenTime){///////FOR SENDING THE NOTIFICATION START
     $succ  =	sendFCMnotification($$gcmID, $projmessage);
 
@@ -87,7 +108,7 @@ if($serveTime == $givenTime){///////FOR SENDING THE NOTIFICATION START
 
 //print_r($gcmID);
 
-}/// END THE IF ISSET STATEMENT
+
 
 function sendFCMnotification($gcmId, $nofifyMsg ){
 	
