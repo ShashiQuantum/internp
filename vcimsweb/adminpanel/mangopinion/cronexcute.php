@@ -10,12 +10,14 @@
  
 
 
-$z= 1; 
+$gcmID = array();
 $qrr="SELECT * from cron_job";
 $result = $mysqli->query($qrr);
 
 if($result->num_rows > 0){  ///////  FIRST QUERY FROM THE CRON JOB TABLE
 $today = date('Y-m-d');
+$serverDate = date('Y-m-d H:i');
+   
     $prows = $result->fetch_all(MYSQLI_ASSOC);
     foreach($prows as $result){   //////////////// FIRST FOREACH START
 
@@ -33,12 +35,12 @@ $today = date('Y-m-d');
      $newDateTime->setTimezone(new DateTimeZone("UTC")); 
      $dateTimeUTC = $newDateTime->format("Y-m-d H:i");
      
-            $serverDate = date('Y-m-d H:i');
+           
             $serveTime=  strtotime($serverDate); 
             $givenTime=  strtotime($dateTimeUTC); 
 
             
-            if($serveTime == $givenTime){///////START SEARCH THE GCM ID 
+            if($serveTime == $givenTime){///////GIVEN TIME IS MATCH START
    
     if($projStatus == 0){
         $qrr2="SELECT appuser_project_map.appuser_id,gcm_users.gcm_regid FROM appuser_project_map inner join gcm_users on appuser_project_map.appuser_id= gcm_users.user_id WHERE appuser_project_map.project_id = $projID and appuser_project_map.status = 0 and appuser_project_map.exp_date >= '$today' and appuser_project_map.start_date <= '$today' ";
@@ -48,66 +50,27 @@ $today = date('Y-m-d');
      
     $resultQR = $mysqli->query($qrr2);
     if($resultQR->num_rows > 0){   /// START  $resultQR STATEMENT 
-        $gcmIDarray = $gcmID.'_'.$z;
+
+        
         $Resrows = $resultQR->fetch_all(MYSQLI_ASSOC);
 
         foreach($Resrows as $GCMresult){ 
-
            
             $gcmID[]= $GCMresult['gcm_regid']; 
-
+           
         }
 
-
-
-
-
-
-
     }///// END $resultQR STATEMENT 
-            
-      }/////////////////END THE SERCHING THE GCM ID
+      
+     $succ  =	sendFCMnotification($gcmID, $projmessage); 
+     $qrr="INSERT INTO `cron_result` ( `project_id`, `runtime`, `result`) VALUES ($projID, '$loDate', '$succ');";
+     $result = $mysqli->query($qrr);
+
+      }/////////////////GIVEN TIME MATCH IS END HERE
 
         } //////END THE FIRST FOREACH STATEMENT
     } /////////////////////////END QUERY FROM THE CRON JOB TABLE
-
-
-
-
-  ////////////////////////////////////////////////////////////////////////////////  
-
-$resultQR = $mysqli->query($qrr2);
-if($resultQR->num_rows > 0){   ////3rd result querty start
-    $Resrows = $resultQR->fetch_all(MYSQLI_ASSOC);
-
-    foreach($Resrows as $GCMresult){ ////SECOUND FOR EACH START
-
-   $gcmID[]= $GCMresult['gcm_regid']; /////TAKING GCM ID FROM THE TABLE
-   
-   
-    } ////// END SECOUND FOREACH
-    // $messageTime=  strtotime($loDate); 
-       
-   
-if($serveTime == $givenTime){///////FOR SENDING THE NOTIFICATION START
-    $succ  =	sendFCMnotification($$gcmID, $projmessage);
-
-
-}/////////////////END SENDING THE NOTIFICATION 
-
-
-}///// 3rd  result querty end
-    
-
-       // print_r($result); echo "<br/>"; echo "<br/>";
-
-
-    }////////////////// FIRST FOREACH END
-
-}/////////////////  FIRST QUERY FROM CRON IS ENDED HERE
-
-//print_r($gcmID);
-
+ 
 
 
 function sendFCMnotification($gcmId, $nofifyMsg ){
@@ -121,7 +84,7 @@ $header =array(
       );
       
       $nofifyData =[
-      'title'=>'Servegeygenics Message for you',
+      'title'=>'Surveygenics Reminder !',
        'body'=>$nofifyMsg,
        'click_action'=> 'activity.notifyHandler'
      
@@ -136,21 +99,14 @@ $header =array(
        
     );
 
-
-        // CREATING NEW API BODY 
-
         $nofifyBody = [
             
             'registration_ids' => $gcmId,
             'notification'=> $nofifyData,
             'data'=> $data,
             'time_to_live'=> 3600
-            
             ];
 
-
-
-      
 $ch =curl_init();
 curl_setopt($ch,CURLOPT_URL,$url);	  
 curl_setopt($ch,CURLOPT_POST,true);	  
@@ -167,7 +123,5 @@ curl_close($ch);
 return $result;
 
 }
-
-
 
 ?>
