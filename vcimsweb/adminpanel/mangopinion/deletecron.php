@@ -22,7 +22,7 @@ if(isset($_POST['createCronJob'])){
             $k=1;
         
           ?>
-            
+
 <table border=1; bgcolor="#e8eef3"; style="width:60%">
 <tr>
     <th>Sl No</th>
@@ -33,11 +33,14 @@ if(isset($_POST['createCronJob'])){
     <th>Action</th>
     
   </tr>
-<?php   
+<?php     
  foreach($result as $rrdata){   ?>
 <tr> <td><?php echo $k; ?></td> <td><?php echo $rrdata['name']; ?></td> <td><?php echo $rrdata['project_id']; ?></td> 
-<td><?php echo $rrdata['project_status']; ?></td>    <td> <?php echo $rrdata['hour']; ?> </td><td> Delete </td>  </tr>
-            
+<td><?php echo $rrdata['project_status']; ?></td>    <td> <?php echo $rrdata['hour']; ?> </td>
+<td>
+<input type='button' value="Delete"  class='idbutton' data-id='<?php echo  $rrdata['id'] ?>' onclick="return confirm('are you sure?')" >
+<span style="color:red" id="rData"> </span> </td> </tr>
+    
     
 <?php 
 $k++;
@@ -82,18 +85,31 @@ $k++;
     </form>
     </center>
       
-      
-    
-    
     <?php
     
-    
-    
-    
-   
     }
-    
     ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script Type="text/javascript"> 
+
+$(".idbutton").click(function() { 
+    var idval = $(this).data("id"); 
+    
+                    $.ajax({
+                type: "POST",
+                url: 'cronquery.php',
+                data: {idval: idval},
+                success: function(data){
+                $("#rData").html(data)
+                
+                },
+                error: function(xhr, status, error){
+                console.error(xhr);
+                }
+                });
+
+});    
+ </script>
     
     
    
