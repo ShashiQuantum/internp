@@ -33,14 +33,86 @@ $(document).ready(function(){
    if(isset($_POST['get_project']))
    {    
 	
+	
+	
 	$searchFlag =0;
 	$datafilter = $_POST; 
 	$arraySize = count($datafilter);
+
+	///////////////////////////// IF PROFILERS SECTION CHOOSE//////////////////////////////////
 	if($arraySize > 2)
-	{   // FILTER IF IS START
+	{   //  IF PROFILER IS SELECTED OR OPTED START
 		 $searchFlag =1;
 		array_pop($datafilter);
 		array_pop($datafilter);
+
+		$userID = array();
+		foreach($datafilter as $key => $var1){  ///////////////////FIRST--PRIFILERS---FOREACH--START///////////
+
+        ///////////////////////////////////// FIND DATA TABLE ///////////////////////////////////
+		$tremName =	explode("_",$key);
+		$projId= $tremName['1'];
+		$profQry ="select resp_id from ";
+		$data=DB::getInstance()->query("select data_table from project where project_id = $projId");
+		if($data->count()>0)
+		foreach($data->results() as $dtName)
+		{
+		 $dataTable= $dtName->data_table;
+		 $profQry .=" $dataTable";
+		 
+		}
+		//////////////////////////////////// FIND DATA TABLE ENDED////////////////////////////
+		
+		$profQry .=" where  $key = ";
+		  
+		 $tt =1;
+		if(is_array($var1))
+		{	
+			$arrLen = count($var1);
+			foreach($var1 as $temval){
+				if( $tt < $arrLen ){
+				$profQry .="  $temval or $key = ";	
+				}if($tt == $arrLen ){
+					$profQry .="  $temval ";
+				}
+				
+				$tt++;	
+			}
+		} else{
+		
+		$profQry .=" $var1";	
+			
+			
+		}
+		
+
+		echo $profQry;	
+		echo "<br/>";
+		
+		/////////////////////////////////////////////////////////////////////////////////////////////////
+		// $iddata=DB::getInstance()->query($profQry);
+		// if($iddata->count()>0)
+		// foreach($iddata->results() as $userIDs)
+		// {
+		// $userID[] = $userIDs->resp_id;
+		 
+		// }
+			
+			
+
+		////////////////////////////////////////////////////////////////////////////////////////////
+		
+			
+
+
+
+
+     
+		} // FIRST--PRIFILERS---FOREACH-- END
+		
+		//print_r($userID);
+		die;
+		//print_r($datafilter); die;
 		////////// select data table ///////////////
 		$data=DB::getInstance()->query("SELECT data_table , project_id from project where response_type = 1");
 
@@ -80,7 +152,14 @@ $(document).ready(function(){
 
 				$List = implode(', ', $userIdArray);
 				
-	} // FILTER IF IS ENDED
+	} // IF PROFILER IS ON OR SELECTED SECTION END
+
+
+
+
+
+
+
 
 		$pid=$_POST['pn'];
         $_SESSION['pid']=$pid;
@@ -131,65 +210,6 @@ $(document).ready(function(){
    	
    }
 
-   
-  
-  	function do_survey($qset,$resp,$rpnt)
-	{
-		if($qset!='' || $resp!='')
-		{
-					$pid=$_SESSION['pid'];
-					$rpnt=$_POST['rpnt'];
-			        $pnn='';$ped='';
-					
-					$ddd1=DB::getInstance()->query("SELECT name, `survey_end_date` FROM project WHERE  `project_id`=$qset");
-					if($ddd1->count()>0)
-					{$pnn=$ddd1->first()->name;$ped=$ddd1->first()->survey_end_date; }
-			        $qr="select * from `appuser_project_map`  WHERE `appuser_id`=$resp AND `project_id`=$qset AND `status`=0";
-					$dsa=DB::getInstance()->query($qr);
-						
-					if($dsa->count()>0)
-					{   
-						
-						$qrr="INSERT INTO `appuser_project_map`(`project_id`,`appuser_id`,  `status`) VALUES ($qset,$resp,0)";
-						DB::getInstance()->query($qrr);
-						 
-						DB::getInstance()->query("UPDATE `appuser_project_map` SET  `cr_point`=$rpnt ,`exp_date`=''  WHERE `appuser_id`=$resp AND `project_id`=$qset AND `status`=0");
-	  
-						$rq2="SELECT a.user_id, a.user_name as name, a.user as user  FROM app_user as a join  `mangopinion_57` as b on a.user_id=b.resp_id WHERE a.user_id=$resp  and b.email!=''";
-						$rr2=DB::getInstance()->query($rq2);
-						if($rr2->count()>0)
-						{       $cuid=$rr2->first()->user_id;
-							$usern=$rr2->first()->name;
-							 $user=$rr2->first()->user;
-							
-							//code for send GCM Notification to user
-										$msg="Hi $usern , A new contest named : $pnn , is added for you in your Mangopinion App";
-										
-										$rq2="SELECT `user_id`, `gcm_regid`, `name`, `email`, `mob`, `created_at` FROM `gcm_users` WHERE `user_id`=$cuid";
-							$rr2=DB::getInstance()->query($rq2);
-							if($rr2->count()>0)
-							{ 
-												//$nctr++;
-								echo '<br>'.$usern=$rr2->first()->name;
-								$user_id=$rr2->first()->user_id; 
-												$gcmid=$rr2->first()->gcm_regid;		    			
-								notify($gcmid, $msg);  
-							}
-		
-											//code for send email
-												$to=$user;
-							$headers  = 'MIME-Version: 1.0' . "\r\n";
-							$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-							$headers .= 'From: Mangopinion<contact@mangopinion.com>'. "\r\n" .'Reply-To: contact@mangopinion.com' ;
-							$m='Dear '.$usern.', <br><br><br> Thanks for using Mangopinion App! One more contest is added for you. <br> Please go to Mangopinion App to share your valuable opinion.  <br><br><br> Thanks,<br>Admin<br><img  src=www.digiadmin.quantumcs.com/images/mangopinion_full_logo.png height=50 width=100><br>';
-							$s="A Contest is added to your Mangopinion account ";
-							$fs= mail($to, $s, nl2br($m), $headers);
-					
-						}
-					}
-					
-		}
-	}
 	
 
 ?>
