@@ -1814,6 +1814,7 @@ onclick="return confirm('Are you sure to set project quota?');"></td></tr>
 		<?php
 			break;
                         case "addmedia":
+
                                 $this->load->view('v_h');
 				echo "<br><br><br><br> <div class='content' style='margin-left: 15%;'><div class='well col-lg-9'>";
 				$this->load->model('MProject');
@@ -5255,83 +5256,104 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                        echo $sdata;
         }
         public function addmedia()
-        {        
-                        $this->load->view('v_h');
-                       echo "<br><br><br><br><br><br> <div style='margin-left:50px;'>";
-
-             //print_r($_POST);
-              //$file = $_FILES['mediaf'];
-              //$file_n = $_FILES['mediaf']['name'];
+        {   
+        
+        $this->load->view('v_h');
+        echo "<br><br><br><br><br><br> <div style='margin-left:50px;'>";
+              $source  = $_FILES["mediaf"]["tmp_name"];
               $pid = $this->input->post('pn');
               $qset = $this->input->post('qset');
               $qid = $this->input->post('qs');
-              $fn="";$mpath="";
+              $fn="";
+              $mpath="";
               $mt= $this->input->post('mt'); 
-
+             
                 if($mt == 1){
+
                    $fn=$qid.".jpg";
-                   $mpath="/vcimsweb/uploads/image/$fn";
-                   var_dump($mpath);
-           	   $config['upload_path'] = $ff= dirname($_SERVER["DOCUMENT_ROOT"])."/htdocs/vcimsweb/uploads/image/";
-                   //$config['upload_path'] = $ff= '/digiamin-web/vcimsweb/uploads/image/'; 
-                   var_dump($config['upload_path']);
+                   $mpath="/digiamin-web/vcimsweb/uploads/image/$fn";
+           	   $config['upload_path'] = $ff= dirname($_SERVER["DOCUMENT_ROOT"])."/digiamin-web/vcimsweb/uploads/image/";
+                   $desFile= $_SERVER["DOCUMENT_ROOT"]."/digiamin-web/vcimsweb/uploads/image/$fn";
                    $config['allowed_types'] = 'jpg';
                    $config['overwrite'] = TRUE;
                    $config['file_name']= $fn;
-		   //$config['max_size']	= '100';
-		   //$config['max_width']  = '1024';
-		   //$config['max_height']  = '768';
-                   //$config['file_name'] = $_FILES['mediaf']['name'];
+		   
+
                 }
                 if($mt == 2){
                    $fn=$qid.".mp3";
-                   $mpath="/vcimsweb/uploads/audio/$fn";
-           	   $config['upload_path'] = dirname($_SERVER["DOCUMENT_ROOT"])."/htdocs/vcimsweb/uploads/audio/";
+                   $mpath="/digiamin-web/vcimsweb/uploads/audio/$fn";
+           	   $config['upload_path'] = dirname($_SERVER["DOCUMENT_ROOT"])."/digiamin-web/vcimsweb/uploads/audio/";
+                   $desFile =  $_SERVER["DOCUMENT_ROOT"]."/digiamin-web/vcimsweb/uploads/audio/$fn";
+
 		   $config['allowed_types'] = 'mp3';
                    $config['overwrite'] = TRUE;
                    $config['file_name']= $fn;
                 }
                 if($mt == 3){
                    $fn=$qid.".mp4";
-                   $mpath="/vcimsweb/uploads/video/$fn";
-           	   $config['upload_path'] = dirname($_SERVER["DOCUMENT_ROOT"])."/htdocs/vcimsweb/uploads/video/";
+                   $mpath="digiamin-web/vcimsweb/uploads/video/$fn";
+           	   $config['upload_path'] = dirname($_SERVER["DOCUMENT_ROOT"])."/digiamin-web/vcimsweb/uploads/video/";
+                   $desFile =  $_SERVER["DOCUMENT_ROOT"]."/digiamin-web/vcimsweb/uploads/audio/$fn";
 		   $config['allowed_types'] = 'mp4';
                    $config['overwrite'] = TRUE;
                    $config['file_name']= $fn;
 
                 }
 
-		$this->load->library('upload', $config);
-
-                
-		if ( ! $this->upload->do_upload('mediaf'))
-		{
-			  $error = array('error' => $this->upload->display_errors());
-                            //print_r($error);
-			//$this->load->view('upload_form', $error);
-			$msg = $this->upload->display_errors();
-                       //$msg="Error! File type/size not allowed to upload file for qid: $qid";
-                        $ardata['rqpost']=''; 
-                        echo $ardata['msg']=$msg;  
-                          //$this->load->model('MProject');
-                        //$this->load->view('samylogin',$ardata);
-		}
-		else
-		{
-			$data = array('upload_data' => $this->upload->data());
-                       
-                        $msg="Successfully uploaded Media file for qid: $qid";
-                        $ardata['rqpost']=''; 
-                        echo $ardata['msg']=$msg; 
-                        $this->load->model('MProject');
+                $fupload = move_uploaded_file( $source, $desFile );
+              if($fupload){
+                echo "File is Uploaded Successfully, ";
+                         $this->load->model('MProject');
                          $sql=null;
                          if($mt == 1) $sql="UPDATE question_detail SET image='$mpath' WHERE q_id=$qid";
                          if($mt == 2) $sql="UPDATE question_detail SET audio='$mpath' WHERE q_id=$qid";
                          if($mt == 3) $sql="UPDATE question_detail SET video='$mpath' WHERE q_id=$qid";
                         $rr=$this->MProject->doSqlDML($sql);
-                        //$this->load->view('samylogin',$ardata);
+                        if($rr){ echo "  Database is also updated ."; }
+                       
+              }else{
+
+                echo "NOT Uploaded";
+              }
+
+
+
+
+
+
+              
+
+		//  $this->load->library('upload', $config);
+          
+		// if ( ! $this->upload->do_upload('mediaf'))
+		// {
+		// 	  $error = array('error' => $this->upload->display_errors());
+                //             //print_r($error);
+		// 	//$this->load->view('upload_form', $error);
+		// 	$msg = $this->upload->display_errors();
+                //        //$msg="Error! File type/size not allowed to upload file for qid: $qid";
+                //         $ardata['rqpost']=''; 
+                //         echo $ardata['msg']=$msg;  
+                //           //$this->load->model('MProject');
+                //         //$this->load->view('samylogin',$ardata);
+		// }
+		// else
+		// {
+		// 	$data = array('upload_data' => $this->upload->data());
+                       
+                //         $msg="Successfully uploaded Media file for qid: $qid";
+                //         $ardata['rqpost']=''; 
+                //         echo $ardata['msg']=$msg; 
+                //         $this->load->model('MProject');
+                //          $sql=null;
+                //          if($mt == 1) $sql="UPDATE question_detail SET image='$mpath' WHERE q_id=$qid";
+                //          if($mt == 2) $sql="UPDATE question_detail SET audio='$mpath' WHERE q_id=$qid";
+                //          if($mt == 3) $sql="UPDATE question_detail SET video='$mpath' WHERE q_id=$qid";
+                //         $rr=$this->MProject->doSqlDML($sql);
+                //         //$this->load->view('samylogin',$ardata);
 			
-		}
+		// }
              
 
 	}    

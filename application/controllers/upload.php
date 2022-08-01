@@ -8,6 +8,9 @@ class Upload extends CI_Controller {
     }
 
     function index() {
+
+       
+
         $class_name = array(
             'home_class' => '',
             'login_class' => '',
