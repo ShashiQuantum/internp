@@ -27,17 +27,16 @@ $(document).ready(function(){
 </head><body>
 
 <?php 	
-   //print_r($_POST);
-  
-
+   
    if(isset($_POST['get_project']))
    {    
-	
-	
 	
 	$searchFlag =0;
 	$datafilter = $_POST; 
 	$arraySize = count($datafilter);
+	$userIdArray = array();
+	$sQuery = array();
+	$profQry =0;
 
 	///////////////////////////// IF PROFILERS SECTION CHOOSE//////////////////////////////////
 	if($arraySize > 2)
@@ -45,118 +44,339 @@ $(document).ready(function(){
 		 $searchFlag =1;
 		array_pop($datafilter);
 		array_pop($datafilter);
-
+		
+		$surveyId  =0;
+		$projectarray = array();
+		$datatable =array();
 		$userID = array();
-		foreach($datafilter as $key => $var1){  ///////////////////FIRST--PRIFILERS---FOREACH--START///////////
+		$arrayInQry = array();
 
-        ///////////////////////////////////// FIND DATA TABLE ///////////////////////////////////
-		$tremName =	explode("_",$key);
-		$projId= $tremName['1'];
-		$profQry ="select resp_id from ";
-		$data=DB::getInstance()->query("select data_table from project where project_id = $projId");
-		if($data->count()>0)
-		foreach($data->results() as $dtName)
+
+		
+
+		foreach($datafilter as $key => $var1)
 		{
-		 $dataTable= $dtName->data_table;
-		 $profQry .=" $dataTable";
-		 
+			$tremName =	explode("_",$key);
+		    $projId= $tremName['1'];
+			$projectarray[] = $projId;
 		}
-		//////////////////////////////////// FIND DATA TABLE ENDED////////////////////////////
+
+		$datatable= array_unique($projectarray);
+		$datatable = array_values($datatable);
 		
-		$profQry .=" where  $key = ";
-		  
-		 $tt =1;
-		if(is_array($var1))
-		{	
-			$arrLen = count($var1);
-			foreach($var1 as $temval){
-				if( $tt < $arrLen ){
-				$profQry .="  $temval or $key = ";	
-				}if($tt == $arrLen ){
-					$profQry .="  $temval ";
-				}
+
+
+		$dyArray = array();
+		foreach($datatable as $mkey =>$mpval){ // HOW MANY TABLE IS USED //START
+			$data=DB::getInstance()->query("select data_table from project where project_id = $mpval");
+			if($data->count()>0)
+			foreach($data->results() as $dtName)
+			{
+			 $TableName= $dtName->data_table;
+			
+			}	
+			foreach($datafilter as $ikey => $ivar)
+			{ //TERM AND THEIR VALUES // START
+
+				$tremName =	explode("_",$ikey);
+		        $projId= $tremName['1'];
+				if($projId==$mpval)
+				{
+					$dyArray[$ikey] = $ivar;
 				
-				$tt++;	
-			}
-		} else{
-		
-		$profQry .=" $var1";	
+				}
+
+			}//TERM AND THEIR VALUES // END
+			 $profQry ="select resp_id from  $TableName where ";
 			
+			 $ll=count($dyArray); 
+			 $mll=1;
+			 foreach($dyArray as $termKey => $termVal){   //MAKING FINAL QUERY //START
+				
+				if($mll == 1)
+				{
+					$profQry .=" $termKey = ";
+					$tt =1;
+					if(is_array($termVal))
+					{	
+						$arrLen = count($termVal);
+						foreach($termVal as $termValRep){
+							if( $tt < $arrLen ){
+							$profQry .="  $termValRep or $termKey = ";	
+							}if($tt == $arrLen ){
+								$profQry .="  $termValRep ";
+							}
+							
+							$tt++;	
+						}
+					} else{
+					
+					$profQry .=" $termVal ";	 
+						
+						
+					}   
+
+
+				}
+
+				
+				
+				if($mll > 1 &&  $mll < $ll)
+				{
+					$profQry .=" AND $termKey = ";
+					$tt =1;
+					if(is_array($termVal))
+					{	
+						$arrLen = count($termVal);
+						foreach($termVal as $termValRep){
+							if( $tt < $arrLen ){
+							$profQry .="  $termValRep or $termKey = ";	
+							}if($tt == $arrLen ){
+								$profQry .="  $termValRep ";
+							}
+							
+							$tt++;	
+						}
+					} else{
+					
+					$profQry .=" $termVal ";	 
+						
+						
+					}   
+
+
+
+
+				}
+				 if($mll ==$ll )
+				{
+
+					$profQry .=" and $termKey = ";
+					$tt =1;
+					if(is_array($termVal))
+					{	
+						$arrLen = count($termVal);
+						foreach($termVal as $termValRep){
+							if( $tt < $arrLen ){
+							$profQry .="  $termValRep or $termKey = ";	
+							}if($tt == $arrLen ){
+								$profQry .="  $termValRep ";
+							}
+							
+							$tt++;	
+						}
+					} else{
+					
+					$profQry .=" $termVal  ";	 
+						
+						
+					}   
+
+
+
+				}
+
+				$mll++;
+				
+				
+			 } //MAKING FINAL QUERY //END
+
 			
-		}
+
+			$arrayInQry[] =$profQry;
+
+			
+		} // HOW MANY TABLE IS USED //END
 		
 
-		echo $profQry;	
-		echo "<br/>";
+		foreach($arrayInQry as $resltKey => $resultVal){ //////////  fetching ids start////////////
+
+			
+
+			$dataRESIDS=DB::getInstance()->query($resultVal);
+			 if($dataRESIDS->count()>0)
+		              {
+					 foreach($dataRESIDS->results() as $RstIDS)
+					 {
+						$userIdArray[]=	 $RstIDS->resp_id;
+						
+						
+									}
+						}
+
+
+		} ////////////////////////////////  fetching ids end/////////////
 		
-		/////////////////////////////////////////////////////////////////////////////////////////////////
-		// $iddata=DB::getInstance()->query($profQry);
-		// if($iddata->count()>0)
-		// foreach($iddata->results() as $userIDs)
-		// {
-		// $userID[] = $userIDs->resp_id;
+		
+		    $userIdArray = array_unique($userIdArray);
+			$userIdArray = array_values($userIdArray);
+
+			 $List = implode(', ', $userIdArray);
+
+		
+
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// 	foreach($datafilter as $key => $var1){  ///////////////////FIRST--PRIFILERS---FOREACH--START///////////
+
+    //     ///////////////////////////////////// FIND DATA TABLE ///////////////////////////////////
+	// 	$tremName =	explode("_",$key);
+	// 	$projId= $tremName['1'];
+
+	// 	 if($projId != $surveyId)
+	// 	{ //IF TABLE IS DIFFERENT CONDITION START
+	// 		$sQuery[]=	$profQry;
+			
+
+	// 		$surveyId = $projId;
+		
+
+	// 	$profQry ="select resp_id from ";
+	// 	$data=DB::getInstance()->query("select data_table from project where project_id = $projId");
+	// 	if($data->count()>0)
+	// 	foreach($data->results() as $dtName)
+	// 	{
+	// 	 $dataTable= $dtName->data_table;
+	// 	 $profQry .=" $dataTable";
 		 
-		// }
-			
-			
-
-		////////////////////////////////////////////////////////////////////////////////////////////
+	// 	}
+	// 	//////////////////////////////////// FIND DATA TABLE ENDED////////////////////////////
 		
+	// 	$profQry .=" where  $key = ";
+		  
+	// 	 $tt =1;
+	// 	if(is_array($var1))
+	// 	{	
+	// 		$arrLen = count($var1);
+	// 		foreach($var1 as $temval){
+	// 			if( $tt < $arrLen ){
+	// 			$profQry .="  $temval or $key = ";	
+	// 			}if($tt == $arrLen ){
+	// 				$profQry .="  $temval ";
+	// 			}
+				
+	// 			$tt++;	
+	// 		}
+	// 	} else{
+		
+	// 	$profQry .=" $var1";	 
+			
+			
+	// 	}   
+		
+	//  } // IF TABLE IS DIFFERENT CONDITION  END	
+
+	//  else{          //  one term end now new term start;
+		
+	// 	$profQry .="  AND $key = ";
+	  
+	//  $tt =1;
+	// if(is_array($var1))
+	// {	
+	// 	$arrLen = count($var1);
+	// 	foreach($var1 as $temval){
+	// 		if( $tt < $arrLen ){
+	// 		$profQry .="  $temval or $key = ";	
+	// 		}if($tt == $arrLen ){
+	// 			$profQry .="  $temval ";
+	// 		}
+			
+	// 		$tt++;	
+	// 	}
+	// } else{
+	
+	// $profQry .=" $var1";	
+		
+		
+	// }
+
+	
+	// }
+
+
+
+		
+		
+	// 	/////////////////////////////////////////////////////////////////////////////////////////////////
+	// 	// $iddata=DB::getInstance()->query($profQry);
+	// 	// if($iddata->count()>0)
+	// 	// foreach($iddata->results() as $userIDs)
+	// 	// {
+	// 	// $userID[] = $userIDs->resp_id;
+		 
+	// 	// }
+			
 			
 
-
-
-
-     
-		} // FIRST--PRIFILERS---FOREACH-- END
+	// 	////////////////////////////////////////////////////////////////////////////////////////////
 		
-		//print_r($userID);
-		die;
-		//print_r($datafilter); die;
-		////////// select data table ///////////////
-		$data=DB::getInstance()->query("SELECT data_table , project_id from project where response_type = 1");
+	// 	//  print_r($profQry);	
+	// 	//  echo "<br/>";
 
-     if($data->count()>0) 
-     {    
-          foreach($data->results() as $d)
-          { 
-            $profilerTable = $d->data_table;
+
+	// 	//$sQuery[]=	$profQry;
+
+	// 	//print_r($sQuery);
+	// 	} // FIRST--PRIFILERS---FOREACH-- END
+		
+	// 	//print_r($userID);
+		
+	// 	print_r($sQuery);
+		
+	// 	die;
+	// 	//print_r($datafilter); die;
+	// 	////////// select data table ///////////////
+	// 	$data=DB::getInstance()->query("SELECT data_table , project_id from project where response_type = 1");
+
+    //  if($data->count()>0) 
+    //  {    
+    //       foreach($data->results() as $d)
+    //       { 
+    //         $profilerTable = $d->data_table;
           
-		  }
-	}	  
-		////////////end data table selection ////////////////
+	// 	  }
+	// }	  
+	// 	////////////end data table selection ////////////////
 
 
-		$userqry ="select DISTINCT(resp_id) from $profilerTable where ";
-			$QFlag =0;
-		foreach($datafilter as $key => $value)
-		      {
-				if($QFlag ==0){
-					$userqry .=" $key = $value ";
-					$QFlag =1;
-				}else{
-	       $userqry .=" or  $key = $value ";
-				     }
-                 }
+	// 	$userqry ="select DISTINCT(resp_id) from $profilerTable where ";
+	// 		$QFlag =0;
+	// 	foreach($datafilter as $key => $value)
+	// 	      {
+	// 			if($QFlag ==0){
+	// 				$userqry .=" $key = $value ";
+	// 				$QFlag =1;
+	// 			}else{
+	//        $userqry .=" or  $key = $value ";
+	// 			     }
+    //              }
 				 
-				/////////////// FINDING FILTER USER ID //////////////////////
-									$dataRes=DB::getInstance()->query($userqry);
-											if($dataRes->count()>0)
-										{
-													foreach($dataRes->results() as $rr)
-													{
-										$userIdArray[]=	 $rr->resp_id;	
-													}
-										}
-				/////////////////END FINDINIG FILTER USER ID ////////////
+	// 			/////////////// FINDING FILTER USER ID //////////////////////
+	// 								$dataRes=DB::getInstance()->query($userqry);
+	// 										if($dataRes->count()>0)
+	// 									{
+	// 												foreach($dataRes->results() as $rr)
+	// 												{
+	// 									$userIdArray[]=	 $rr->resp_id;	
+	// 												}
+	// 									}
+	// 			/////////////////END FINDINIG FILTER USER ID ////////////
 
-				$List = implode(', ', $userIdArray);
+			//	$List = implode(', ', $userIdArray);
 				
 	} // IF PROFILER IS ON OR SELECTED SECTION END
-
-
-
-
 
 
 
