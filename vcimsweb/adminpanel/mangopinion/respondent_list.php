@@ -87,107 +87,145 @@ $(document).ready(function(){
 				}
 
 			}//TERM AND THEIR VALUES // END
-			 $profQry ="select resp_id from  $TableName where ";
 			
-			 $ll=count($dyArray); 
-			 $mll=1;
+
+
+
+
+
+			$profQry ="SELECT resp_id  ";
+			
+			$aall=count($dyArray); 
+			$mll=1;
+			 
+			 $arrGCT= array();
+			 $arrFIS = array();
+			 $arrASVL = array();
+			
 			 foreach($dyArray as $termKey => $termVal){   //MAKING FINAL QUERY //START
 				
-				if($mll == 1)
-				{
-					$profQry .=" $termKey = ";
+				    
+					$arrGCT[] =	" GROUP_CONCAT($termKey) as $termKey  ";
+
+				if($mll ==1 &&  $aall > 1){  ////////start first statement
 					$tt =1;
 					if(is_array($termVal))
 					{	
 						$arrLen = count($termVal);
 						foreach($termVal as $termValRep){
 							if( $tt < $arrLen ){
-							$profQry .="  $termValRep or $termKey = ";	
+							$arrFIS[] =" FIND_IN_SET($termValRep,$termKey) OR  ";	
 							}if($tt == $arrLen ){
-								$profQry .="  $termValRep ";
+								$arrFIS[]	="  FIND_IN_SET($termValRep,$termKey)  AND ";
 							}
-							
-							$tt++;	
+						$tt++;
+								
 						}
+						
 					} else{
 					
-					$profQry .=" $termVal ";	 
-						
+						$arrFIS[]	="  FIND_IN_SET($termVal,$termKey) AND  ";	 
 						
 					}   
+				}//////end first statement
 
 
-				}
-
-				
-				
-				if($mll > 1 &&  $mll < $ll)
-				{
-					$profQry .=" AND $termKey = ";
+				if($mll <  $aall ){  ////////start middle  statement
 					$tt =1;
 					if(is_array($termVal))
 					{	
 						$arrLen = count($termVal);
 						foreach($termVal as $termValRep){
 							if( $tt < $arrLen ){
-							$profQry .="  $termValRep or $termKey = ";	
+							$arrFIS[] =" FIND_IN_SET($termValRep,$termKey) OR ";	
 							}if($tt == $arrLen ){
-								$profQry .="  $termValRep ";
+								$arrFIS[]	="  FIND_IN_SET($termValRep,$termKey)  AND ";
 							}
-							
-							$tt++;	
+						$tt++;
+								
 						}
+						
 					} else{
 					
-					$profQry .=" $termVal ";	 
-						
+						$arrFIS[]	="  FIND_IN_SET($termVal,$termKey)  AND ";	 
 						
 					}   
+				}//////end middle statement
 
 
-
-
-				}
-				 if($mll ==$ll )
-				{
-
-					$profQry .=" and $termKey = ";
+				if($mll ==  $aall ){  ////////start Last  statement
 					$tt =1;
 					if(is_array($termVal))
 					{	
 						$arrLen = count($termVal);
 						foreach($termVal as $termValRep){
 							if( $tt < $arrLen ){
-							$profQry .="  $termValRep or $termKey = ";	
+							$arrFIS[] =" FIND_IN_SET($termValRep,$termKey) OR ";	
 							}if($tt == $arrLen ){
-								$profQry .="  $termValRep ";
+								$arrFIS[]	="  FIND_IN_SET($termValRep,$termKey)  ";
 							}
-							
-							$tt++;	
+						$tt++;
+								
 						}
+						
 					} else{
 					
-					$profQry .=" $termVal  ";	 
-						
+						$arrFIS[]	="  FIND_IN_SET($termVal,$termKey)  ";	 
 						
 					}   
-
-
-
-				}
+				}//////end last statement
 
 				$mll++;
-				
-				
-			 } //MAKING FINAL QUERY //END
 
+			} //MAKING FINAL QUERY //END
+
+					///////////////////////////////////MAKING QUERY ////////////////////////////////
+					$profQry ="  SELECT resp_id";
+					foreach($dyArray as  $askey => $asaskeyValues)
+					{
+						$profQry .=", $askey  ";
+					}
+					$profQry .=" from  (SELECT resp_id  ";
+
+					foreach($arrGCT as $arrGCTval)
+					{   
+						$profQry .=" , $arrGCTval ";
+
+					}
+					$profQry .=" FROM $TableName GROUP BY resp_id) as T WHERE ";
+
+					$arrlen =count($arrFIS);
+					$ltt= 1;
+					foreach($arrFIS as $arrFISval)
+					{
+						if($ltt  < $arrlen ) $profQry .=" $arrFISval  ";
+						
+						if($ltt  ==  $arrlen ) $profQry .=" $arrFISval ";
+
+						$ltt++;
+
+					}
+
+		/////////////////////////////////////// MAKING QUERY END//////////////			
+				
+				
+				
 			
+
+			 
 
 			$arrayInQry[] =$profQry;
 
 			
 		} // HOW MANY TABLE IS USED //END
 		
+
+
+
+
+
+
+
 
 		foreach($arrayInQry as $resltKey => $resultVal){ //////////  fetching ids start////////////
 
