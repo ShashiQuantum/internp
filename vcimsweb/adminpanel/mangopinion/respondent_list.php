@@ -36,8 +36,7 @@ $(document).ready(function(){
 	$arraySize = count($datafilter);
 	$userIdArray = array();
 	$sQuery = array();
-	$profQry =0;
-
+	
 	///////////////////////////// IF PROFILERS SECTION CHOOSE//////////////////////////////////
 	if($arraySize > 2)
 	{   //  IF PROFILER IS SELECTED OR OPTED START
@@ -87,7 +86,7 @@ $(document).ready(function(){
 				}
 
 			}//TERM AND THEIR VALUES // END
-			
+			$profQry ='';
 
 
 
