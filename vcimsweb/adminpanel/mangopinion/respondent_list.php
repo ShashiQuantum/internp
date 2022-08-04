@@ -32,162 +32,176 @@ $(document).ready(function(){
    {    
 	
 	$searchFlag =0;
-	$datafilter = $_POST; 
-	$arraySize = count($datafilter);
-	$userIdArray = array();
-	$sQuery = array();
+	$originData = $_POST;
+	$arraySize = count($originData);
+	
 	
 	///////////////////////////// IF PROFILERS SECTION CHOOSE//////////////////////////////////
 	if($arraySize > 2)
 	{   //  IF PROFILER IS SELECTED OR OPTED START
 		 $searchFlag =1;
-		array_pop($datafilter);
-		array_pop($datafilter);
+		array_pop($originData);
+		array_pop($originData);
 		
-		$surveyId  =0;
-		$projectarray = array();
-		$datatable =array();
-		$userID = array();
-		$arrayInQry = array();
-
-
+		$surveyId  =0; $projectarray = array(); $datatableID =array(); $userID = array();
 		
 
-		foreach($datafilter as $key => $var1)
+		foreach($originData as $key => $var1)
 		{
 			$tremName =	explode("_",$key);
 		    $projId= $tremName['1'];
 			$projectarray[] = $projId;
 		}
-
-		$datatable= array_unique($projectarray);
-		$datatable = array_values($datatable);
+		$datatableID= array_unique($projectarray);
+		$datatableID = array_values($datatableID);
 		
 
 
 		
-		foreach($datatable as $mkey =>$mpval){ // HOW MANY TABLE IS USED //START
+		foreach($datatableID as $mkey =>$mpval){ // HOW MANY TABLE IS USED //START
 			$data=DB::getInstance()->query("select data_table from project where project_id = $mpval");
 			if($data->count()>0)
 			foreach($data->results() as $dtName)
 			{
-			 $TableName= $dtName->data_table;
-			
-			}	
-			$dyArray = array();
+			 $TableName= $dtName->data_table;	
+			}
+
+
+
+			$OneProfArry = array();	
 			foreach($datafilter as $ikey => $ivar)
-			{ //TERM AND THEIR VALUES // START
+			{ //TERM AND THEIR VALUES FRO ONE PROFILER TABLE // START
 
 				$tremName =	explode("_",$ikey);
 		        $projId= $tremName['1'];
 				if($projId==$mpval)
 				{
-					$dyArray[$ikey] = $ivar;
-				
+					$OneProfArry[$ikey] = $ivar;
 				}
 
-			}//TERM AND THEIR VALUES // END
+			}//TERM AND THEIR VALUES FRO ONE PROFILER TABLE// END
 			
+			$QryTrem = array(); $QryGCanct =array(); $QryFindInOr =array(); $QryFindInAnd=array();
 			
-			
-			$profQry ='';
-
-
-
-
-
-			$profQry ="SELECT resp_id  ";
-			
-			$aall=count($dyArray); 
-			$mll=1;
+		
+			$ProfSize = count($OneProfArry); 
+			$lopCunt = 1;
 			 
-			 $arrGCT= array();
-			 $arrFIS = array();
-			 $arrASVL = array();
 			
-			 foreach($dyArray as $termKey => $termVal){   //MAKING FINAL QUERY //START
+			
+			 foreach($OneProfArry as $termKey => $termVal){   //MAKING FINAL QUERY //START
 				
-				    
-					$arrGCT[] =	" GROUP_CONCAT($termKey) as $termKey  ";
+				$QryTrem[] = "$termKey";
+				$QryGCanct[] = " GROUP_CONCAT( $termKey ) as $termKey  ";    
+				
 
-				if($mll ==1 &&  $aall > 1){  ////////start first statement
-					
+/////////////////////////////////////////CREATE IF ARRAY SIZE IS ONLY ONE ////////////////////////////////
 
-					if(is_array($termVal))
-					{	                 ////////if term is in array form start
-						$arrLen = count($termVal);
-						
-				$aIn = 1;
-					
-							
-					}  ///////// if term is an array form end 
-					else{
-					
-						$arrFIS[]	="  FIND_IN_SET($termVal,$termKey)  ";	 
-						
-					}   
-
-				}//////end first statement
-
-
-
-
-
-
-
-
-
-
-
-
-				if($mll <  $aall   && $mll > 1 ){  ////////start middle  statement
-					$tt =1;
-
-
+				if($lopCunt ==1 &&  $ProfSize > 1){  ////////start first statement
+					$termLopCunt =1;
 					if(is_array($termVal))
 					{	
-						$arrLen = count($termVal);
+						$TermValLen = count($termVal);
+
 						foreach($termVal as $termValRep){
-							if( $tt < $arrLen ){
-							$arrFIS[] =" ( FIND_IN_SET($termValRep,$termKey) OR ";	
-							}if($tt == $arrLen ){
-								$arrFIS[]	="  FIND_IN_SET($termValRep,$termKey) ) AND ";
+							if( $TermValLen == 1 )
+							{
+							$QryFindInOr[] =" FIND_IN_SET($termValRep,$termKey)  ";	
 							}
-						$tt++;
-								
+							if($TermValLen > 1 && $termLopCunt == 1 )
+							{
+								$QryFindInOr[]	="  FIND_IN_SET($termValRep,$termKey) OR ";
+							}
+							if($TermValLen > 1 && $termLopCunt > 1 && $termLopCunt < $TermValLen  )
+							{
+								$QryFindInOr[]	="  FIND_IN_SET($termValRep,$termKey)  OR ";
+							}
+							if($TermValLen > 1 && $termLopCunt > 1 && $termLopCunt == $TermValLen  )
+							{
+								$QryFindInOr[]	="  FIND_IN_SET($termValRep,$termKey)  ";
+							}
+						$termLopCunt++;
+		
 						}
 						
 					} else{
 					
-						$arrFIS[]	="  FIND_IN_SET($termVal,$termKey)  AND ";	 
+						$QryFindInAnd[]	="  FIND_IN_SET($termVal,$termKey) AND  ";	 
+						
+					}   
+				}//////end first statement
+
+
+				if($lopCunt <  $ProfSize  && $lopCunt  > 1){  ////////start middle  statement
+					$termLopCunt =1;
+					if(is_array($termVal))
+					{	
+						$TermValLen = count($termVal);
+
+						foreach($termVal as $termValRep){
+							if( $TermValLen == 1 )
+							{
+							$QryFindInOr[] =" FIND_IN_SET($termValRep,$termKey)  ";	
+							}
+							if($TermValLen > 1 && $termLopCunt == 1 )
+							{
+								$QryFindInOr[]	="  FIND_IN_SET($termValRep,$termKey) OR ";
+							}
+							if($TermValLen > 1 && $termLopCunt > 1 && $termLopCunt < $TermValLen  )
+							{
+								$QryFindInOr[]	="  FIND_IN_SET($termValRep,$termKey)  OR ";
+							}
+							if($TermValLen > 1 && $termLopCunt > 1 && $termLopCunt == $TermValLen  )
+							{
+								$QryFindInOr[]	="  FIND_IN_SET($termValRep,$termKey)  ";
+							}
+						$termLopCunt++;
+		
+						}
+						
+					} else{
+					
+						$QryFindInAnd[]	="  FIND_IN_SET($termVal,$termKey) AND  ";	 
 						
 					}   
 				}//////end middle statement
 
 
-				if($mll ==  $aall ){  ////////start Last  statement
-					$tt =1;
+				if($lopCunt ==  $ProfSize){  ////////start Last  statement
+					$termLopCunt =1;
 					if(is_array($termVal))
 					{	
-						$arrLen = count($termVal);
+						$TermValLen = count($termVal);
+
 						foreach($termVal as $termValRep){
-							if( $tt < $arrLen ){
-							$arrFIS[] =" FIND_IN_SET($termValRep,$termKey) OR ";	
-							}if($tt == $arrLen ){
-								$arrFIS[]	="  FIND_IN_SET($termValRep,$termKey)  ";
+							if( $TermValLen == 1 )
+							{
+							$QryFindInOr[] =" FIND_IN_SET($termValRep,$termKey)  ";	
 							}
-						$tt++;
-								
+							if($TermValLen > 1 && $termLopCunt == 1 )
+							{
+								$QryFindInOr[]	="  FIND_IN_SET($termValRep,$termKey) OR ";
+							}
+							if($TermValLen > 1 && $termLopCunt > 1 && $termLopCunt < $TermValLen  )
+							{
+								$QryFindInOr[]	="  FIND_IN_SET($termValRep,$termKey)  OR ";
+							}
+							if($TermValLen > 1 && $termLopCunt > 1 && $termLopCunt == $TermValLen  )
+							{
+								$QryFindInOr[]	="  FIND_IN_SET($termValRep,$termKey)  ";
+							}
+						$termLopCunt++;
+		
 						}
 						
 					} else{
 					
-						$arrFIS[]	="  FIND_IN_SET($termVal,$termKey)  ";	 
+						$QryFindInAnd[]	="  FIND_IN_SET($termVal,$termKey)   ";	 
 						
 					}   
 				}//////end last statement
 
-				$mll++;
+				$lopCunt++;
 
 			} //MAKING FINAL QUERY //END
 
