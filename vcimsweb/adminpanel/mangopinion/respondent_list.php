@@ -111,84 +111,22 @@ $(document).ready(function(){
 					$arrGCT[] =	" GROUP_CONCAT($termKey) as $termKey  ";
 
 				if($mll ==1 &&  $aall > 1){  ////////start first statement
-					$tt =1;
+					
 
 					if(is_array($termVal))
-					{	                             /////////////////////////if term is in array form start
+					{	                 ////////if term is in array form start
 						$arrLen = count($termVal);
 						
 				$aIn = 1;
-		switch($arrLen) {      //////// CASE START
-		case "1":
-							
-				foreach($termVal as $termValRep)
-				{
-					$arrFIS[] =" FIND_IN_SET($termValRep,$termKey)  AND ";	
-						
-				}	
-		break;
-							
-		case "2":
-										
-				foreach($termVal as $termValRep)
-				{   
-					if($aIn ==1) $arrFIS[] =" ( FIND_IN_SET($termValRep,$termKey) OR ";	
-					if($aIn ==2) $arrFIS[] =" FIND_IN_SET($termValRep,$termKey) ) AND ";	
 					
-					$aIn++;
-						
-				}		
-	    break;
-
-		case "3":
-
-			foreach($termVal as $termValRep)
-			{   
-				if($aIn ==1) $arrFIS[] =" ( FIND_IN_SET($termValRep,$termKey) OR ";	
-				if($aIn ==2) $arrFIS[] =" FIND_IN_SET($termValRep,$termKey)  OR ";	
-				if($aIn ==3) $arrFIS[] =" FIND_IN_SET($termValRep,$termKey) ) AND ";	
-				
-				$aIn++;
-					
-			}	
-					
-		break;
-
-		case "4":
-			foreach($termVal as $termValRep)
-			{   
-				if($aIn ==1) $arrFIS[] =" ( FIND_IN_SET($termValRep,$termKey) OR ";	
-				if($aIn ==2) $arrFIS[] =" FIND_IN_SET($termValRep,$termKey)  OR ";	
-				if($aIn ==3) $arrFIS[] =" FIND_IN_SET($termValRep,$termKey)  OR ";
-				if($aIn ==4) $arrFIS[] =" FIND_IN_SET($termValRep,$termKey) ) AND ";	
-				
-				$aIn++;
-					
-			}	
-
-					
-		break;
-
-		case "5":
-
-			foreach($termVal as $termValRep)
-			{   
-				if($aIn ==1) $arrFIS[] =" ( FIND_IN_SET($termValRep,$termKey) OR ";	
-				if($aIn ==2) $arrFIS[] =" FIND_IN_SET($termValRep,$termKey)  OR ";	
-				if($aIn ==3) $arrFIS[] =" FIND_IN_SET($termValRep,$termKey)  OR ";
-				if($aIn ==4) $arrFIS[] =" FIND_IN_SET($termValRep,$termKey)  OR ";
-				if($aIn ==5) $arrFIS[] =" FIND_IN_SET($termValRep,$termKey) ) AND ";	
-				
-				$aIn++;
-					
-			}
-			
-				
-		break;			
-				}   ///////////////CASE END
-						
 							
 					}  ///////// if term is an array form end 
+					else{
+					
+						$arrFIS[]	="  FIND_IN_SET($termVal,$termKey)  ";	 
+						
+					}   
+
 				}//////end first statement
 
 
@@ -202,16 +140,18 @@ $(document).ready(function(){
 
 
 
-				if($mll <  $aall  && $aall > 1 ){  ////////start middle  statement
+				if($mll <  $aall   && $mll > 1 ){  ////////start middle  statement
 					$tt =1;
+
+
 					if(is_array($termVal))
 					{	
 						$arrLen = count($termVal);
 						foreach($termVal as $termValRep){
 							if( $tt < $arrLen ){
-							$arrFIS[] =" FIND_IN_SET($termValRep,$termKey) OR ";	
+							$arrFIS[] =" ( FIND_IN_SET($termValRep,$termKey) OR ";	
 							}if($tt == $arrLen ){
-								$arrFIS[]	="  FIND_IN_SET($termValRep,$termKey)  AND ";
+								$arrFIS[]	="  FIND_IN_SET($termValRep,$termKey) ) AND ";
 							}
 						$tt++;
 								
