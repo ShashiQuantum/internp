@@ -65,7 +65,7 @@ $(document).ready(function(){
 		
 
 
-		$dyArray = array();
+		
 		foreach($datatable as $mkey =>$mpval){ // HOW MANY TABLE IS USED //START
 			$data=DB::getInstance()->query("select data_table from project where project_id = $mpval");
 			if($data->count()>0)
@@ -74,6 +74,7 @@ $(document).ready(function(){
 			 $TableName= $dtName->data_table;
 			
 			}	
+			$dyArray = array();
 			foreach($datafilter as $ikey => $ivar)
 			{ //TERM AND THEIR VALUES // START
 
@@ -86,6 +87,9 @@ $(document).ready(function(){
 				}
 
 			}//TERM AND THEIR VALUES // END
+			
+			
+			
 			$profQry ='';
 
 
