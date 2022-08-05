@@ -39,11 +39,11 @@ $(document).ready(function(){
 	///////////////////////////// IF PROFILERS SECTION CHOOSE//////////////////////////////////
 	if($arraySize > 2)
 	{   //  IF PROFILER IS SELECTED OR OPTED START
-		 $searchFlag =1;
+		$searchFlag =1;
 		array_pop($originData);
 		array_pop($originData);
 		
-	$arrayInQry = array();	$surveyId  =0; $projectarray = array(); $datatableID =array(); $userID = array(); 
+	  $arrayInQry = array(); $projectarray = array(); $datatableID =array();  
 		
 
 		foreach($originData as $key => $var1)
@@ -70,7 +70,7 @@ $(document).ready(function(){
 
 			$OneProfArry = array();	
 			foreach($originData as $ikey => $ivar)
-			{ //TERM AND THEIR VALUES FRO ONE PROFILER TABLE // START
+			{ //TERM AND THEIR VALUES FOR ONE PROFILER TABLE // START
 
 				$tremName =	explode("_",$ikey);
 		        $projId= $tremName['1'];
@@ -79,37 +79,70 @@ $(document).ready(function(){
 					$OneProfArry[$ikey] = $ivar;
 				}
 
-			}//TERM AND THEIR VALUES FRO ONE PROFILER TABLE// END
+			}//TERM AND THEIR VALUES FOR ONE PROFILER TABLE// END
 			
-			$QryTrem = array(); $QryGCanct =array(); $QryFindInOr =array(); $QryFindInAnd=array();
+	$QryTrem = array(); $QryGCanct =array();  $QryAndOr=array();
 			
-			
- foreach($OneProfArry as $termKey => $termVal){   //MAKING FINAL QUERY FOR ONE PROFILERS //START
+		
+	    
+		
+    foreach($OneProfArry as $termKey => $termVal)
+	{   //MAKING FINAL QUERY FOR ONE PROFILERS //START
 				
-				$QryTrem[] = "$termKey";
-				$QryGCanct[] = " GROUP_CONCAT( $termKey ) as $termKey  ";    
-		
-	
-	if(is_array($termVal))
-	{	
-		
-		foreach($termVal as $termValRep){
+			$QryTrem[] = "$termKey";
+			$QryGCanct[] = " GROUP_CONCAT( $termKey ) as $termKey  ";    
+								
+							
+					if(is_array($termVal))
+					{	
+						$ttLoop =1;
+						$ttLen= count($termVal);
+						foreach($termVal as $termValRep)
+						{
+							if($ttLen == 1)
+								{ 
+									$QryAndOr[]	="  FIND_IN_SET($termVal,$termKey) "; 
+								}
+							if($ttLen > 1)
+							{    
+								$qryORstring ='';
+								 if($ttLoop == 1)
+								 {
+									
+									$qryORstring ="( FIND_IN_SET($termValRep,$termKey) ";
+								 }
+								 if($ttLoop > 1  && $ttLoop < $ttLen )
+								 {
+									
+									$qryORstring .=" OR FIND_IN_SET($termValRep,$termKey) ";
+								 }
 
-		$QryFindInOr[]	="  FIND_IN_SET($termValRep,$termKey)  ";
+								 if($ttLoop > 1  && $ttLoop == $ttLen )
+								 {
+									
+									$qryORstring .=" OR FIND_IN_SET($termValRep,$termKey)  ) ";
+								 }
 
-		}
-		
-	} else{
-	
-		$QryFindInAnd[]	="  FIND_IN_SET($termVal,$termKey) ";	 
-		
-	}   
+								 $QryAndOr[]	=" $qryORstring ";
+								
 
+							}	
+							
 
+							$ttLoop++;
+						} ///// FOREACH END
+						
+					}  //////  ISARRAY END ////
+					else
+					{
+						$QryAndOr[]	="  FIND_IN_SET($termVal,$termKey) ";
+					}   
+	   
+    } //MAKING FINAL QUERY FOR ONE PROFILERS //END
 
 			
 
-			} //MAKING FINAL QUERY FOR ONE PROFILERS //END
+			
 
 					///////////////////////////////////MAKING QUERY ////////////////////////////////
 					// print_r($QryFindInOr);  echo "<br/><br/><br/><br/>";
@@ -131,110 +164,54 @@ $(document).ready(function(){
 						$FinalQry .=" , $QryGCanctVal ";
 
 					}
-					$FinalQry .=" FROM $TableName GROUP BY resp_id) as T WHERE ";
+					$FinalQry .=" FROM $TableName GROUP BY resp_id) as T WHERE ";   
+
 					
-					$totORlen = count($QryFindInOr);
-					$orINc =1;
-					foreach($QryFindInOr as $QryFindInOrVal)
-					{    
-						 
-						
-						if($totORlen == 1 &&  $orINc == 1 ){
-							
-							$FinalQry .=" $QryFindInOrVal  ";
+					$AO =1;
+					$AOarryLen = count($QryAndOr);
 
+					foreach($QryAndOr as $QandOr)
+					{   
+						if($AOarryLen == 1  && $AO == 1)
+						{
+							$FinalQry .="  $QandOr ";
 						}
 
-						if($totORlen > 1 &&  $orINc == 1 ){
-							
-							$FinalQry .=" ( $QryFindInOrVal  ";
-
+						if($AOarryLen > 1  && $AO > 1)
+						{
+							$FinalQry .=" AND  $QandOr ";
 						}
-
-						if($totORlen > 1 &&  $orINc > 1  &&  $totORlen != $orINc ){
-							
-							$FinalQry .=" OR $QryFindInOrVal  ";
-
-						}
-
-						if($totORlen > 1 &&  $orINc > 1  &&  $totORlen == $orINc ){
-							
-							$FinalQry .=" OR $QryFindInOrVal ) ";
-
-						}
-
-
-						$orINc++;
-
+						$AO++;
+					
 					}
-					$totORlen = count($QryFindInOr);
-					$totAndLen  =	count($QryFindInAnd);
-					$andInc  =1;
-					foreach($QryFindInAnd  as   $QFInAndVal)
-					{
-						
-						if($totAndLen >= 1  && $andInc == 1  &&  $totORlen < 1 ){
-							
-							$FinalQry .="  $QryFindInOrVal  ";
+		
 
-						}
-						
-						
-						if($totAndLen >= 1 &&  $andInc > 1  &&  $totORlen < 1 ){
-							
-							$FinalQry .=" AND $QryFindInOrVal  ";
-
-						}
-
-						if($totAndLen >= 1 &&  $andInc > 1  &&  $totORlen >= 1 ){
-							
-							$FinalQry .=" AND $QryFindInOrVal  ";
-
-						}
-
-
-						$andInc++;
-						
-				    }
-
-		/////////////////////////////////////// MAKING QUERY END//////////////			
-				
-				
-				
-			
-
-			 
-
+		/////////////////////////////////////// MAKING QUERY END//////////////	
 			$arrayInQry[] =$FinalQry;
-
-			
 		} // HOW MANY TABLE IS USED //END
 		
 
 
 
-// print_r($arrayInQry);
+ print_r($arrayInQry); die;
 
-// die;
-
-
-		foreach($arrayInQry as $resltKey => $resultVal){ //////////  fetching ids start////////////
-
+        $userIdArray = array();
+		foreach($arrayInQry as $resltKey => $resultVal)
+		{ //////////  fetching ids start////////////
 			
-
 			$dataRESIDS=DB::getInstance()->query($resultVal);
 			 if($dataRESIDS->count()>0)
 		              {
 					 foreach($dataRESIDS->results() as $RstIDS)
 					 {
 						$userIdArray[]=	 $RstIDS->resp_id;
-						
-						
-									}
-						}
-
-
+					}	}
 		} ////////////////////////////////  fetching ids end/////////////
+						
+									
+						
+
+
 		
 		
 		    $userIdArray = array_unique($userIdArray);
