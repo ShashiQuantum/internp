@@ -131,8 +131,9 @@ $(document).ready(function(){
 							$ttLoop++;
 
 						} ///// FOREACH END
+						if($qryORstring != ''){
 					$QryAndOr[]	=" $qryORstring ";
-						
+						}
 					}  //////  ISARRAY END ////
 					else
 					{
