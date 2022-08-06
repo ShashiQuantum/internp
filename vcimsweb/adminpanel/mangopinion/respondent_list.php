@@ -97,15 +97,16 @@ $(document).ready(function(){
 					{	
 						$ttLoop =1;
 						$ttLen= count($termVal);
+						$qryORstring ='';
 						foreach($termVal as $termValRep)
 						{
-							if($ttLen == 1)
+						   if($ttLen == 1)
 								{ 
-									$QryAndOr[]	="  FIND_IN_SET($termVal,$termKey) "; 
+									$QryAndOr[]	="  FIND_IN_SET($termValRep,$termKey) "; 
 								}
 							if($ttLen > 1)
 							{    
-								$qryORstring ='';
+								
 								 if($ttLoop == 1)
 								 {
 									
@@ -123,14 +124,14 @@ $(document).ready(function(){
 									$qryORstring .=" OR FIND_IN_SET($termValRep,$termKey)  ) ";
 								 }
 
-								 $QryAndOr[]	=" $qryORstring ";
-								
 
 							}	
 							
 
 							$ttLoop++;
+
 						} ///// FOREACH END
+					$QryAndOr[]	=" $qryORstring ";
 						
 					}  //////  ISARRAY END ////
 					else
@@ -141,7 +142,8 @@ $(document).ready(function(){
     } //MAKING FINAL QUERY FOR ONE PROFILERS //END
 
 			
-
+// print_r($QryAndOr);
+// die;
 			
 
 					///////////////////////////////////MAKING QUERY ////////////////////////////////
@@ -167,21 +169,22 @@ $(document).ready(function(){
 					$FinalQry .=" FROM $TableName GROUP BY resp_id) as T WHERE ";   
 
 					
-					$AO =1;
+					
 					$AOarryLen = count($QryAndOr);
+					$looPcont = 1;
 
 					foreach($QryAndOr as $QandOr)
 					{   
-						if($AOarryLen == 1  && $AO == 1)
+						if($AOarryLen == 1  OR $looPcont == 1)
 						{
 							$FinalQry .="  $QandOr ";
 						}
 
-						if($AOarryLen > 1  && $AO > 1)
+						if($AOarryLen > 1  &&  $looPcont != 1 )
 						{
 							$FinalQry .=" AND  $QandOr ";
 						}
-						$AO++;
+						$looPcont++;
 					
 					}
 		
@@ -190,10 +193,6 @@ $(document).ready(function(){
 			$arrayInQry[] =$FinalQry;
 		} // HOW MANY TABLE IS USED //END
 		
-
-
-
- print_r($arrayInQry); die;
 
         $userIdArray = array();
 		foreach($arrayInQry as $resltKey => $resultVal)
