@@ -166,7 +166,8 @@ echo "</option>";
   echo "\r\n";  
 ?>
 
-<input type=submit name="get_project" id ="get_project" value="View Respondent for project deployment">
+<input type=submit name="get_project" id ="get_project" value="View Respondent for project deployment"> <br/> <br/>
+<input type="reset" value="Reset" name="reset" />
 </form>
 
 
