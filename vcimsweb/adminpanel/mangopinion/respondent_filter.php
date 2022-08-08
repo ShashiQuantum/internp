@@ -65,14 +65,34 @@ if(isset($_POST['pDeploy'])){
 }
 
 ?>
-<head><title>Project Deployement </title></head>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Project Deployement</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+</head>
 <body>
+
+
+
+
+
+
+
+
+
+
 <br><br>
+
 <center>
+<table  >
   
 <h3><font color=red><u>Project Deployement</u></font></h3>
 <form name="tFORM" method=post action="respondent_list.php" >
-
+<tr> <td>   <div class="text-primary"> Users on the basis of Their Profilers </div> </td> </tr>
 <?php 
 //////////////////////////////////// NEW CODE FOR PROFILERS////////////////////////////
 
@@ -98,10 +118,10 @@ $data=DB::getInstance()->query("SELECT data_table , project_id from project wher
                       if($qType == 'radio' || $qType == 'checkbox' ){    // RADIOT CHECKBOX START
                         ?>
                      
-                    
+              <tr> <td>      
                         
                       <?php
-                        echo $questdetail; echo '[';
+                        echo $questdetail; echo "<b>[ </b>";
 
                       $data3=DB::getInstance()->query("select opt_text_value,value from question_option_detail where q_id= $qustId");
                       if($data3->count()>0){//3rd IF START
@@ -118,10 +138,10 @@ $data=DB::getInstance()->query("SELECT data_table , project_id from project wher
                 
                    <input type="radio" name="<?php echo $qustId.'_'.$qsetId ?>" value="<?php echo $optionVal ?>" />
                             
-                       <?php  echo $optionDetails; 
-                             }
+                       <?php  echo $optionDetails;    
+                              
 
-                        elseif($qType == 'checkbox'){
+                      }  elseif($qType == 'checkbox'){
                           ?>
                           <input type="checkbox" name="<?php echo $qustId.'_'.$qsetId ?>[]" value="<?php echo $optionVal ?>" />
                                <?php  echo $optionDetails; 
@@ -131,7 +151,7 @@ $data=DB::getInstance()->query("SELECT data_table , project_id from project wher
 
 
                         }//OPTION FOREACH END  
-                          echo ']';  echo"<br/>";
+                          echo "<b>] </b>";  ?> </td> </tr><?php 
                       }//3rd  IF END
 
                       }//RADIO CHECKBOX END
@@ -147,11 +167,44 @@ $data=DB::getInstance()->query("SELECT data_table , project_id from project wher
      } //FIRST IF END
 
 //////////////////////////////////// PROFILERS CODE ENDED HERE ///////////////////////////
+
+//////////////////////////////////  FILTER USERS ON THE BASIS OF SURVEY SUBMIT START//////////////////////
 ?>
+<tr><td></td>  </tr> <tr> <td></td> </tr>
+
+<tr> <td>   <div class="text-primary"> Users on the basis of Survey Submitted /Not Submitted </div> </td> </tr>
+<tr> <td> Users basis of  Survey Status   
+<b>[ </b>
+  All <input type="radio" id="userOnSurveyType" name="userOnSurveyType" value="allRegUser" checked >  
+  Survey Submit within 30 days <input type="radio" id="userOnSurveyType" name="userOnSurveyType" value="submiN30day" > 
+  Survey  Submit within 90 days <input type="radio" id="userOnSurveyType" name="userOnSurveyType" value="submiN90day" >   
+ 
+ 
+ <b>] </b> 
+
+</td> </tr>
+ 
+
+<?php
+
+//////////////////////////////////FILTER USERS ON THE BASIS OF SURVEY SUBMIT END//////////////////////
+?>
+
+
+
+
+
+
+
+
+
+
+
+
 <!--   NEW CODE FOR PROJECT DEPLOYEMENT     --> 
 
 <br>
-  <tr><td> Project </td> </td><td> <select name=pn id=pn required ><option value=0>--Select Project--</option>;
+  <tr> <td> Project   <select name=pn id=pn required ><option value=0>--Select Project--</option>;
     
 <?php
 $pj=get_projects_details_serveygenics();
@@ -166,11 +219,19 @@ echo "</option>";
   echo "\r\n";  
 ?>
 
-<input type=submit name="get_project" id ="get_project" value="View Respondent for project deployment"> <br/> <br/>
-<input type="reset" value="Reset" name="reset" />
+
+
+ <input  type=submit  name="get_project" id ="get_project" value="View Respondent for project deployment"> </td></tr>
+
+
+<tr> <td > <input type="reset" value="Reset" name="reset" /> </td></tr>
 </form>
 
-
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
 
 
 

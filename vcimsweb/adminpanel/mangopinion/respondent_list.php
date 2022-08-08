@@ -30,16 +30,22 @@ $(document).ready(function(){
    
    if(isset($_POST['get_project']))
    {    
-	
+	//print_r($_POST);die;
 	$searchFlag =0;
 	$originData = $_POST;
+	$pid=$_POST['pn'];
+	$usrOnSurvyStatus=  $_POST['userOnSurveyType'];
 	$arraySize = count($originData);
+	$dayByActiveUsr = array();
+	$userIdArray = array();
+	
 	
 	
 	///////////////////////////// IF PROFILERS SECTION CHOOSE//////////////////////////////////
-	if($arraySize > 2)
+	if($arraySize > 3)
 	{   //  IF PROFILER IS SELECTED OR OPTED START
 		$searchFlag =1;
+		array_pop($originData);
 		array_pop($originData);
 		array_pop($originData);
 		
@@ -143,16 +149,10 @@ $(document).ready(function(){
     } //MAKING FINAL QUERY FOR ONE PROFILERS //END
 
 			
-// print_r($QryAndOr);
-// die;
-			
+
 
 					///////////////////////////////////MAKING QUERY ////////////////////////////////
-					// print_r($QryFindInOr);  echo "<br/><br/><br/><br/>";
-
-					// print_r($QryFindInAnd); 
-
-					// die;
+					
 					
 					$FinalQry ="  SELECT resp_id";
 
@@ -207,191 +207,104 @@ $(document).ready(function(){
 						$userIdArray[]=	 $RstIDS->resp_id;
 					}	}
 		} ////////////////////////////////  fetching ids end/////////////
-						
-									
-						
-
-
-		
-		
+				
 		    $userIdArray = array_unique($userIdArray);
 			$userIdArray = array_values($userIdArray);
-
 			 $List = implode(', ', $userIdArray);
-
-		
-
-		
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// 	foreach($datafilter as $key => $var1){  ///////////////////FIRST--PRIFILERS---FOREACH--START///////////
-
-    //     ///////////////////////////////////// FIND DATA TABLE ///////////////////////////////////
-	// 	$tremName =	explode("_",$key);
-	// 	$projId= $tremName['1'];
-
-	// 	 if($projId != $surveyId)
-	// 	{ //IF TABLE IS DIFFERENT CONDITION START
-	// 		$sQuery[]=	$profQry;
-			
-
-	// 		$surveyId = $projId;
-		
-
-	// 	$profQry ="select resp_id from ";
-	// 	$data=DB::getInstance()->query("select data_table from project where project_id = $projId");
-	// 	if($data->count()>0)
-	// 	foreach($data->results() as $dtName)
-	// 	{
-	// 	 $dataTable= $dtName->data_table;
-	// 	 $profQry .=" $dataTable";
-		 
-	// 	}
-	// 	//////////////////////////////////// FIND DATA TABLE ENDED////////////////////////////
-		
-	// 	$profQry .=" where  $key = ";
-		  
-	// 	 $tt =1;
-	// 	if(is_array($var1))
-	// 	{	
-	// 		$arrLen = count($var1);
-	// 		foreach($var1 as $temval){
-	// 			if( $tt < $arrLen ){
-	// 			$profQry .="  $temval or $key = ";	
-	// 			}if($tt == $arrLen ){
-	// 				$profQry .="  $temval ";
-	// 			}
-				
-	// 			$tt++;	
-	// 		}
-	// 	} else{
-		
-	// 	$profQry .=" $var1";	 
-			
-			
-	// 	}   
-		
-	//  } // IF TABLE IS DIFFERENT CONDITION  END	
-
-	//  else{          //  one term end now new term start;
-		
-	// 	$profQry .="  AND $key = ";
-	  
-	//  $tt =1;
-	// if(is_array($var1))
-	// {	
-	// 	$arrLen = count($var1);
-	// 	foreach($var1 as $temval){
-	// 		if( $tt < $arrLen ){
-	// 		$profQry .="  $temval or $key = ";	
-	// 		}if($tt == $arrLen ){
-	// 			$profQry .="  $temval ";
-	// 		}
-			
-	// 		$tt++;	
-	// 	}
-	// } else{
-	
-	// $profQry .=" $var1";	
-		
-		
-	// }
-
-	
-	// }
-
-
-
-		
-		
-	// 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	// 	// $iddata=DB::getInstance()->query($profQry);
-	// 	// if($iddata->count()>0)
-	// 	// foreach($iddata->results() as $userIDs)
-	// 	// {
-	// 	// $userID[] = $userIDs->resp_id;
-		 
-	// 	// }
-			
-			
-
-	// 	////////////////////////////////////////////////////////////////////////////////////////////
-		
-	// 	//  print_r($profQry);	
-	// 	//  echo "<br/>";
-
-
-	// 	//$sQuery[]=	$profQry;
-
-	// 	//print_r($sQuery);
-	// 	} // FIRST--PRIFILERS---FOREACH-- END
-		
-	// 	//print_r($userID);
-		
-	// 	print_r($sQuery);
-		
-	// 	die;
-	// 	//print_r($datafilter); die;
-	// 	////////// select data table ///////////////
-	// 	$data=DB::getInstance()->query("SELECT data_table , project_id from project where response_type = 1");
-
-    //  if($data->count()>0) 
-    //  {    
-    //       foreach($data->results() as $d)
-    //       { 
-    //         $profilerTable = $d->data_table;
-          
-	// 	  }
-	// }	  
-	// 	////////////end data table selection ////////////////
-
-
-	// 	$userqry ="select DISTINCT(resp_id) from $profilerTable where ";
-	// 		$QFlag =0;
-	// 	foreach($datafilter as $key => $value)
-	// 	      {
-	// 			if($QFlag ==0){
-	// 				$userqry .=" $key = $value ";
-	// 				$QFlag =1;
-	// 			}else{
-	//        $userqry .=" or  $key = $value ";
-	// 			     }
-    //              }
-				 
-	// 			/////////////// FINDING FILTER USER ID //////////////////////
-	// 								$dataRes=DB::getInstance()->query($userqry);
-	// 										if($dataRes->count()>0)
-	// 									{
-	// 												foreach($dataRes->results() as $rr)
-	// 												{
-	// 									$userIdArray[]=	 $rr->resp_id;	
-	// 												}
-	// 									}
-	// 			/////////////////END FINDINIG FILTER USER ID ////////////
-
-			//	$List = implode(', ', $userIdArray);
-				
+			 $profilerResultArrayCnt = count($userIdArray);
 	} // IF PROFILER IS ON OR SELECTED SECTION END
 
 
-
-
-		$pid=$_POST['pn'];
+		
         $_SESSION['pid']=$pid;
 		$pid=$_SESSION['pid'];
+		
+		
+		////////////////////////////////// FIND USERS ON BASIS OF SURVEY SUBMISSION START /////////////////////////////
+		if($usrOnSurvyStatus == 'submiN30day'  ||  $usrOnSurvyStatus == 'submiN90day') {
+			
+			if($usrOnSurvyStatus == 'submiN30day' )  
+			{
+			$qry30 ="select appuser_id from appuser_project_map where survey_submit > current_date - interval 30 day GROUP by appuser_id";
+			$Udata30D=DB::getInstance()->query($qry30);
+			 if($Udata30D->count()>0){
+				foreach($Udata30D->results() as $UResult30D){
+					$dayByActiveUsr[] = $UResult30D->appuser_id;
+				}
+				}
+			}
+			
+			if($usrOnSurvyStatus == 'submiN90day' )  
+			{
+				$qry30 ="select appuser_id from appuser_project_map where survey_submit > current_date - interval 90 day GROUP by appuser_id";
+				$Udata30D=DB::getInstance()->query($qry30);
+				 if($Udata30D->count()>0){
+					foreach($Udata30D->results() as $UResult30D){
+						$dayByActiveUsr[] = $UResult30D->appuser_id;
+					}
+					}
+				}
+				$ActiveSurveyIdOnly  = 	count($dayByActiveUsr);	
+			
+			
+			
+			
+			
+			
+			
+			
+			if($searchFlag ==1  && $profilerResultArrayCnt > 1)
+			{
+				
 
-    }
+			if($ActiveSurveyIdOnly > 0 ){
+				$BothArrayReslt = array_intersect($userIdArray, $dayByActiveUsr);
+				$List = implode(', ', $BothArrayReslt);
+			}
+
+
+		} // IF PROFILERS IS SELECTED AND USER IS FOUND
+		elseif($searchFlag ==1  && $profilerResultArrayCnt == 0 && ($ActiveSurveyIdOnly > 0 || $ActiveSurveyIdOnly ==0) ){
+			$List = '';
+
+		}
+		elseif($searchFlag ==0  && $ActiveSurveyIdOnly > 0  ){
+			$searchFlag = 1;
+			$List = implode(', ', $dayByActiveUsr);
+		
+		}
+
+
+	}	// IF DAY VALIDATION SELECTED  END
+			
+	
+	
+	
+			
+			
+
+
+		
+//$result = array_intersect($array1, $array2);
+			
+     
+			
+		
+
+
+//print_r($List); die;
+
+
+
+
+
+		
+////////////////////////////////// FIND USERS ON BASIS OF SURVEY SUBMISSION END /////////////////////////////
+
+
+
+
+    } ///// IF $POST IS SUBMITED
   
    echo "<table border=0>";
    echo "<form name='projectDeploy' method='post' action='respondent_filter.php'>";
