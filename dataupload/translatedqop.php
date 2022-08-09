@@ -1,10 +1,13 @@
 <?php
 include_once 'PHPExcel.php';
+include_once 'PHPExcel/IOFactory.php';
 //include_once('../../vcimsweb/init.php');
 
 if(isset($_POST['submit']))
 {
-	$sflag = 0 ;
+	 
+        
+        $sflag = 0 ;
 	$filename = $_FILES['myfile']['name'];
 	$fileTmpName = $_FILES['myfile']['tmp_name'];
 	$fileExtension = pathinfo($filename,PATHINFO_EXTENSION);
@@ -16,7 +19,7 @@ if(isset($_POST['submit']))
 	}
 	else{
 		// connection establish to db
-		$connect = mysqli_connect("database-1.c1mggasso0hp.ap-south-1.rds.amazonaws.com","qcsrdsadmin","Pa7du#ah$098","vcims");
+		$connect = mysqli_connect("localhost","root","","vcims");
 		if($connect){
 			//echo "success";
 		}
@@ -25,16 +28,22 @@ if(isset($_POST['submit']))
 				die('connection fail'.mysqli_connect_error());
 		}
 		//include_once 'PHPExcel.php';
+               
 		$excel = PHPExcel_IOFactory::load($fileTmpName);
+                
+
+        
 
 //set active sheet to first sheet 
 		  $excel->setActiveSheetIndex(0); 
 	foreach ($excel->getWorksheetIterator() as $worksheet) {
 
+                
 		  $highestRow = $worksheet->getHighestDataRow();
 		  $highestColumn = $worksheet->getHighestColumn();
 		  $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
-		  
+                //////////////correct//////
+		
 		for ($row = 2; $row <= $highestRow; $row++)
 		{
 				$crespid = '';
@@ -46,6 +55,7 @@ if(isset($_POST['submit']))
 					
 					$head = $worksheet->getCellByColumnAndRow($col,1);
 					if($head=='Hindi' && $val != ''){
+                                                
 						$qid = $worksheet->getCellByColumnAndRow(0,$row);
 						$type = $worksheet->getCellByColumnAndRow(1,$row);
 						$translation = $worksheet->getCellByColumnAndRow($col,$row);
