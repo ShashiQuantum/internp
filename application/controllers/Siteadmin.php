@@ -3069,7 +3069,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
 			//$_SESSION['ctpn'] = $pn;
 			//print_r($_SESSION);
 		}
-                redirect("http://13.232.11.235/digiamin-web/vcimsweb/crosstabh.php?ctp=$pid&pn=$pn");
+                redirect("http://localhost/digiamin-web/vcimsweb/crosstabh.php?ctp=$pid&pn=$pn");
         }
         public function viewtransdataupload()
         {
@@ -3082,7 +3082,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         //$_SESSION['ctpn'] = $pn;
                         //print_r($_SESSION);
                 }
-                redirect("http://13.232.11.235/digiamin-web/dataupload/viewtransqop.php?ctp=$pid&pn=$pn");
+                redirect("http://localhost/digiamin-web/dataupload/viewtransqop.php?ctp=$pid&pn=$pn");
         }
 
         public function transdataupload()
@@ -3096,7 +3096,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         //$_SESSION['ctpn'] = $pn;
                         //print_r($_SESSION);
                 }
-                redirect("http://13.232.11.235/digiamin-web/dataupload/transqop.php?ctp=$pid&pn=$pn");
+                redirect("http://localhost/digiamin-web/dataupload/transqop.php?ctp=$pid&pn=$pn");
         }
 
         public function dummydataupload()
@@ -3110,7 +3110,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         //$_SESSION['ctpn'] = $pn;
                         //print_r($_SESSION);
                 }
-                redirect("http://13.232.11.235/digiamin-web/dataupload/dummydataupload.php?ctp=$pid&pn=$pn");
+                redirect("http://localhost/digiamin-web/dataupload/dummydataupload.php?ctp=$pid&pn=$pn");
         }
 
         public function dummycrosstab()
@@ -3122,7 +3122,7 @@ array( 'id','resp_id','q_id','r_name','mobile','timestamp','centre','c_area','c_
                         $this->load->model('MProject');
                         $pn = $this->MProject->get_project_name($pid);
                 }
-                redirect("http://13.232.11.235/digiamin-web/vcimsweb/dummycrosstabh.php?ctp=$pid&pn=$pn");
+                redirect("http://localhost/digiamin-web/vcimsweb/dummycrosstabh.php?ctp=$pid&pn=$pn");
         }
 	public function viewpshowcards()
 	{
