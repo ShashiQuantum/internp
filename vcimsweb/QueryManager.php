@@ -1437,10 +1437,14 @@ $jsonPost = stripslashes($_REQUEST['result']);
 
 
       $flag_tr = null;
-      $dt = date('Y-m-d H:i:s');
-      $TDate = date('Y-m-d');
-      $qchk="UPDATE `appuser_project_map` SET `status`=$setNewStatus , `survey_submit`='$TDate' WHERE `appuser_id`= $rsp and `project_id`=$qset";
-      $ss=mysqli_query($conn, $qchk);
+
+     
+            $dt = date('Y-m-d H:i:s');
+            $SurveyupDate = date('Y-m-d');
+            $qchk="UPDATE `appuser_project_map` SET `status`=$setNewStatus , `survey_submit`='$SurveyupDate' WHERE `appuser_id`= $rsp and `project_id`=$qset";
+            $ss=mysqli_query($conn, $qchk);
+
+               
                     
             $msg = "Result Exported  Successfully";
         } //end of isFirst check
